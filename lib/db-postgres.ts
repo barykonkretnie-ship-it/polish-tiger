@@ -59,7 +59,7 @@ ALTER TABLE polish_tiger.login_attempts ENABLE ROW LEVEL SECURITY;`);
   await tx`INSERT INTO polish_tiger.metadata VALUES('seed-v1',${new Date().toISOString()})`;
  });
 }
-export async function dictionary():Promise<Term[]>{return await (await ready())`SELECT * FROM polish_tiger.terms ORDER BY dimension,label` as unknown as Term[];}
+export async function dictionary():Promise<Term[]>{const sql=await ready();return await sql`SELECT * FROM polish_tiger.terms ORDER BY dimension,label` as unknown as Term[];}
 export async function records():Promise<RecordData[]>{
  const sql=await ready();
  const [rows,terms,ingredients,sources]=await sql.begin(async tx=>[
@@ -76,15 +76,16 @@ export async function records():Promise<RecordData[]>{
  })) as unknown as RecordData[];
 }
 export async function updateRecord(id:string,data:RecordUpdate){
- await (await ready()).begin(async tx=>{
+ const sql=await ready();
+ await sql.begin(async tx=>{
   const rows=await tx`UPDATE polish_tiger.records SET name=${data.name},translation=${data.translation},notes=${data.notes} WHERE id=${id} RETURNING id`;
   if(!rows.length)throw new Error('Brak rekordu');
   await tx`DELETE FROM polish_tiger.record_terms WHERE record_id=${id}`;
   for(const termId of new Set(data.termIds))await tx`INSERT INTO polish_tiger.record_terms VALUES(${id},${termId})`;
  });
 }
-export async function updateTerm(id:number,label:string,synonyms:string){const result=await (await ready())`UPDATE polish_tiger.terms SET label=${label},synonyms=${synonyms} WHERE id=${id} RETURNING id`;if(!result.length)throw new Error('Brak terminu');}
-export async function createTerm(dimension:string,label:string,synonyms:string){await (await ready())`INSERT INTO polish_tiger.terms(dimension,label,synonyms) VALUES(${dimension},${label},${synonyms})`;}
+export async function updateTerm(id:number,label:string,synonyms:string){const sql=await ready();const result=await sql`UPDATE polish_tiger.terms SET label=${label},synonyms=${synonyms} WHERE id=${id} RETURNING id`;if(!result.length)throw new Error('Brak terminu');}
+export async function createTerm(dimension:string,label:string,synonyms:string){const sql=await ready();await sql`INSERT INTO polish_tiger.terms(dimension,label,synonyms) VALUES(${dimension},${label},${synonyms})`;}
 export async function allowLoginAttempt(key:string){
  const sql=await ready();
  const rows=await sql`INSERT INTO polish_tiger.login_attempts(key,window_start,attempts) VALUES(${key},NOW(),1)
