@@ -125,3 +125,23 @@ test('Połączenie z bazą przez tunel HTTP CONNECT (sieć tylko przez proxy)',{
   await assert.rejects(tunnel(proxyUrl,'db.example',9),/HTTP 403/);
  }finally{await sql.end();proxy.close();}
 });
+
+test('Tłumaczenia: eksport ze skrótami, wgranie, konflikt przy zmianie źródła, publikacja tagów do atlasu',{skip:!url},async()=>{
+ const sql=postgres(url!,{max:1,onnotice:()=>{},prepare:false});
+ const {exportSource,storeTranslations,currentTranslations}=await import('../lib/source/translations');
+ const {tagsFor}=await import('../lib/source/publish');
+ try{
+  await sql`DROP SCHEMA IF EXISTS polish_tiger_source CASCADE`;await migrate(sql);
+  const {fetcher}=fakeSite();await discover(sql,env(),fetcher);await fetchAndParse(sql,env(),fetcher,'pilot',pilot);
+  const exp=await exportSource(sql,['test-gen','test-tang']);
+  assert.deepEqual(exp['test-gen'].fields.taste.value,['Sweet','(Bitter)']);assert.ok(exp['test-tang'].fields.ingredient_notes);
+  const file={glossaryVersion:'gl-test',model:'test',promptVersion:'p1',records:[
+   {id:'test-gen',kind:'herb' as const,fields:{taste:{sourceHash:exp['test-gen'].fields.taste.sourceHash,value:['słodki','(gorzki)']},temperature:{sourceHash:exp['test-gen'].fields.temperature.sourceHash,value:['ciepłe','lekko toksyczne']}}},
+   {id:'test-tang',kind:'formula' as const,fields:{syndromes:{sourceHash:'stary-skrot',value:['Niedobór egzaminacyjny']}}}]};
+  assert.deepEqual(await storeTranslations(sql,file),{stored:2,conflict:1,unchanged:0});
+  assert.deepEqual(await storeTranslations(sql,file),{stored:0,conflict:1,unchanged:2},'ponowne wgranie nie duplikuje');
+  const cur=await currentTranslations(sql);
+  assert.deepEqual(cur.get('test-gen')!.taste,['słodki','(gorzki)']);assert.equal(cur.get('test-tang')?.syndromes,undefined,'konflikt nie jest pokazywany');
+  assert.deepEqual(tagsFor('herb',cur.get('test-gen')!),{thermal:['ciepłe'],contraindication:['lekko toksyczne'],taste:['słodki']});
+ }finally{await sql`DROP SCHEMA IF EXISTS polish_tiger_source CASCADE`;await sql.end();}
+});
