@@ -6,7 +6,7 @@ import type {Element} from 'domhandler';
 import {clean,cjk,grid,lines,slug} from './html';
 
 export const PARSER='americandragon';
-export const PARSER_VERSION='1.0.0';
+export const PARSER_VERSION='1.1.0';
 
 export type Completeness='present'|'missing_in_source'|'unreadable'|'needs_review';
 export type Field={name:string; value:unknown; excerpt:string; completeness:Completeness};
@@ -70,6 +70,7 @@ export function parseDosage(raw:string){
  return {min,max,unit:m[3]?m[3].toLowerCase():null};
 }
 
+const titleCase=(s:string)=>s.toLowerCase().replace(/(^|[\s(])([a-z])/g,(_,a,b)=>a+b.toUpperCase());
 function pageTitle($:CheerioAPI){return clean($('title').text()).split(' - ').map(s=>s.trim());}
 
 export function parseHerb(html:string,expectedName?:string):ParsedHerb{
@@ -77,7 +78,9 @@ export function parseHerb(html:string,expectedName?:string):ParsedHerb{
  const text=body($,'INDIVIDUAL HERBS'),title=pageTitle($);
  const fields:Field[]=[],issues:Issue[]=[],tags:Tag[]=[];
  const nameLine=text.find(l=>l.startsWith('NAME:'))||'';
- const pinyin=title[0]||'';
+ // The NAME line is the card's own Pinyin; some titles start with the Latin name instead ("Fr. Corni - …").
+ const named=nameLine.replace(/^NAME:\s*/,'').split(/\s+-\s+/)[0].trim();
+ const pinyin=!named||slug(named)===slug(title[0]||'')?title[0]||titleCase(named):titleCase(named);
  const chinese=cjk(title.join(' '))||cjk(nameLine);
  field(fields,issues,'pinyin',pinyin,[title.join(' - ')],{required:true});
  field(fields,issues,'chinese',chinese,[nameLine||title.join(' - ')]);
@@ -140,7 +143,8 @@ export function parseHerb(html:string,expectedName?:string):ParsedHerb{
  const combos:{herbs:string[];indication:string}[]=[];const comboExcerpt:string[]=[];
  const comboHeading=text.findIndex(l=>heading(l)==='MAJOR COMBINATIONS');
  if(comboHeading>=0){
-  const table=$('table').toArray().filter(t=>!$(t).find('table').length).find(t=>{
+  // Layout tables that wrap the whole page contain section headings and are skipped; a stray inner table inside one cell is fine.
+  const table=$('table').toArray().find(t=>{
    const g=grid($,t as Element);return g.length>=2&&g.some(r=>r.some(c=>/\b(Rx|Rz|Fr|Hb|Fol|Flos|Cx|Sm|Ram|Tub|Caulis)\.?\s/.test($(c).text())))&&!/Indications\/Syndromes|Entering Meridians|Pharmaceutical Latin/.test($(t).text())&&!HERB_SECTIONS.some(h=>$(t).text().includes(h));
   });
   if(table){

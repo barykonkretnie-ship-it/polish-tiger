@@ -220,10 +220,13 @@ async function storeParsed(tx:Tx,runId:number,pageId:number,revisionId:number,ur
 
 /** Links formula ingredients to herb cards by Pinyin; ingredients without a card stay unlinked by design. */
 async function linkIngredients(sql:Sql){
- const herbs=new Set((await sql`SELECT id FROM ${sql(S)}.herbs`).map(r=>r.id as string));
+ // A card is found by its id or by the Pinyin on its page (the "ban-xia" card is the Zhi Ban Xia page).
+ // Optional ingredients are written in parentheses; processed forms such as Zhi Gan Cao stay separate from Gan Cao.
+ const byName=new Map<string,string>();
+ for(const h of await sql`SELECT id,pinyin FROM ${sql(S)}.herbs`){byName.set(h.id as string,h.id as string);byName.set(slug(h.pinyin as string),h.id as string);}
  const rows=await sql`SELECT formula_id,position,pinyin_raw,herb_id FROM ${sql(S)}.formula_ingredients`;
  for(const r of rows){
-  const target=herbs.has(slug(r.pinyin_raw))?slug(r.pinyin_raw):null;
+  const target=byName.get(slug((r.pinyin_raw as string).replace(/^\((.*)\)$/,'$1')))??null;
   if(target!==r.herb_id)await sql`UPDATE ${sql(S)}.formula_ingredients SET herb_id=${target} WHERE formula_id=${r.formula_id} AND position=${r.position}`;
  }
 }

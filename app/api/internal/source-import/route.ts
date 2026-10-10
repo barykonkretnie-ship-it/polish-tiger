@@ -1,13 +1,14 @@
 // Server-side trigger for the source importer, for hosts that cannot reach the database themselves.
 // It answers only when IMPORT_TRIGGER_ENABLED=true and only on this deployment's own URL (VERCEL_URL), which
 // Vercel Authentication protects; the public production domain always gets 404. Database credentials stay on the server.
-// GET ?stage=migrate | discover | fetch[&batch=N] | report[&run=ID] | review
+// GET ?stage=migrate | discover | fetch[&batch=N] | parse[&force=true] | report[&run=ID] | review | atlas
 import {NextRequest,NextResponse} from 'next/server';
 import {loadConfig,ConfigError} from '../../../../lib/source/config';
 import {connect} from '../../../../lib/source/db';
 import {migrate} from '../../../../lib/source/migrate';
 import {PoliteFetcher} from '../../../../lib/source/fetcher';
-import {discover,fetchAndParse,buildReport,RightsNotConfirmed} from '../../../../lib/source/importer';
+import {discover,fetchAndParse,reparse,buildReport,RightsNotConfirmed} from '../../../../lib/source/importer';
+import {records} from '../../../../lib/db';
 
 export const dynamic='force-dynamic';
 export const maxDuration=300;
@@ -30,6 +31,12 @@ export async function GET(req:NextRequest){
    if(!Number.isInteger(batch)||batch<1||batch>config.maxPages)return NextResponse.json({error:'Nieprawidłowy batch.'},{status:400});
    return NextResponse.json((await fetchAndParse(sql,config,fetcher,'pilot',undefined,{batch})).report);
   }
+  if(stage==='parse')return NextResponse.json((await reparse(sql,config,req.nextUrl.searchParams.get('force')==='true')).report);
+  if(stage==='atlas'){
+   // Runs the atlas's own initialization (including the one-time rollback) and returns its record counts.
+   const all=await records();
+   return NextResponse.json({herbs:all.filter(r=>r.kind==='herb').length,formulas:all.filter(r=>r.kind==='formula').length});
+  }
   if(stage==='report'){
    const run=Number(req.nextUrl.searchParams.get('run'))||Number((await sql`SELECT max(id) AS id FROM polish_tiger_source.import_runs`)[0].id);
    return NextResponse.json(await buildReport(sql,run));
@@ -43,7 +50,7 @@ export async function GET(req:NextRequest){
    const markers=await sql`SELECT key FROM polish_tiger.metadata ORDER BY key`.catch(()=>[]);
    return NextResponse.json({records,open,unlinked,atlas,atlasMarkers:markers.map(m=>m.key)});
   }
-  return NextResponse.json({error:'stage: migrate | discover | fetch | report | review'},{status:400});
+  return NextResponse.json({error:'stage: migrate | discover | fetch | parse | report | review | atlas'},{status:400});
  }catch(error){
   const message=error instanceof ConfigError||error instanceof RightsNotConfirmed||error instanceof Error?error.message:String(error);
   return NextResponse.json({error:message},{status:500});
