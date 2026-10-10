@@ -1,7 +1,7 @@
 // Server-side trigger for the source importer, for hosts that cannot reach the database themselves.
 // It answers only when IMPORT_TRIGGER_ENABLED=true and only on this deployment's own URL (VERCEL_URL), which
 // Vercel Authentication protects; the public production domain always gets 404. Database credentials stay on the server.
-// GET ?stage=migrate | discover | fetch[&batch=N] | report[&run=ID]
+// GET ?stage=migrate | discover | fetch[&batch=N] | report[&run=ID] | review
 import {NextRequest,NextResponse} from 'next/server';
 import {loadConfig,ConfigError} from '../../../../lib/source/config';
 import {connect} from '../../../../lib/source/db';
@@ -34,7 +34,16 @@ export async function GET(req:NextRequest){
    const run=Number(req.nextUrl.searchParams.get('run'))||Number((await sql`SELECT max(id) AS id FROM polish_tiger_source.import_runs`)[0].id);
    return NextResponse.json(await buildReport(sql,run));
   }
-  return NextResponse.json({error:'stage: migrate | discover | fetch | report'},{status:400});
+  if(stage==='review'){
+   // Read-only overview for the quality check after the pilot (document 9.9).
+   const open=await sql`SELECT record_kind,record_id,field,issue_type,detail FROM polish_tiger_source.review_queue WHERE status='open' ORDER BY issue_type,record_kind,record_id`;
+   const unlinked=await sql`SELECT formula_id,position,pinyin_raw,dosage_raw FROM polish_tiger_source.formula_ingredients WHERE herb_id IS NULL ORDER BY formula_id,position`;
+   const records=await sql`SELECT 'herb' AS kind,id,pinyin,chinese,pharmaceutical_latin AS latin FROM polish_tiger_source.herbs UNION ALL SELECT 'formula',id,pinyin,chinese,english_name FROM polish_tiger_source.formulas ORDER BY 1,2`;
+   const atlas=await sql`SELECT kind,count(*)::int AS n FROM polish_tiger.records GROUP BY kind`.catch(()=>[]);
+   const markers=await sql`SELECT key FROM polish_tiger.metadata ORDER BY key`.catch(()=>[]);
+   return NextResponse.json({records,open,unlinked,atlas,atlasMarkers:markers.map(m=>m.key)});
+  }
+  return NextResponse.json({error:'stage: migrate | discover | fetch | report | review'},{status:400});
  }catch(error){
   const message=error instanceof ConfigError||error instanceof RightsNotConfirmed||error instanceof Error?error.message:String(error);
   return NextResponse.json({error:message},{status:500});
