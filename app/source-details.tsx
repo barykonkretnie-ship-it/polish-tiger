@@ -17,8 +17,8 @@ function pick(source:SourceInfo,field:string):{value:unknown;en:boolean;missing?
 const En=({on}:{on:boolean})=>on?<small className="en" title="Brak tłumaczenia — tekst źródłowy">EN</small>:null;
 const list=(v:unknown)=>(Array.isArray(v)?v:v==null?[]:[v]).map(String);
 
-function Field({label,source,field,inline}:{label:string;source:SourceInfo;field:string;inline?:boolean}){
- const {value,en,missing}=pick(source,field);
+function Field({label,source,field,inline,latin}:{label:string;source:SourceInfo;field:string;inline?:boolean;latin?:boolean}){
+ const picked=pick(source,field),{value,missing}=picked,en=picked.en&&!latin;
  const items=list(value);
  return <div className="src-field"><strong>{label}:</strong>{' '}{missing?<span className="missing">{missing}</span>:inline||items.length<2?<>{items.join(', ')} <En on={en}/></>:<><En on={en}/><ul>{items.map((x,i)=><li key={i}>{x}</li>)}</ul></>}</div>;
 }
@@ -45,7 +45,7 @@ export default function SourceDetails({record,source,open,known}:Props){
   :<section className="panel"><h2>Objawy i diagnostyka</h2><Field label="Objawy kliniczne" source={source} field="manifestations"/><Field label="Język" source={source} field="tongue" inline/><Field label="Nalot" source={source} field="coating" inline/><Field label="Puls" source={source} field="pulse" inline/></section>}
 
   <section className="panel"><h2>Bezpieczeństwo i przygotowanie</h2>
-   {herb?<><Field label="Dawkowanie" source={source} field="dosage" inline/><Field label="Surowiec (nazwa farmaceutyczna)" source={source} field="pharmaceutical_latin" inline/></>:null}
+   {herb?<><Field label="Dawkowanie" source={source} field="dosage" inline/><Field label="Surowiec (nazwa farmaceutyczna)" source={source} field="pharmaceutical_latin" inline latin/></>:null}
    <Field label="Przeciwwskazania" source={source} field="contraindications"/>
    {herb&&<Field label="Niezgodności" source={source} field="incompatibilities"/>}
    <Field label="Interakcje zioło–lek" source={source} field="interactions"/>
