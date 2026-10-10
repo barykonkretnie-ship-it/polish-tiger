@@ -61,7 +61,7 @@ if (db.prepare('SELECT 1 FROM metadata WHERE key=?').get(rollback.importMarker) 
 }
 export function dictionary():Term[] {return db.prepare('SELECT * FROM terms ORDER BY dimension,label').all() as Term[];}
 export function records():RecordData[] {
- return (db.prepare('SELECT * FROM records ORDER BY name').all() as Omit<RecordData,'terms'|'ingredients'|'related'|'sources'>[]).map(r=>({...r,
+ return (db.prepare('SELECT * FROM records ORDER BY name').all() as unknown as Omit<RecordData,'terms'|'ingredients'|'related'|'sources'|'source'>[]).map(r=>({...r,
   terms:db.prepare('SELECT t.* FROM terms t JOIN record_terms rt ON rt.term_id=t.id WHERE rt.record_id=? ORDER BY t.label').all(r.id) as Term[],
   ingredients:db.prepare('SELECT r.id,r.name,i.quantity,i.role,i.preparation FROM ingredients i JOIN records r ON r.id=i.herb_id WHERE formula_id=? ORDER BY r.name').all(r.id) as RecordData['ingredients'],
   related:db.prepare('SELECT r.id,r.name FROM ingredients i JOIN records r ON r.id=i.formula_id WHERE herb_id=? ORDER BY r.name').all(r.id) as RecordData['related'],

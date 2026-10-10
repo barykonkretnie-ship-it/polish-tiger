@@ -1,6 +1,6 @@
 import postgres from 'postgres';
 import {herbs,formulas} from './sample';
-import type {Term,RecordData,RecordUpdate} from './types';
+import type {Term,RecordData,RecordUpdate,SourceInfo} from './types';
 import * as rollback from './rollback';
 let connection:ReturnType<typeof postgres>|undefined;
 let initialized:Promise<void>|undefined;
@@ -70,7 +70,8 @@ export async function records():Promise<RecordData[]>{
   await tx`SELECT i.*,h.name AS herb_name,f.name AS formula_name FROM polish_tiger.ingredients i JOIN polish_tiger.records h ON h.id=i.herb_id JOIN polish_tiger.records f ON f.id=i.formula_id ORDER BY h.name`,
   await tx`SELECT * FROM polish_tiger.sources ORDER BY id`,
  ]);
- return rows.map(r=>({...r,
+ const source=await sourceInfo(sql);
+ return rows.map(r=>({...r,source:source.get(r.id)??null,
   terms:terms.filter(t=>t.record_id===r.id).map(({record_id,...t})=>t),
   ingredients:ingredients.filter(i=>i.formula_id===r.id).map(i=>({id:i.herb_id,name:i.herb_name,quantity:i.quantity,role:i.role,preparation:i.preparation})),
   related:ingredients.filter(i=>i.herb_id===r.id).map(i=>({id:i.formula_id,name:i.formula_name})),
@@ -114,4 +115,24 @@ async function rollbackAmericanDragon(tx:postgres.TransactionSql){
  const only=rollback.importedOnlyTerms;
  await tx`DELETE FROM polish_tiger.terms t USING unnest(${tx.array(only.map(t=>t.dimension))}::text[],${tx.array(only.map(t=>t.label))}::text[]) AS u(d,l) WHERE t.dimension=u.d AND t.label=u.l AND NOT EXISTS(SELECT 1 FROM polish_tiger.record_terms rt WHERE rt.term_id=t.id)`;
  await tx`INSERT INTO polish_tiger.metadata VALUES(${rollback.rollbackMarker},${new Date().toISOString()})`;
+}
+
+/** Source-layer data for atlas records with the same id, from each record's current revision. Empty until the importer has run. */
+async function sourceInfo(sql:ReturnType<typeof postgres>){
+ const out=new Map<string,SourceInfo>();
+ if(!(await sql`SELECT to_regclass('polish_tiger_source.field_evidence') AS t`)[0].t)return out;
+ const S='polish_tiger_source';
+ const [records,fields,ingredients,modifications]=await Promise.all([
+  sql`SELECT c.id,c.pinyin,c.chinese,c.parser_version,p.canonical_url,r.fetched_at FROM (SELECT id,pinyin,chinese,parser_version,source_page_id,revision_id FROM ${sql(S)}.herbs UNION ALL SELECT id,pinyin,chinese,parser_version,source_page_id,revision_id FROM ${sql(S)}.formulas) c
+   JOIN ${sql(S)}.source_pages p ON p.id=c.source_page_id JOIN ${sql(S)}.source_page_revisions r ON r.id=c.revision_id`,
+  sql`SELECT e.record_id,e.field,e.value,e.completeness FROM ${sql(S)}.field_evidence e
+   JOIN (SELECT id,revision_id FROM ${sql(S)}.herbs UNION ALL SELECT id,revision_id FROM ${sql(S)}.formulas) c ON c.id=e.record_id AND c.revision_id=e.revision_id`,
+  sql`SELECT formula_id,position,pinyin_raw,latin_raw,dosage_raw,is_optional,notes,herb_id FROM ${sql(S)}.formula_ingredients ORDER BY formula_id,position`,
+  sql`SELECT formula_id,position,condition,operation,ingredient_raw FROM ${sql(S)}.formula_modifications ORDER BY formula_id,position`,
+ ]);
+ for(const r of records)out.set(r.id,{url:r.canonical_url,fetchedAt:new Date(r.fetched_at).toISOString(),parserVersion:r.parser_version,pinyin:r.pinyin,chinese:r.chinese,fields:{},ingredients:[],modifications:[]});
+ for(const f of fields){const s=out.get(f.record_id);if(s)s.fields[f.field]={value:f.value,completeness:f.completeness};}
+ for(const i of ingredients)out.get(i.formula_id)?.ingredients.push({position:i.position,pinyin:i.pinyin_raw,latin:i.latin_raw,dosage:i.dosage_raw,optional:i.is_optional,notes:i.notes,herbId:i.herb_id});
+ for(const m of modifications)out.get(m.formula_id)?.modifications.push({position:m.position,condition:m.condition,operation:m.operation,ingredient:m.ingredient_raw});
+ return out;
 }

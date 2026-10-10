@@ -6,7 +6,7 @@ Prywatny prototyp edukacyjnego atlasu TCM: dokładnie 20 ziół i 10 formuł. Ws
 
 ## Warstwa źródłowa i importer (American Dragon)
 
-Według dokumentu „Polish Tiger — pobieranie danych i dedykowana baza”. Dane źródłowe trafiają do osobnego schematu PostgreSQL `polish_tiger_source`, oddzielonego od tabel atlasu (`polish_tiger`), tłumaczeń i poprawek redakcyjnych. Aplikacja jeszcze z niego nie czyta (punkt 12.7).
+Według dokumentu „Polish Tiger — pobieranie danych i dedykowana baza”. Dane źródłowe trafiają do osobnego schematu PostgreSQL `polish_tiger_source`, oddzielonego od tabel atlasu (`polish_tiger`), tłumaczeń i poprawek redakcyjnych. Karty atlasu o tych samych identyfikatorach pokazują sekcję „Dane ze źródła” (wszystkie odczytane pola, kompletność, link do konkretnej strony American Dragon i datę pobrania); klasyfikacja atlasu pozostaje osobną, polską warstwą.
 
 - Migracje: `db/migrations/*.sql`, stosowane przez `npm run db:migrate` (`MIGRATION_DATABASE_URL`). Importer nie tworzy tabel.
 - Importer: `npm run import -- discover | fetch [pilot|all] | parse [--force] | report <id> | read-files <katalog>`. Ustawienia są jawne, według wzoru `.env.import.example` (punkt 10). Brak którejkolwiek wartości blokuje start.
