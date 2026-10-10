@@ -1,7 +1,7 @@
 // Server-side trigger for the source importer, for hosts that cannot reach the database themselves.
 // It answers only when IMPORT_TRIGGER_ENABLED=true and only on this deployment's own URL (VERCEL_URL), which
 // Vercel Authentication protects; the public production domain always gets 404. Database credentials stay on the server.
-// GET ?stage=migrate | discover | fetch[&batch=N] | parse[&force=true] | report[&run=ID] | review | atlas
+// GET ?stage=migrate | export&ids=a,b | translations | publish | discover | fetch[&batch=N] | parse[&force=true] | report[&run=ID] | review | atlas
 import {NextRequest,NextResponse} from 'next/server';
 import {loadConfig,ConfigError} from '../../../../lib/source/config';
 import {connect} from '../../../../lib/source/db';
@@ -9,6 +9,8 @@ import {migrate} from '../../../../lib/source/migrate';
 import {PoliteFetcher} from '../../../../lib/source/fetcher';
 import {discover,fetchAndParse,reparse,buildReport,RightsNotConfirmed} from '../../../../lib/source/importer';
 import {records} from '../../../../lib/db';
+import {exportSource,loadTranslationFile,storeTranslations} from '../../../../lib/source/translations';
+import {publishTranslatedTags} from '../../../../lib/source/publish';
 
 export const dynamic='force-dynamic';
 export const maxDuration=300;
@@ -23,6 +25,18 @@ export async function GET(req:NextRequest){
  const sql=connect(dbUrl,{POLISH_TIGER_DATABASE_SSL:process.env.POLISH_TIGER_DATABASE_SSL,VERCEL:process.env.VERCEL});
  try{
   if(stage==='migrate')return NextResponse.json({applied:await migrate(sql)});
+  // Translation workflow (document section 7): export source text, load reviewed-to-be translations, publish tags.
+  if(stage==='export'){
+   const ids=(req.nextUrl.searchParams.get('ids')||'').split(',').filter(Boolean);
+   if(!ids.length||ids.length>10)return NextResponse.json({error:'Podaj 1–10 identyfikatorów w ids.'},{status:400});
+   return NextResponse.json(await exportSource(sql,ids));
+  }
+  if(stage==='translations'){
+   const file=loadTranslationFile();
+   if(!file)return NextResponse.json({error:'Brak db/translations/pilot-pl.json w tym wdrożeniu.'},{status:404});
+   return NextResponse.json(await storeTranslations(sql,file));
+  }
+  if(stage==='publish'){await records();return NextResponse.json(await publishTranslatedTags(sql));}
   const config=loadConfig({...process.env,IMPORT_DATABASE_URL:dbUrl});
   const fetcher=new PoliteFetcher({delaySeconds:config.delaySeconds,maxRetries:config.maxRetries,userAgent:config.userAgent});
   if(stage==='discover')return NextResponse.json((await discover(sql,config,fetcher)).report);
