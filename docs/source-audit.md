@@ -23,6 +23,12 @@ Data: 2026-10-10. Etap 1 z dokumentu „Polish Tiger — pobieranie danych i ded
 
 Import 50 ziół i 50 formuł z 2026-10-10 wykonano bez tego kroku. Wycofano go z aplikacji i bazy (`lib/rollback.ts`), a strony pobrane wtedy posłużyły tylko do offline'owego testu parsera.
 
+## Decyzja właściciela (2026-10-10)
+
+- Pobieranie i przechowywanie pilota 20 + 10 w prywatnej bazie: **zatwierdzone przez właściciela projektu** na jego odpowiedzialność. Nie było kontaktu z rodziną autora. `IMPORT_SOURCE_RIGHTS_CONFIRMED=true` wolno ustawić tylko dla zakresu pilota.
+- Retencja: **`raw_html`**, czyli pełny HTML w `source_page_revisions`, żeby poprawki parsera nie wymagały ponownego pobierania.
+- Baza: istniejąca baza Neon projektu (integracja Vercel). Pełny import i tłumaczenia nadal wymagają osobnej zgody.
+
 ## Struktura źródła
 
 - Indeks ziół (Pinyin): `IndividualHerbsIndex2.html`, 715 linków do kart w `Individualherbsupdate/`. Jeden link jest martwy: `Bai(Ci)JiLi.html` zwraca 404 (dublet `BaiJiLi.html`).

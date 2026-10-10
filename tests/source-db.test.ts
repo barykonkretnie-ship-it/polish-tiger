@@ -101,3 +101,23 @@ test('Polityka excerpts_only: brak surowego HTML, a ponowne parsowanie to raport
   const r=await reparse(sql,config,true);assert.equal(r.report.counters.no_raw_html,2);
  }finally{await sql`DROP SCHEMA IF EXISTS polish_tiger_source CASCADE`;await sql.end();}
 });
+
+test('Połączenie z bazą przez tunel HTTP CONNECT (sieć tylko przez proxy)',{skip:!url},async()=>{
+ const {tunnel}=await import('../lib/source/db');
+ const http=await import('node:http'),net=await import('node:net');
+ const target=new URL(url!);const seen:string[]=[];
+ const proxy=http.createServer().on('connect',(req,client,head)=>{
+  seen.push(req.url!);
+  if(req.url!.endsWith(':9')){client.end('HTTP/1.1 403 Forbidden\r\n\r\n');return;}
+  const upstream=net.connect(Number(target.port)||5432,target.hostname,()=>{client.write('HTTP/1.1 200 Connection Established\r\n\r\n');upstream.write(head);upstream.pipe(client);client.pipe(upstream);});
+  upstream.on('error',()=>client.destroy());
+ });
+ await new Promise<void>(r=>proxy.listen(0,'127.0.0.1',()=>r()));
+ const proxyUrl=`http://127.0.0.1:${(proxy.address() as {port:number}).port}`;
+ const sql=postgres(url!,{max:1,onnotice:()=>{},socket:()=>tunnel(proxyUrl,target.hostname,Number(target.port)||5432)});
+ try{
+  assert.equal((await sql`SELECT 41+1 AS n`)[0].n,42);
+  assert.deepEqual(seen,[`${target.hostname}:${Number(target.port)||5432}`]);
+  await assert.rejects(tunnel(proxyUrl,'db.example',9),/HTTP 403/);
+ }finally{await sql.end();proxy.close();}
+});

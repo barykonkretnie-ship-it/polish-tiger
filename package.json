@@ -16,8 +16,8 @@
     "test:e2e": "playwright test",
     "db:setup": "node --env-file-if-exists=.env.local --import tsx scripts/setup-postgres.ts",
     "test:private": "tsx scripts/check-private.ts",
-    "db:migrate": "node --env-file-if-exists=.env.import --import tsx scripts/migrate.ts",
-    "import": "node --env-file-if-exists=.env.import --import tsx scripts/import.ts"
+    "db:migrate": "NODE_USE_ENV_PROXY=1 node --env-file-if-exists=.env.import --import tsx scripts/migrate.ts",
+    "import": "NODE_USE_ENV_PROXY=1 node --env-file-if-exists=.env.import --import tsx scripts/import.ts"
   },
   "repository": {
     "type": "git",

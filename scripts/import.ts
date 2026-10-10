@@ -5,10 +5,10 @@
 //   npm run import -- report <runId>    print a stored run report
 //   npm run import -- read-files <dir>  offline parser read report for saved pages (no database, no network)
 // Settings come from the environment; see .env.import.example. Nothing has a hidden default.
-import postgres from 'postgres';
 import {readdirSync,readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import path from 'node:path';
 import {loadConfig,ConfigError} from '../lib/source/config';
+import {connect} from '../lib/source/db';
 import {PoliteFetcher} from '../lib/source/fetcher';
 import {discover,fetchAndParse,reparse,buildReport,RightsNotConfirmed} from '../lib/source/importer';
 import {parsePage,PARSER_VERSION} from '../lib/source/parser';
@@ -56,8 +56,7 @@ if(command==='read-files'){
 
 let config;
 try{config=loadConfig();}catch(e){console.error(e instanceof ConfigError?e.message:e);process.exit(1);}
-const local=process.env.POLISH_TIGER_DATABASE_SSL==='local-test'&&['127.0.0.1','localhost','[::1]'].includes(new URL(config.databaseUrl).hostname);
-const sql=postgres(config.databaseUrl,{ssl:local?false:{rejectUnauthorized:true},max:1,onnotice:()=>{},prepare:false});
+const sql=connect(config.databaseUrl);
 const fetcher=new PoliteFetcher({delaySeconds:config.delaySeconds,maxRetries:config.maxRetries,userAgent:config.userAgent});
 try{
  const migrated=await sql`SELECT to_regclass('polish_tiger_source.import_runs') AS t`;
