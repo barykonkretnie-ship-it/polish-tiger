@@ -133,6 +133,9 @@ test('Tłumaczenia: eksport ze skrótami, wgranie, konflikt przy zmianie źród�
  try{
   await sql`DROP SCHEMA IF EXISTS polish_tiger_source CASCADE`;await migrate(sql);
   const {fetcher}=fakeSite();await discover(sql,env(),fetcher);await fetchAndParse(sql,env(),fetcher,'pilot',pilot);
+  // A brand-new connection has not loaded array types yet; the export must still work as its first query.
+  const fresh=postgres(url!,{max:1,onnotice:()=>{},prepare:false});
+  try{assert.ok((await exportSource(fresh,['test-gen','test-tang']))['test-gen']);}finally{await fresh.end();}
   const exp=await exportSource(sql,['test-gen','test-tang']);
   assert.deepEqual(exp['test-gen'].fields.taste.value,['Sweet','(Bitter)']);assert.ok(exp['test-tang'].fields.ingredient_notes);
   const file={glossaryVersion:'gl-test',model:'test',promptVersion:'p1',records:[

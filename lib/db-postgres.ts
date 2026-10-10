@@ -1,6 +1,7 @@
 import postgres from 'postgres';
 import {herbs,formulas} from './sample';
 import type {Term,RecordData,RecordUpdate,SourceInfo} from './types';
+import {currentTranslations} from './source/translations';
 import * as rollback from './rollback';
 let connection:ReturnType<typeof postgres>|undefined;
 let initialized:Promise<void>|undefined;
@@ -134,5 +135,7 @@ async function sourceInfo(sql:ReturnType<typeof postgres>){
  for(const f of fields){const s=out.get(f.record_id);if(s)s.fields[f.field]={value:f.value,completeness:f.completeness};}
  for(const i of ingredients)out.get(i.formula_id)?.ingredients.push({position:i.position,pinyin:i.pinyin_raw,latin:i.latin_raw,dosage:i.dosage_raw,optional:i.is_optional,notes:i.notes,herbId:i.herb_id});
  for(const m of modifications)out.get(m.formula_id)?.modifications.push({position:m.position,condition:m.condition,operation:m.operation,ingredient:m.ingredient_raw});
+ const translations=await currentTranslations(sql);
+ for(const [id,pl] of translations){const s=out.get(id);if(s)s.pl=pl;}
  return out;
 }

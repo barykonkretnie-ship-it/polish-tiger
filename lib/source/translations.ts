@@ -19,9 +19,9 @@ export type TranslationFile={glossaryVersion:string; model:string; promptVersion
 export async function exportSource(sql:postgres.Sql,ids:string[]){
  const rows=await sql`SELECT e.record_kind,e.record_id,e.field,e.value,e.completeness FROM ${sql(S)}.field_evidence e
   JOIN (SELECT id,revision_id FROM ${sql(S)}.herbs UNION ALL SELECT id,revision_id FROM ${sql(S)}.formulas) c ON c.id=e.record_id AND c.revision_id=e.revision_id
-  WHERE e.record_id=ANY(${sql.array(ids)}::text[]) ORDER BY e.record_id,e.field`;
- const ingredients=await sql`SELECT formula_id,position,pinyin_raw,notes FROM ${sql(S)}.formula_ingredients WHERE formula_id=ANY(${sql.array(ids)}::text[]) ORDER BY formula_id,position`;
- const mods=await sql`SELECT formula_id,position,condition,ingredient_raw FROM ${sql(S)}.formula_modifications WHERE formula_id=ANY(${sql.array(ids)}::text[]) ORDER BY formula_id,position`;
+  WHERE e.record_id IN ${sql(ids)} ORDER BY e.record_id,e.field`;
+ const ingredients=await sql`SELECT formula_id,position,pinyin_raw,notes FROM ${sql(S)}.formula_ingredients WHERE formula_id IN ${sql(ids)} ORDER BY formula_id,position`;
+ const mods=await sql`SELECT formula_id,position,condition,ingredient_raw FROM ${sql(S)}.formula_modifications WHERE formula_id IN ${sql(ids)} ORDER BY formula_id,position`;
  const out:Record<string,{kind:string;fields:Record<string,{value:unknown;completeness:string;sourceHash:string}>}>={};
  for(const r of rows){(out[r.record_id]??={kind:r.record_kind,fields:{}}).fields[r.field]={value:r.value,completeness:r.completeness,sourceHash:sourceHash(r.value)};}
  // Ingredient notes and modification conditions live in their own tables; they are exported as pseudo-fields.
