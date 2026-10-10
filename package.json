@@ -1,0 +1,50 @@
+{
+  "name": "polish-tiger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start --hostname 0.0.0.0",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "test:e2e": "playwright test",
+    "db:setup": "node --env-file-if-exists=.env.local --import tsx scripts/setup-postgres.ts",
+    "test:private": "tsx scripts/check-private.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barykonkretnie-ship-it/polish-tiger.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/barykonkretnie-ship-it/polish-tiger/issues"
+  },
+  "homepage": "https://github.com/barykonkretnie-ship-it/polish-tiger#readme",
+  "dependencies": {
+    "next": "^16.4.0",
+    "postgres": "^3.4.9",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=24 <25"
+  }
+}
