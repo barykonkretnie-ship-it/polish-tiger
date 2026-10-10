@@ -3,6 +3,7 @@ node_modules/
 data/
 .env*
 !.env.example
+!.env.import.example
 .vercel/
 playwright-report/
 test-results/

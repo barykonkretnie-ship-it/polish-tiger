@@ -1,0 +1,157 @@
+{
+ "description": "Pilot 20 + 10: te same zioła i formuły co próbka demonstracyjna atlasu (lib/sample.ts). Adresy z indeksów American Dragon (audyt 2026-10-10).",
+ "herbs": [
+  {
+   "id": "ren-shen",
+   "name": "Ren Shen",
+   "url": "https://www.americandragon.com/Individualherbsupdate/RenShen.html"
+  },
+  {
+   "id": "bai-zhu",
+   "name": "Bai Zhu",
+   "url": "https://www.americandragon.com/Individualherbsupdate/BaiZhu.html"
+  },
+  {
+   "id": "fu-ling",
+   "name": "Fu Ling",
+   "url": "https://www.americandragon.com/Individualherbsupdate/FuLing.html"
+  },
+  {
+   "id": "gan-cao",
+   "name": "Gan Cao",
+   "url": "https://www.americandragon.com/Individualherbsupdate/GanCao.html"
+  },
+  {
+   "id": "dang-gui",
+   "name": "Dang Gui",
+   "url": "https://www.americandragon.com/Individualherbsupdate/DangGui.html"
+  },
+  {
+   "id": "bai-shao",
+   "name": "Bai Shao",
+   "url": "https://www.americandragon.com/Individualherbsupdate/BaiShao.html"
+  },
+  {
+   "id": "chuan-xiong",
+   "name": "Chuan Xiong",
+   "url": "https://www.americandragon.com/Individualherbsupdate/ChuanXiong.html"
+  },
+  {
+   "id": "shu-di-huang",
+   "name": "Shu Di Huang",
+   "url": "https://www.americandragon.com/Individualherbsupdate/ShuDiHuang.html"
+  },
+  {
+   "id": "shan-zhu-yu",
+   "name": "Shan Zhu Yu",
+   "url": "https://www.americandragon.com/Individualherbsupdate/ShanZhuYu.html"
+  },
+  {
+   "id": "huang-qi",
+   "name": "Huang Qi",
+   "url": "https://www.americandragon.com/Individualherbsupdate/HuangQi.html"
+  },
+  {
+   "id": "gui-zhi",
+   "name": "Gui Zhi",
+   "url": "https://www.americandragon.com/Individualherbsupdate/GuiZhi.html"
+  },
+  {
+   "id": "sheng-jiang",
+   "name": "Sheng Jiang",
+   "url": "https://www.americandragon.com/Individualherbsupdate/ShengJiang.html"
+  },
+  {
+   "id": "da-zao",
+   "name": "Da Zao",
+   "url": "https://www.americandragon.com/Individualherbsupdate/DaZao.html"
+  },
+  {
+   "id": "ban-xia",
+   "name": "Ban Xia",
+   "url": "https://www.americandragon.com/Individualherbsupdate/ZhiBanXia.htm"
+  },
+  {
+   "id": "chen-pi",
+   "name": "Chen Pi",
+   "url": "https://www.americandragon.com/Individualherbsupdate/ChenPi.html"
+  },
+  {
+   "id": "chai-hu",
+   "name": "Chai Hu",
+   "url": "https://www.americandragon.com/Individualherbsupdate/ChaiHu.html"
+  },
+  {
+   "id": "huang-qin",
+   "name": "Huang Qin",
+   "url": "https://www.americandragon.com/Individualherbsupdate/HuangQin.html"
+  },
+  {
+   "id": "shan-yao",
+   "name": "Shan Yao",
+   "url": "https://www.americandragon.com/Individualherbsupdate/ShanYao.html"
+  },
+  {
+   "id": "mu-dan-pi",
+   "name": "Mu Dan Pi",
+   "url": "https://www.americandragon.com/Individualherbsupdate/MuDanPi.html"
+  },
+  {
+   "id": "ze-xie",
+   "name": "Ze Xie",
+   "url": "https://www.americandragon.com/Individualherbsupdate/ZeXie.html"
+  }
+ ],
+ "formulas": [
+  {
+   "id": "si-jun-zi-tang",
+   "name": "Si Jun Zi Tang",
+   "url": "https://www.americandragon.com/Herb%20Formulas%20copy/SiJunZiTang.html"
+  },
+  {
+   "id": "si-wu-tang",
+   "name": "Si Wu Tang",
+   "url": "https://www.americandragon.com/Herb%20Formulas%20copy/SiWuTang.html"
+  },
+  {
+   "id": "ba-zhen-tang",
+   "name": "Ba Zhen Tang",
+   "url": "https://www.americandragon.com/Herb%20Formulas%20copy/BaZhenTang.html"
+  },
+  {
+   "id": "liu-jun-zi-tang",
+   "name": "Liu Jun Zi Tang",
+   "url": "https://www.americandragon.com/Herb%20Formulas%20copy/LiuJunZiTang.html"
+  },
+  {
+   "id": "gui-zhi-tang",
+   "name": "Gui Zhi Tang",
+   "url": "https://www.americandragon.com/Herb%20Formulas%20copy/GuiZhiTang.html"
+  },
+  {
+   "id": "xiao-chai-hu-tang",
+   "name": "Xiao Chai Hu Tang",
+   "url": "https://www.americandragon.com/Herb%20Formulas%20copy/XiaoChaiHuTang.html"
+  },
+  {
+   "id": "dang-gui-bu-xue-tang",
+   "name": "Dang Gui Bu Xue Tang",
+   "url": "https://www.americandragon.com/Herb%20Formulas%20copy/DangGuiBuXueTang.html"
+  },
+  {
+   "id": "huang-qi-gui-zhi-wu-wu-tang",
+   "name": "Huang Qi Gui Zhi Wu Wu Tang",
+   "url": "https://www.americandragon.com/Herb%20Formulas%20copy/HuangQiGuiZhiWuWuTang.html"
+  },
+  {
+   "id": "liu-wei-di-huang-wan",
+   "name": "Liu Wei Di Huang Wan",
+   "url": "https://www.americandragon.com/Herb%20Formulas%20copy/LiuWeiDiHuangWan.html"
+  },
+  {
+   "id": "fu-ling-gan-cao-tang",
+   "name": "Fu Ling Gan Cao Tang",
+   "url": "https://www.americandragon.com/Herb%20Formulas%20copy/FuLingGanCaoTang.html"
+  }
+ ]
+}

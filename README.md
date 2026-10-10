@@ -4,6 +4,18 @@ Wdrożenie Vercel + Supabase: [instrukcja krok po kroku](DEPLOYMENT.md). Postgre
 
 Prywatny prototyp edukacyjnego atlasu TCM: dokładnie 20 ziół i 10 formuł. Wszystkie dane próbki są **demonstracyjne i niezweryfikowane**. Nie pobierano treści American Dragon, nie uruchamiano masowego importu ani AI. Odnośnik do strony głównej American Dragon oznacza źródło referencyjne projektu, nie cytowanie lub weryfikację konkretnego rekordu. Nie podano dawek ani porad leczenia.
 
+## Warstwa źródłowa i importer (American Dragon)
+
+Według dokumentu „Polish Tiger — pobieranie danych i dedykowana baza”. Dane źródłowe trafiają do osobnego schematu PostgreSQL `polish_tiger_source`, oddzielonego od tabel atlasu (`polish_tiger`), tłumaczeń i poprawek redakcyjnych. Aplikacja jeszcze z niego nie czyta (punkt 12.7).
+
+- Migracje: `db/migrations/*.sql`, stosowane przez `npm run db:migrate` (`MIGRATION_DATABASE_URL`). Importer nie tworzy tabel.
+- Importer: `npm run import -- discover | fetch [pilot|all] | parse [--force] | report <id> | read-files <katalog>`. Ustawienia są jawne, według wzoru `.env.import.example` (punkt 10). Brak którejkolwiek wartości blokuje start.
+- Pobieranie: kolejne strony pojedynczo, z opóźnieniem, żądaniami warunkowymi (`ETag`/`Last-Modified`), ograniczonymi ponowieniami z `Retry-After` i limitem stron. Każda strona zapisuje się we własnej transakcji, więc przerwany import można wznowić.
+- Pochodzenie: `field_evidence` przechowuje dla każdego pola wartość, URL, rewizję, cytowany fragment, datę pobrania, parser z wersją, status wartości (`source`…`human_approved`) i kompletność (`present`/`missing_in_source`/`unreadable`/`needs_review`).
+- Niepewne odczyty, nieznane sekcje, rozbieżne nazwy i błędy pobrania trafiają do `review_queue`. Każdy przebieg ma raport w `import_runs`.
+- Zakres pilota: `db/pilot-sample.json`, czyli dokładnie 20 + 10. Pełny import wymaga `IMPORT_ALLOW_FULL_IMPORT=true`. Tłumaczenie AI jest wyłączone i niewdrożone.
+- **Pobieranie jest wstrzymane** (`IMPORT_SOURCE_RIGHTS_CONFIRMED=false`) do decyzji o prawach do treści; szczegóły w `docs/source-audit.md`.
+
 Nieuzgodniony import 50 + 50 z 2026-10-10 został wycofany. `lib/rollback.ts` jednorazowo usuwa go z istniejących baz (znacznik `rollback-americandragon-v1`) i zachowuje edycje rekordów próbki.
 
 ## Architektura
