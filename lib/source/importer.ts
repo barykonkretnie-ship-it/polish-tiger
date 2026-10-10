@@ -214,6 +214,11 @@ async function storeParsed(tx:Tx,runId:number,pageId:number,revisionId:number,ur
   const [term]=await tx`INSERT INTO ${tx(S)}.taxonomy_terms(axis,label,language,status) VALUES(${t.axis},${t.label},'en','source') ON CONFLICT(axis,label,language) DO UPDATE SET label=EXCLUDED.label RETURNING id`;
   await tx`INSERT INTO ${tx(S)}.${tx(tagTable)}(${tx(idColumn)},term_id,qualifier,value_status,evidence_id) VALUES(${p.id},${term.id},${t.qualifier},'source',${evidence.get(t.field)??null}) ON CONFLICT DO NOTHING`;
  }
+ // Parser findings that no longer occur are closed with a note; items raised by people or by fetching stay open.
+ await tx`UPDATE ${tx(S)}.review_queue SET status='resolved',resolved_at=now(),resolution=${`Nie występuje po parsowaniu ${PARSER}@${PARSER_VERSION}.`}
+  WHERE status='open' AND record_kind=${p.kind} AND record_id=${p.id}
+  AND issue_type IN ('unknown_section','missing_field','unreadable','ambiguous_value','name_mismatch','template_variant')
+  AND NOT (issue_type||'|'||detail = ANY(${tx.array(p.issues.map(i=>`${i.type}|${i.detail}`))}::text[]))`;
  for(const issue of p.issues)await review(tx,runId,pageId,p.kind,p.id,issue);
  return p.issues.some(i=>i.type==='missing_field'||i.type==='unreadable')?'incomplete':'parsed';
 }

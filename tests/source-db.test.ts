@@ -80,7 +80,10 @@ test('Warstwa źródłowa: blokada praw, odkrywanie, idempotentny import, rewizj
   assert.equal((await sql`SELECT count(*)::int AS n FROM polish_tiger_source.field_evidence WHERE record_id='test-tang' AND field='ingredients'`)[0].n,2,'dowody obu rewizji zostają');
   assert.equal((await sql`SELECT dosage_raw FROM polish_tiger_source.formula_ingredients WHERE formula_id='test-tang' AND position=1`)[0].dosage_raw,'12g');
 
-  const p1=await reparse(sql,env(),true);assert.equal((p1.report.counters.parsed??0)+(p1.report.counters.incomplete??0),2,'ponowne parsowanie z zachowanej treści');
+  // A finding the parser no longer reports is closed, not left open.
+  await sql`INSERT INTO polish_tiger_source.review_queue(record_kind,record_id,field,issue_type,detail) VALUES('herb','test-gen','pinyin','name_mismatch','stara rozbieżność')`;
+  const p1=await reparse(sql,env(),true);
+  assert.equal((await sql`SELECT status FROM polish_tiger_source.review_queue WHERE detail='stara rozbieżność'`)[0].status,'resolved');assert.equal((p1.report.counters.parsed??0)+(p1.report.counters.incomplete??0),2,'ponowne parsowanie z zachowanej treści');
   assert.equal(site.requests.filter(u=>u===HERB).length,3,'ponowne parsowanie nie pobiera stron');
 
   // A gone page is marked, never deleted.
