@@ -139,12 +139,18 @@ test('Tłumaczenia: eksport ze skrótami, wgranie, konflikt przy zmianie źród�
   const exp=await exportSource(sql,['test-gen','test-tang']);
   assert.deepEqual(exp['test-gen'].fields.taste.value,['Sweet','(Bitter)']);assert.ok(exp['test-tang'].fields.ingredient_notes);
   const file={glossaryVersion:'gl-test',model:'test',promptVersion:'p1',records:[
-   {id:'test-gen',kind:'herb' as const,fields:{taste:{sourceHash:exp['test-gen'].fields.taste.sourceHash,value:['słodki','(gorzki)']},temperature:{sourceHash:exp['test-gen'].fields.temperature.sourceHash,value:['ciepłe','lekko toksyczne']}}},
-   {id:'test-tang',kind:'formula' as const,fields:{syndromes:{sourceHash:'stary-skrot',value:['Niedobór egzaminacyjny']}}}]};
-  assert.deepEqual(await storeTranslations(sql,file),{stored:2,conflict:1,unchanged:0});
-  assert.deepEqual(await storeTranslations(sql,file),{stored:0,conflict:1,unchanged:2},'ponowne wgranie nie duplikuje');
-  const cur=await currentTranslations(sql);
-  assert.deepEqual(cur.get('test-gen')!.taste,['słodki','(gorzki)']);assert.equal(cur.get('test-tang')?.syndromes,undefined,'konflikt nie jest pokazywany');
+   {id:'test-gen',kind:'herb' as const,fields:{taste:['słodki','(gorzki)'],temperature:['ciepłe','lekko toksyczne'],incompatibilities:['brak w źródle — pominąć']}},
+   {id:'test-tang',kind:'formula' as const,fields:{syndromes:['Niedobór egzaminacyjny']}}]};
+  const bad={...file,records:[{id:'test-gen',kind:'herb' as const,fields:{taste:['słodki']}}]};
+  assert.deepEqual(await storeTranslations(sql,bad),{stored:0,updated:0,skipped:1},'tłumaczenie z inną liczbą pozycji jest odrzucane');
+  assert.ok((await sql`SELECT 1 FROM polish_tiger_source.review_queue WHERE issue_type='conflict' AND record_id='test-gen'`).length);
+  assert.deepEqual(await storeTranslations(sql,file),{stored:3,updated:0,skipped:1},'pole bez treści w źródle jest pomijane');
+  assert.deepEqual(await storeTranslations(sql,file),{stored:0,updated:3,skipped:1},'ponowne wgranie nie duplikuje');
+  let cur=await currentTranslations(sql);
+  assert.deepEqual(cur.get('test-gen')!.taste,['słodki','(gorzki)']);assert.deepEqual(cur.get('test-tang')!.syndromes,['Niedobór egzaminacyjny']);
+  // The source changes: the old translation is no longer shown for that field.
+  await sql`UPDATE polish_tiger_source.field_evidence SET value='["Exam Excess"]'::jsonb WHERE record_id='test-tang' AND field='syndromes'`;
+  cur=await currentTranslations(sql);assert.equal(cur.get('test-tang')?.syndromes,undefined);
   assert.deepEqual(tagsFor('herb',cur.get('test-gen')!),{thermal:['ciepłe'],contraindication:['lekko toksyczne'],taste:['słodki']});
  }finally{await sql`DROP SCHEMA IF EXISTS polish_tiger_source CASCADE`;await sql.end();}
 });

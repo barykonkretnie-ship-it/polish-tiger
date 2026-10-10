@@ -53,7 +53,7 @@ export default function SourceDetails({record,source,open,known}:Props){
    <p className="muted">Brak informacji o przeciwwskazaniach nie oznacza bezpieczeństwa stosowania. Dane ze źródła, niezweryfikowane; to nie jest zalecenie leczenia.</p>
   </section>
 
-  {herb&&<section className="panel"><h2>Główne kombinacje</h2>{combos.missing?<p className="missing">{combos.missing}</p>:<><En on={combos.en}/><ul className="src-list">{(combos.value as {herbs:string[];indication:string}[]).map((c,i)=><li key={i}><strong>{pinyinOnly(c.herbs)}</strong>{c.indication&&<> — {c.indication}</>}</li>)}</ul></>}</section>}
+  {herb&&<section className="panel"><h2>Główne kombinacje</h2>{combos.missing?<p className="missing">{combos.missing}</p>:<><En on={combos.en}/><ul className="src-list">{(source.fields.combinations.value as {herbs:string[];indication:string}[]).map((c,i)=>{const pl=combos.en?null:(combos.value as string[])[i];return <li key={i}><strong>{pinyinOnly(c.herbs)}</strong>{(pl??c.indication)&&<> — {pl??c.indication}</>}</li>;})}</ul></>}</section>}
 
   <section className="panel"><h2>Pochodzenie i uwagi</h2>
    {notes.missing?null:<><En on={notes.en}/><ul className="src-list">{list(notes.value).map((x,i)=><li key={i}>{x}</li>)}</ul></>}
