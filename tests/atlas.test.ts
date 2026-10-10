@@ -6,18 +6,10 @@ import path from 'node:path';
 process.env.POLISH_TIGER_DATA_DIR=mkdtempSync(path.join(tmpdir(),'polish-tiger-test-'));
 const {records,dictionary,updateRecord,updateTerm}=await import('../lib/db-sqlite');
 const {matches,normalize}=await import('../lib/search');
-test('Próbka 20 + 10 oraz import American Dragon; wszystkie składniki mają karty i powiązania zwrotne',()=>{
- const all=records();assert.equal(all.filter(r=>r.kind==='herb').length,68);assert.equal(all.filter(r=>r.kind==='formula').length,60);
- for(const formula of all.filter(r=>r.kind==='formula')){if(formula.status==='demonstracyjne')assert.ok(formula.ingredients.length>0);for(const ingredient of formula.ingredients){const herb=all.find(r=>r.id===ingredient.id);assert.equal(herb?.kind,'herb');assert.ok(herb.related.some(r=>r.id===formula.id));}}
- assert.ok(all.every(r=>['demonstracyjne','zaimportowane — niezweryfikowane'].includes(r.status)&&r.verified_at===null));
-});
-test('Import American Dragon: scala istniejące karty, łączy skład i zachowuje źródło',()=>{
- const all=records(),baiShao=all.find(r=>r.id==='bai-shao')!,baWu=all.find(r=>r.id==='ba-wu-tang')!;
- assert.equal(baiShao.name,'Bai Shao');assert.ok(baiShao.notes.startsWith('Próbka demonstracyjna'));assert.match(baiShao.notes,/Dawkowanie \(źródło\): 5-30g/);
- assert.ok(baiShao.sources.some(s=>s.url.endsWith('Individualherbsupdate/BaiShao.html')&&s.checked_at));
- assert.ok(baiShao.terms.some(t=>t.dimension==='action'&&t.label==='Nourishes the Blood and regulates menstruation'));
- assert.ok(baWu.ingredients.some(i=>i.id==='shu-di-huang'&&i.quantity==='4-21g'));assert.ok(baiShao.related.some(r=>r.id==='ba-wu-tang'));
- assert.ok(all.find(r=>r.id==='ba-dou')!.terms.some(t=>t.dimension==='contraindication'&&t.label.startsWith('toksyczne')));
+test('Dokładnie 20 ziół i 10 formuł; wszystkie składniki mają karty i powiązania zwrotne',()=>{
+ const all=records();assert.equal(all.filter(r=>r.kind==='herb').length,20);assert.equal(all.filter(r=>r.kind==='formula').length,10);
+ for(const formula of all.filter(r=>r.kind==='formula')){assert.ok(formula.ingredients.length>0);for(const ingredient of formula.ingredients){const herb=all.find(r=>r.id===ingredient.id);assert.equal(herb?.kind,'herb');assert.ok(herb.related.some(r=>r.id===formula.id));}}
+ assert.ok(all.every(r=>r.status==='demonstracyjne'&&r.verified_at===null));
 });
 test('Polskie znaki, nazwa łacińska i Pinyin w wyszukiwaniu',()=>{
  const all=records();assert.equal(normalize('Śledziona Łódź'),'sledziona lodz');assert.ok(matches(all.find(r=>r.id==='ren-shen')!,'panax',{},'AND'));assert.ok(matches(all.find(r=>r.id==='bai-zhu')!,'sledziona',{},'AND'));assert.ok(matches(all.find(r=>r.id==='si-jun-zi-tang')!,'si jun zi',{},'AND'));

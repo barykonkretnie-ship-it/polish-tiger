@@ -1,7 +1,7 @@
 import postgres from 'postgres';
 import {herbs,formulas} from './sample';
 import type {Term,RecordData,RecordUpdate} from './types';
-import {importMarker,importedOn,importedRecords,importedSourceField,importedStatus} from './americandragon';
+import * as rollback from './rollback';
 let connection:ReturnType<typeof postgres>|undefined;
 let initialized:Promise<void>|undefined;
 // Vercel Marketplace databases (Neon, Supabase) inject DATABASE_URL/POSTGRES_URL instead of the project-specific name.
@@ -39,12 +39,8 @@ ALTER TABLE polish_tiger.sources ENABLE ROW LEVEL SECURITY;
 ALTER TABLE polish_tiger.metadata ENABLE ROW LEVEL SECURITY;
 ALTER TABLE polish_tiger.login_attempts ENABLE ROW LEVEL SECURITY;`);
   // This private schema is not exposed through the Supabase browser REST API.
-  if(!(await tx`SELECT value FROM polish_tiger.metadata WHERE key='seed-v1'`).length)await seed(tx);
-  if(!(await tx`SELECT value FROM polish_tiger.metadata WHERE key=${importMarker}`).length)await importAmericanDragon(tx);
- });
-}
-type Tx=postgres.TransactionSql;
-async function seed(tx:Tx){
+  await rollbackAmericanDragon(tx);
+  if((await tx`SELECT value FROM polish_tiger.metadata WHERE key='seed-v1'`).length)return;
   const existing=await tx`SELECT count(*)::int AS total FROM polish_tiger.records`;
   if(existing[0].total!==0)throw new Error('Refusing to seed a nonempty database without a seed marker.');
   const note='Próbka demonstracyjna do testowania interfejsu. Klasyfikacje i skład wymagają weryfikacji, w tym postaci przetworzenia surowców. Nie jest to receptura ani zalecenie leczenia.';
@@ -63,22 +59,7 @@ async function seed(tx:Tx){
   }
   for(const [id] of [...herbs,...formulas])await tx`INSERT INTO polish_tiger.sources(record_id,field,url,status) VALUES(${id},'Źródło referencyjne projektu — nie potwierdzenie danych rekordu','https://www.americandragon.com/','niezweryfikowane')`;
   await tx`INSERT INTO polish_tiger.metadata VALUES('seed-v1',${new Date().toISOString()})`;
-}
-// Adds the American Dragon records once. Records already in the atlas keep their name and edits and gain the imported data.
-async function importAmericanDragon(tx:Tx){
- for(const r of importedRecords){
-  const updated=await tx`UPDATE polish_tiger.records SET latin=CASE WHEN latin='' THEN ${r.latin} ELSE latin END,translation=CASE WHEN translation='' THEN ${r.translation} ELSE translation END,status=${importedStatus},notes=notes||${'\n\n'+r.notes} WHERE id=${r.id} RETURNING id`;
-  if(!updated.length)await tx`INSERT INTO polish_tiger.records(id,kind,name,latin,translation,status,notes) VALUES(${r.id},${r.kind},${r.name},${r.latin},${r.translation},${importedStatus},${r.notes})`;
-  const pairs=Object.entries(r.terms).flatMap(([dimension,labels])=>labels.map(label=>[dimension,label]));
-  if(pairs.length){
-   const dimensions=tx.array(pairs.map(p=>p[0])),labels=tx.array(pairs.map(p=>p[1]));
-   await tx`INSERT INTO polish_tiger.terms(dimension,label) SELECT * FROM unnest(${dimensions}::text[],${labels}::text[]) ON CONFLICT DO NOTHING`;
-   await tx`INSERT INTO polish_tiger.record_terms(record_id,term_id) SELECT ${r.id},t.id FROM polish_tiger.terms t JOIN unnest(${dimensions}::text[],${labels}::text[]) AS u(d,l) ON t.dimension=u.d AND t.label=u.l ON CONFLICT DO NOTHING`;
-  }
-  for(const i of r.ingredients||[])await tx`INSERT INTO polish_tiger.ingredients(formula_id,herb_id,quantity,role,preparation) VALUES(${r.id},${i.herb_id},${i.quantity},${i.role},${i.preparation}) ON CONFLICT DO NOTHING`;
-  await tx`INSERT INTO polish_tiger.sources(record_id,field,url,status,checked_at) VALUES(${r.id},${importedSourceField},${r.url},'niezweryfikowane',${importedOn})`;
- }
- await tx`INSERT INTO polish_tiger.metadata VALUES(${importMarker},${new Date().toISOString()})`;
+ });
 }
 export async function dictionary():Promise<Term[]>{const sql=await ready();return await sql`SELECT * FROM polish_tiger.terms ORDER BY dimension,label` as unknown as Term[];}
 export async function records():Promise<RecordData[]>{
@@ -115,4 +96,22 @@ export async function allowLoginAttempt(key:string){
  window_start=CASE WHEN polish_tiger.login_attempts.window_start<NOW()-INTERVAL '15 minutes' THEN NOW() ELSE polish_tiger.login_attempts.window_start END RETURNING attempts`;
  await sql`DELETE FROM polish_tiger.login_attempts WHERE window_start<NOW()-INTERVAL '1 day'`;
  return rows[0].attempts<=10;
+}
+// Undoes the unreviewed American Dragon import once, keeping the sample records and their edits.
+async function rollbackAmericanDragon(tx:postgres.TransactionSql){
+ if(!(await tx`SELECT 1 FROM polish_tiger.metadata WHERE key=${rollback.importMarker}`).length)return;
+ if((await tx`SELECT 1 FROM polish_tiger.metadata WHERE key=${rollback.rollbackMarker}`).length)return;
+ const added=tx.array(rollback.addedRecordIds),merged=tx.array(rollback.mergedRecordIds);
+ await tx`DELETE FROM polish_tiger.ingredients WHERE formula_id=ANY(${added}) OR herb_id=ANY(${added})`;
+ await tx`DELETE FROM polish_tiger.record_terms WHERE record_id=ANY(${added})`;
+ await tx`DELETE FROM polish_tiger.sources WHERE record_id=ANY(${added}) OR (record_id=ANY(${merged}) AND field=${rollback.importedSourceField})`;
+ await tx`DELETE FROM polish_tiger.records WHERE id=ANY(${added})`;
+ for(const id of rollback.mergedRecordIds){
+  await tx`UPDATE polish_tiger.records SET status='demonstracyjne',notes=split_part(notes,${rollback.notesSeparator},1),translation=CASE WHEN translation=${rollback.mergedTranslations[id]||''} THEN '' ELSE translation END WHERE id=${id}`;
+  const detach=rollback.importedTermsToDetach(id);
+  if(detach.length)await tx`DELETE FROM polish_tiger.record_terms rt USING polish_tiger.terms t, unnest(${tx.array(detach.map(t=>t.dimension))}::text[],${tx.array(detach.map(t=>t.label))}::text[]) AS u(d,l) WHERE rt.record_id=${id} AND rt.term_id=t.id AND t.dimension=u.d AND t.label=u.l`;
+ }
+ const only=rollback.importedOnlyTerms;
+ await tx`DELETE FROM polish_tiger.terms t USING unnest(${tx.array(only.map(t=>t.dimension))}::text[],${tx.array(only.map(t=>t.label))}::text[]) AS u(d,l) WHERE t.dimension=u.d AND t.label=u.l AND NOT EXISTS(SELECT 1 FROM polish_tiger.record_terms rt WHERE rt.term_id=t.id)`;
+ await tx`INSERT INTO polish_tiger.metadata VALUES(${rollback.rollbackMarker},${new Date().toISOString()})`;
 }

@@ -2,7 +2,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { herbs, formulas } from './sample';
-import {importMarker,importedOn,importedRecords,importedSourceField,importedStatus} from './americandragon';
+import * as rollback from './rollback';
 
 import type { Term, RecordData } from './types';
 const directory = process.env.POLISH_TIGER_DATA_DIR || path.join(process.cwd(), 'data');
@@ -40,21 +40,22 @@ if (!db.prepare("SELECT value FROM metadata WHERE key='seed-v1'").get()) {
   db.exec('COMMIT');
  } catch(e) { db.exec('ROLLBACK'); throw e; }
 }
-// Adds the American Dragon records once. Records already in the atlas keep their name and edits and gain the imported data.
-if (!db.prepare('SELECT value FROM metadata WHERE key=?').get(importMarker)) {
+// Undoes the unreviewed American Dragon import once, keeping the sample records and their edits.
+if (db.prepare('SELECT 1 FROM metadata WHERE key=?').get(rollback.importMarker) && !db.prepare('SELECT 1 FROM metadata WHERE key=?').get(rollback.rollbackMarker)) {
  db.exec('BEGIN');
  try {
-  for(const r of importedRecords) {
-   const updated=db.prepare("UPDATE records SET latin=CASE WHEN latin='' THEN ? ELSE latin END,translation=CASE WHEN translation='' THEN ? ELSE translation END,status=?,notes=notes||? WHERE id=?").run(r.latin,r.translation,importedStatus,'\n\n'+r.notes,r.id);
-   if(!updated.changes) db.prepare('INSERT INTO records(id,kind,name,latin,translation,status,notes) VALUES(?,?,?,?,?,?,?)').run(r.id,r.kind,r.name,r.latin,r.translation,importedStatus,r.notes);
-   for(const [dimension,labels] of Object.entries(r.terms)) for(const label of labels) {
-    db.prepare('INSERT OR IGNORE INTO terms(dimension,label) VALUES(?,?)').run(dimension,label);
-    db.prepare('INSERT OR IGNORE INTO record_terms VALUES(?,(SELECT id FROM terms WHERE dimension=? AND label=?))').run(r.id,dimension,label);
-   }
-   for(const i of r.ingredients||[]) db.prepare('INSERT OR IGNORE INTO ingredients(formula_id,herb_id,quantity,role,preparation) VALUES(?,?,?,?,?)').run(r.id,i.herb_id,i.quantity,i.role,i.preparation);
-   db.prepare('INSERT INTO sources(record_id,field,url,status,checked_at) VALUES(?,?,?,?,?)').run(r.id,importedSourceField,r.url,'niezweryfikowane',importedOn);
+  const added=JSON.stringify(rollback.addedRecordIds),merged=JSON.stringify(rollback.mergedRecordIds);
+  db.prepare('DELETE FROM ingredients WHERE formula_id IN (SELECT value FROM json_each(?)) OR herb_id IN (SELECT value FROM json_each(?))').run(added,added);
+  db.prepare('DELETE FROM record_terms WHERE record_id IN (SELECT value FROM json_each(?))').run(added);
+  db.prepare('DELETE FROM sources WHERE record_id IN (SELECT value FROM json_each(?)) OR (record_id IN (SELECT value FROM json_each(?)) AND field=?)').run(added,merged,rollback.importedSourceField);
+  db.prepare('DELETE FROM records WHERE id IN (SELECT value FROM json_each(?))').run(added);
+  for(const id of rollback.mergedRecordIds){
+   const row=db.prepare('SELECT notes,translation FROM records WHERE id=?').get(id) as {notes:string;translation:string}|undefined;
+   if(row) db.prepare("UPDATE records SET status='demonstracyjne',notes=?,translation=? WHERE id=?").run(row.notes.split(rollback.notesSeparator)[0],row.translation===(rollback.mergedTranslations[id]||'')?'':row.translation,id);
+   for(const t of rollback.importedTermsToDetach(id)) db.prepare('DELETE FROM record_terms WHERE record_id=? AND term_id=(SELECT id FROM terms WHERE dimension=? AND label=?)').run(id,t.dimension,t.label);
   }
-  db.prepare('INSERT INTO metadata VALUES(?,?)').run(importMarker,new Date().toISOString());
+  for(const t of rollback.importedOnlyTerms) db.prepare('DELETE FROM terms WHERE dimension=? AND label=? AND NOT EXISTS(SELECT 1 FROM record_terms WHERE term_id=terms.id)').run(t.dimension,t.label);
+  db.prepare('INSERT INTO metadata VALUES(?,?)').run(rollback.rollbackMarker,new Date().toISOString());
   db.exec('COMMIT');
  } catch(e) { db.exec('ROLLBACK'); throw e; }
 }

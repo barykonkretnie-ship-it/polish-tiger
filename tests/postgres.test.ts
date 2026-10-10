@@ -9,8 +9,7 @@ test('PostgreSQL: relacje, zapis, rollback i powtarzalny seed',{skip:!process.en
  try{
   await pg.initializePostgres();
   const all=await db.records();
-  assert.equal(all.filter(r=>r.kind==='herb').length,68);assert.equal(all.filter(r=>r.kind==='formula').length,60);
-  assert.ok(all.find(r=>r.id==='ba-wu-tang')?.ingredients.some(i=>i.id==='shu-di-huang'));assert.equal(all.find(r=>r.id==='bai-shao')?.name,'Bai Shao');
+  assert.equal(all.filter(r=>r.kind==='herb').length,20);assert.equal(all.filter(r=>r.kind==='formula').length,10);
   for(const formula of all.filter(r=>r.kind==='formula'))for(const ingredient of formula.ingredients)assert.ok(all.find(r=>r.id===ingredient.id)?.related.some(r=>r.id===formula.id));
   const ren=all.find(r=>r.id==='ren-shen')!,update={name:ren.name,translation:ren.translation,notes:'Trwała edycja PostgreSQL',termIds:ren.terms.map(t=>t.id)};
   await db.updateRecord(ren.id,update);await pg.initializePostgres();await pg.closeDatabase();

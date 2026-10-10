@@ -1,0 +1,4523 @@
+{
+ "marker": "import-americandragon-v1",
+ "addedRecordIds": [
+  "a-wei",
+  "ai-ye",
+  "an-chong-tang",
+  "an-fei-jie-geng-tang",
+  "an-shen-yin",
+  "an-xi-xiang",
+  "an-ye",
+  "an-zhong-san",
+  "ba-dou",
+  "ba-ji-tian",
+  "ba-jiao-hui-xiang",
+  "ba-jiao-lian",
+  "ba-qia",
+  "ba-sheng-dan",
+  "ba-wei-dai-xia-fang",
+  "ba-wei-di-huang-wan",
+  "ba-wei-xiao-feng-tang",
+  "ba-wu-tang",
+  "ba-xian-tang",
+  "ba-xian-xiao-yao-tang",
+  "ba-yue-zha",
+  "bai-ai-tang",
+  "bai-bian-dou",
+  "bai-bu",
+  "bai-cao-shuang",
+  "bai-dai-wan",
+  "bai-dou-kou",
+  "bai-guo",
+  "bai-he",
+  "bai-he-bing-er-hao",
+  "bai-he-bing-liu-hao",
+  "bai-he-bing-san-hao",
+  "bai-he-bing-si-hao",
+  "bai-he-bing-wu-hao",
+  "bai-he-bing-yi-hao",
+  "bai-he-di-huang-tang",
+  "bai-he-huan-tan-tang",
+  "bai-he-zhi-mu-tang",
+  "bai-hu-gui-zhi-tang-jia-wei",
+  "bai-hu-jia-cang-zhu-tang",
+  "bai-hua-she",
+  "bai-hua-she-she-cao",
+  "bai-hua-she-she-cao-xi-ji",
+  "bai-ji",
+  "bai-ji-li",
+  "bai-jiang-cao",
+  "bai-jiang-gua-lou-tang",
+  "bai-jiao-xiang",
+  "bai-jie-zi",
+  "bai-lian",
+  "bai-ling-tiao-gan-tang",
+  "bai-mao-gen",
+  "bai-mao-xia-ku-cao",
+  "bai-qian",
+  "bai-qu-cai",
+  "bai-shao-mu-gua-tang",
+  "bai-shi-tang",
+  "bai-shi-zhi",
+  "bai-tou-weng",
+  "bai-wei",
+  "bai-xian-pi",
+  "bai-xian-pi-yin",
+  "bai-yao-zi",
+  "bai-zhi",
+  "bai-zhu-fu-zi-tang",
+  "bai-zhu-san-jia-wei",
+  "bai-zhu-tang",
+  "bai-zi-ren",
+  "bai-zi-ren-wan",
+  "ban-bian-lian",
+  "ban-he-gao",
+  "ban-lan-gen",
+  "ban-mao",
+  "ban-xia-di-yu-tang",
+  "ban-xia-fu-ling-tang",
+  "ban-xia-fu-ling-wan-jia-wei",
+  "ban-zhen-zhong-hua-shu",
+  "ban-zhi-lian",
+  "bao-fa-tang",
+  "bao-luo-huo-yu-tang-jia-jian",
+  "bao-xin-jiang-zhi-tang",
+  "bao-zhen-tang",
+  "bei-dou-gen",
+  "bei-xie",
+  "bei-xie-fen-qing-yin",
+  "bi-ba",
+  "bi-cheng-qie",
+  "bi-li",
+  "bi-ma-zi",
+  "bi-yu-san",
+  "bian-fei-chui-shao-tang",
+  "bian-xu",
+  "bie-jia",
+  "bie-jia-jian-wan",
+  "bie-jia-wan",
+  "bing-peng-san",
+  "bing-wu-huo-qi-tang",
+  "bo-shi-tang"
+ ],
+ "mergedRecordIds": [
+  "bai-shao",
+  "bai-zhu"
+ ],
+ "importedTerms": [
+  [
+   "action",
+   ".Promotes tissue regeneration, stops bleeding"
+  ],
+  [
+   "action",
+   "Absorbs Dampness and sores"
+  ],
+  [
+   "action",
+   "Activates the Blood"
+  ],
+  [
+   "action",
+   "Activates the functions of the Liver and Kidneys"
+  ],
+  [
+   "action",
+   "Alleviates pain"
+  ],
+  [
+   "action",
+   "Anti-cancer"
+  ],
+  [
+   "action",
+   "Aromatically transforms Dampness"
+  ],
+  [
+   "action",
+   "Arrests convulsion"
+  ],
+  [
+   "action",
+   "Astringes"
+  ],
+  [
+   "action",
+   "Astringes Yin Deficiency sweat"
+  ],
+  [
+   "action",
+   "Astringes Yin and adjusts the Ying and Wei"
+  ],
+  [
+   "action",
+   "Astringes leakage of Blood and stops bleeding"
+  ],
+  [
+   "action",
+   "Astringes the Lungs, expels Phlegm and stops wheezing"
+  ],
+  [
+   "action",
+   "Attacks toxin and erodes sores"
+  ],
+  [
+   "action",
+   "Benefits the Lungs"
+  ],
+  [
+   "action",
+   "Breaks up Blood Stasis"
+  ],
+  [
+   "action",
+   "Breaks up Stagnant Qi and Blood"
+  ],
+  [
+   "action",
+   "Breaks up clogged Phlegm and improves the condition of the throat"
+  ],
+  [
+   "action",
+   "Calms Liver Yang and Liver Wind and alleviates pain"
+  ],
+  [
+   "action",
+   "Calms the Liver and anchors Yang"
+  ],
+  [
+   "action",
+   "Calms the Shen"
+  ],
+  [
+   "action",
+   "Calms the fetus"
+  ],
+  [
+   "action",
+   "Circulates Qi"
+  ],
+  [
+   "action",
+   "Clears Damp-Heat"
+  ],
+  [
+   "action",
+   "Clears Damp-Heat and stops itching"
+  ],
+  [
+   "action",
+   "Clears Damp-Heat from the skin"
+  ],
+  [
+   "action",
+   "Clears Damp-Heat, reduces infection and inflammation, stimulates immunity, stops discharge and expels parasites"
+  ],
+  [
+   "action",
+   "Clears Deficiency Heat"
+  ],
+  [
+   "action",
+   "Clears Deficient Heat"
+  ],
+  [
+   "action",
+   "Clears Empty-Heat"
+  ],
+  [
+   "action",
+   "Clears Heat"
+  ],
+  [
+   "action",
+   "Clears Heat and promotes urination"
+  ],
+  [
+   "action",
+   "Clears Heat and removes toxicity"
+  ],
+  [
+   "action",
+   "Clears Heat and resolves toxicity"
+  ],
+  [
+   "action",
+   "Clears Heat from the Heart and calms the Spirit"
+  ],
+  [
+   "action",
+   "Clears Heat from the Stomach and Lungs"
+  ],
+  [
+   "action",
+   "Clears Heat, alleviates dysentery, cools the Blood and resolves Fire toxicity"
+  ],
+  [
+   "action",
+   "Clears Heat, cools the Blood and reduces toxicity (internally and topically)"
+  ],
+  [
+   "action",
+   "Clears Heat, resolves Fire toxins, invigorates the Blood and reduces swellings"
+  ],
+  [
+   "action",
+   "Clears Heat, resolves Fire-toxicity, expels Wind and dries Dampness"
+  ],
+  [
+   "action",
+   "Clears Heat, resolves toxicity, expels pus, eliminates Phlegm and reduces abscesses (internal and topical)"
+  ],
+  [
+   "action",
+   "Clears Heat, strongly relieves Fire toxins and reduces abscesses (internally and topically)"
+  ],
+  [
+   "action",
+   "Clears Summerheat and resolves Dampness"
+  ],
+  [
+   "action",
+   "Clears and Eliminates Damp-Heat from the skin"
+  ],
+  [
+   "action",
+   "Clears the Gallbladder"
+  ],
+  [
+   "action",
+   "Controls bleeding and disperses Accumulation"
+  ],
+  [
+   "action",
+   "Controls pain"
+  ],
+  [
+   "action",
+   "Cools and invigorates the Blood"
+  ],
+  [
+   "action",
+   "Cools the Blood"
+  ],
+  [
+   "action",
+   "Cools the Blood and clears Deficiency Heat"
+  ],
+  [
+   "action",
+   "Cools the Blood and stops bleeding"
+  ],
+  [
+   "action",
+   "Descends Qi, expels Phlegm and stops coughing"
+  ],
+  [
+   "action",
+   "Detoxifies, stops bleeding and cools the Blood and generates flesh"
+  ],
+  [
+   "action",
+   "Dispels Blood Stasis"
+  ],
+  [
+   "action",
+   "Dispels Cold"
+  ],
+  [
+   "action",
+   "Dispels Cold Qi from the Bladder"
+  ],
+  [
+   "action",
+   "Dispels Dampness"
+  ],
+  [
+   "action",
+   "Dispels Stasis"
+  ],
+  [
+   "action",
+   "Dispels Wind"
+  ],
+  [
+   "action",
+   "Dispels Wind and stops itching"
+  ],
+  [
+   "action",
+   "Dispels Wind and stops pain"
+  ],
+  [
+   "action",
+   "Dispels Wind from the sinews and settles jitteriness and convulsions"
+  ],
+  [
+   "action",
+   "Dispels Wind from the skin"
+  ],
+  [
+   "action",
+   "Dispels Wind-Dampness"
+  ],
+  [
+   "action",
+   "Dispels Wind-Heat and brightens the eyes"
+  ],
+  [
+   "action",
+   "Disperses Cold"
+  ],
+  [
+   "action",
+   "Disperses Cold and alleviates pain"
+  ],
+  [
+   "action",
+   "Disperses Wind"
+  ],
+  [
+   "action",
+   "Disperses Wind-Cold-Damp and strengthens the sinews and bones"
+  ],
+  [
+   "action",
+   "Dissipates swelling\\"
+  ],
+  [
+   "action",
+   "Dissolves Damp Toxins"
+  ],
+  [
+   "action",
+   "Drains Damp-Heat"
+  ],
+  [
+   "action",
+   "Drains Damp-Heat from the Lower Jiao"
+  ],
+  [
+   "action",
+   "Drains Damp-Heat from the Urinary Bladder, promotes urination and unblocks painful urinary dysfunction"
+  ],
+  [
+   "action",
+   "Drains Dampness"
+  ],
+  [
+   "action",
+   "Drains Fire, relieves toxicity, eliminates Dampness, resolves lumps (reduces swelling), relieves pain, promotes the healing of wounds and generates flesh"
+  ],
+  [
+   "action",
+   "Drains Heat"
+  ],
+  [
+   "action",
+   "Drains Heat, relieves Fire toxicity, cools the Blood and benefits the throat"
+  ],
+  [
+   "action",
+   "Dredges Liver Qi and disperses Stagnation and clumping"
+  ],
+  [
+   "action",
+   "Dredges the Liver"
+  ],
+  [
+   "action",
+   "Dredges the Liver, regulates Qi and controls pain"
+  ],
+  [
+   "action",
+   "Dries Dampness"
+  ],
+  [
+   "action",
+   "Dries Dampness and promotes water metabolism"
+  ],
+  [
+   "action",
+   "Drives out water and reduces edema"
+  ],
+  [
+   "action",
+   "Eliminates Blood Stasis"
+  ],
+  [
+   "action",
+   "Eliminates Dampness"
+  ],
+  [
+   "action",
+   "Eliminates Dampness and stops itching"
+  ],
+  [
+   "action",
+   "Eliminates Summerheat"
+  ],
+  [
+   "action",
+   "Eliminates accumulations"
+  ],
+  [
+   "action",
+   "Eliminates swelling, removes toxins, moistens the Intestines and promotes defecation"
+  ],
+  [
+   "action",
+   "Eliminates toxins, treats sores and carbuncles and relieves swelling topically and internally"
+  ],
+  [
+   "action",
+   "Enhances the functions of the Kidney and Liver channels, increases the libido and treats wasting and thirsting"
+  ],
+  [
+   "action",
+   "Expel parasites and kills lice"
+  ],
+  [
+   "action",
+   "Expels Damp-Heat"
+  ],
+  [
+   "action",
+   "Expels Dampness, alleviates discharge and treats leukorrhea and diarrhea"
+  ],
+  [
+   "action",
+   "Expels Phlegm and disperses clumps"
+  ],
+  [
+   "action",
+   "Expels Wind and Dampness"
+  ],
+  [
+   "action",
+   "Expels Wind and alleviates pain"
+  ],
+  [
+   "action",
+   "Expels Wind, eliminates Dampness, unblocks the nasal passages, dispels Cold and alleviates pain"
+  ],
+  [
+   "action",
+   "Expels Wind-Dampness"
+  ],
+  [
+   "action",
+   "Expels Wind-Dampness, relaxes the sinews and unblocks the Luo channels"
+  ],
+  [
+   "action",
+   "Expels parasites and stops itching"
+  ],
+  [
+   "action",
+   "Extinguishes Liver Wind"
+  ],
+  [
+   "action",
+   "Generates Fluids"
+  ],
+  [
+   "action",
+   "Harmonizes the Middle Jiao"
+  ],
+  [
+   "action",
+   "Heavily anchors, descends, unblocks and facilitates the functions of the Blood vessels"
+  ],
+  [
+   "action",
+   "Induces diuresis"
+  ],
+  [
+   "action",
+   "Insecticide topically"
+  ],
+  [
+   "action",
+   "Invigorates Qi and Blood (anti-tumor)"
+  ],
+  [
+   "action",
+   "Invigorates and nourishes the Blood"
+  ],
+  [
+   "action",
+   "Invigorates the Blood"
+  ],
+  [
+   "action",
+   "Invigorates the Blood and alleviates pain"
+  ],
+  [
+   "action",
+   "Invigorates the Blood, dispels Blood Stasis and disperses clumps"
+  ],
+  [
+   "action",
+   "Invigorates the Blood, dispels Blood Stasis, resolves bruises and stops pain"
+  ],
+  [
+   "action",
+   "Invigorates the Blood, disperses swelling and removes toxicity"
+  ],
+  [
+   "action",
+   "Invigorates the Blood, promotes menstruation, softens hardness and dissipates nodules"
+  ],
+  [
+   "action",
+   "Invigorates the Blood, promotes the movement of Qi and alleviates pain"
+  ],
+  [
+   "action",
+   "Kills intestinal parasites"
+  ],
+  [
+   "action",
+   "Kills parasites"
+  ],
+  [
+   "action",
+   "Lowers blood pressure due to Liver Heat"
+  ],
+  [
+   "action",
+   "Mildly dispels Blood Stasis and stops bleeding"
+  ],
+  [
+   "action",
+   "Moistens the Intestines and unblocks the bowels"
+  ],
+  [
+   "action",
+   "Moistens the Lungs"
+  ],
+  [
+   "action",
+   "Moistens the Lungs and Heart"
+  ],
+  [
+   "action",
+   "Moistens the Lungs and stops coughing"
+  ],
+  [
+   "action",
+   "Moves Qi"
+  ],
+  [
+   "action",
+   "Moves Qi and alleviates pain"
+  ],
+  [
+   "action",
+   "Nourishes Fluids"
+  ],
+  [
+   "action",
+   "Nourishes Heart Blood and Lung Yin"
+  ],
+  [
+   "action",
+   "Nourishes Stomach Yin and harmonizes the Middle Jiao"
+  ],
+  [
+   "action",
+   "Nourishes Yin"
+  ],
+  [
+   "action",
+   "Nourishes Yin and Blood"
+  ],
+  [
+   "action",
+   "Nourishes Yin and anchors Yang"
+  ],
+  [
+   "action",
+   "Nourishes Yin, Blood and Jing"
+  ],
+  [
+   "action",
+   "Nourishes Yin, moistens the Lungs, clears Heat and stops coughing"
+  ],
+  [
+   "action",
+   "Nourishes and astringes Yin"
+  ],
+  [
+   "action",
+   "Nourishes tendons"
+  ],
+  [
+   "action",
+   "Nourishes the Blood"
+  ],
+  [
+   "action",
+   "Nourishes the Blood and regulates menstruation"
+  ],
+  [
+   "action",
+   "Nourishes the Heart and calms the Spirit"
+  ],
+  [
+   "action",
+   "Nourishes the Liver"
+  ],
+  [
+   "action",
+   "Nourishes the Lungs and resolves Phlegm"
+  ],
+  [
+   "action",
+   "Opens the Orifices of the Heart by removing Phlegm in the Upper Jiao"
+  ],
+  [
+   "action",
+   "Opens the Orifices, resolves Phlegm and awakens the Spirit"
+  ],
+  [
+   "action",
+   "Powerfully unblocks the channels and extinguishes Wind"
+  ],
+  [
+   "action",
+   "Prevents putrefication"
+  ],
+  [
+   "action",
+   "Promotes Qi movement, dissipates nodules, unblocks the collaterals and alleviates pain"
+  ],
+  [
+   "action",
+   "Promotes diuresis"
+  ],
+  [
+   "action",
+   "Promotes expectoration, resolves Phlegm-Heat and Dryness, relieves coughing, tonifies Lung Yin and relieves the bronchi"
+  ],
+  [
+   "action",
+   "Promotes healing of abscesses and ulcers topically and kills parasites"
+  ],
+  [
+   "action",
+   "Promotes sweating, expels Wind-Heat, reduces fever, promotes eruptions, opens the sinuses and relieves pain"
+  ],
+  [
+   "action",
+   "Promotes the circulation of Qi and Blood"
+  ],
+  [
+   "action",
+   "Promotes the movement of Qi"
+  ],
+  [
+   "action",
+   "Promotes the movement of Qi and Blood, unblocks the channels and collaterals and alleviates pain"
+  ],
+  [
+   "action",
+   "Promotes the movement of Qi, aromatically transforms Dampness and strengthens the Stomach"
+  ],
+  [
+   "action",
+   "Promotes tissue repair, reduces inflammation, benefits the skin and repel insects"
+  ],
+  [
+   "action",
+   "Promotes urination"
+  ],
+  [
+   "action",
+   "Promotes urination and reduces edema"
+  ],
+  [
+   "action",
+   "Promotes urination and relieves restlessness"
+  ],
+  [
+   "action",
+   "Reduces abdominal masses"
+  ],
+  [
+   "action",
+   "Reduces swelling, eliminates toxins and expels pus"
+  ],
+  [
+   "action",
+   "Reduces swelling, generates flesh and eliminates ulcers"
+  ],
+  [
+   "action",
+   "Reduces toxicity"
+  ],
+  [
+   "action",
+   "Regulates Qi"
+  ],
+  [
+   "action",
+   "Regulates Qi and Blood"
+  ],
+  [
+   "action",
+   "Regulates Qi, invigorates the Blood (disperses abdominal distention due to constipation) and purges meat due to overeating"
+  ],
+  [
+   "action",
+   "Regulates menstruation"
+  ],
+  [
+   "action",
+   "Regulates the uterus"
+  ],
+  [
+   "action",
+   "Reinforces the Heart"
+  ],
+  [
+   "action",
+   "Reinforces the Kidneys"
+  ],
+  [
+   "action",
+   "Releases Stagnation"
+  ],
+  [
+   "action",
+   "Relieves Fire toxins"
+  ],
+  [
+   "action",
+   "Relieves cough and resolves phlegm, clears heat and cools the Blood, resolves swelling and removes toxicity"
+  ],
+  [
+   "action",
+   "Relieves pain"
+  ],
+  [
+   "action",
+   "Relieves the Exterior, induces sweat, expels Wind-Dampness, promotes urination and alleviates pain"
+  ],
+  [
+   "action",
+   "Relieves the Stomach"
+  ],
+  [
+   "action",
+   "Relieves toxicity"
+  ],
+  [
+   "action",
+   "Relieves toxicity and treats sores"
+  ],
+  [
+   "action",
+   "Removes Stasis"
+  ],
+  [
+   "action",
+   "Removes toxic Heat, resolves Phlegm, disperses nodulation, removes Stagnation and reduces swelling"
+  ],
+  [
+   "action",
+   "Removes toxin"
+  ],
+  [
+   "action",
+   "Resolves Dampness"
+  ],
+  [
+   "action",
+   "Resolves Dampness and reduces swelling"
+  ],
+  [
+   "action",
+   "Resolves Phlegm"
+  ],
+  [
+   "action",
+   "Resolves Phlegm and stops cough and asthma"
+  ],
+  [
+   "action",
+   "Resolves and expels Cold Phlegm"
+  ],
+  [
+   "action",
+   "Resolves toxicity"
+  ],
+  [
+   "action",
+   "Restrains and inhibits sores"
+  ],
+  [
+   "action",
+   "Scatters nodulation"
+  ],
+  [
+   "action",
+   "Separates the pure from the turbid (resolves turbid Dampness in the Lower Jiao)"
+  ],
+  [
+   "action",
+   "Separates the turbid from the clear"
+  ],
+  [
+   "action",
+   "Softens and resolves hard masses"
+  ],
+  [
+   "action",
+   "Softens hardness"
+  ],
+  [
+   "action",
+   "Softens the Liver and relieves pain"
+  ],
+  [
+   "action",
+   "Soothes the Heart and Lungs by descending Qi"
+  ],
+  [
+   "action",
+   "Soothes the Liver"
+  ],
+  [
+   "action",
+   "Stabilizes abandoned disorders"
+  ],
+  [
+   "action",
+   "Stabilizes the Exterior and stops sweating"
+  ],
+  [
+   "action",
+   "Stabilizes the Lower Jiao, eliminates Dampness, stops discharge and astringes the urine"
+  ],
+  [
+   "action",
+   "Stops bleeding"
+  ],
+  [
+   "action",
+   "Stops cough"
+  ],
+  [
+   "action",
+   "Stops diarrhea"
+  ],
+  [
+   "action",
+   "Stops itching"
+  ],
+  [
+   "action",
+   "Stops nausea"
+  ],
+  [
+   "action",
+   "Stops numbness and pain"
+  ],
+  [
+   "action",
+   "Stops pain"
+  ],
+  [
+   "action",
+   "Stops vaginal discharge"
+  ],
+  [
+   "action",
+   "Stops vomiting"
+  ],
+  [
+   "action",
+   "Strengthens Qi"
+  ],
+  [
+   "action",
+   "Strengthens the Kidneys"
+  ],
+  [
+   "action",
+   "Strengthens the Middle Jiao"
+  ],
+  [
+   "action",
+   "Strengthens the Spleen"
+  ],
+  [
+   "action",
+   "Subdues swelling"
+  ],
+  [
+   "action",
+   "Supports the pancreas and lowers Blood sugar"
+  ],
+  [
+   "action",
+   "Tonifies Liver and Kidney Yin"
+  ],
+  [
+   "action",
+   "Tonifies Qi"
+  ],
+  [
+   "action",
+   "Tonifies Spleen Qi"
+  ],
+  [
+   "action",
+   "Tonifies and moistens the Lungs"
+  ],
+  [
+   "action",
+   "Tonifies the Blood"
+  ],
+  [
+   "action",
+   "Tonifies the Kidneys and Spleen"
+  ],
+  [
+   "action",
+   "Tonifies the Kidneys and fortifies sperm"
+  ],
+  [
+   "action",
+   "Tonifies the Kidneys and strengthens Yang"
+  ],
+  [
+   "action",
+   "Tonifies the Spleen and Stomach"
+  ],
+  [
+   "action",
+   "Tonifies the Spleen and augments Qi"
+  ],
+  [
+   "action",
+   "Transforms Phlegm"
+  ],
+  [
+   "action",
+   "Treats toothache (topical)"
+  ],
+  [
+   "action",
+   "Treats various types of cancer and hepatitis"
+  ],
+  [
+   "action",
+   "Unblocks and relaxes the channels"
+  ],
+  [
+   "action",
+   "Unblocks the Liver"
+  ],
+  [
+   "action",
+   "Unblocks the channels"
+  ],
+  [
+   "action",
+   "Unblocks the channels and collaterals"
+  ],
+  [
+   "action",
+   "Warmly unblocks and vigorously purges (purges accumulated Cold)"
+  ],
+  [
+   "action",
+   "Warms and Tonifies Kidney Yang"
+  ],
+  [
+   "action",
+   "Warms the Kidneys"
+  ],
+  [
+   "action",
+   "Warms the Lungs, regulates Qi and expels Phlegm"
+  ],
+  [
+   "action",
+   "Warms the Middle"
+  ],
+  [
+   "action",
+   "Warms the Middle Jiao, descends Qi and stops vomiting"
+  ],
+  [
+   "action",
+   "Warms the Middle Jiao, disperses Cold from the Stomach and Intestines, Descends Qi and stops pain"
+  ],
+  [
+   "action",
+   "Warms the Middle, descends Qi, and stops pain"
+  ],
+  [
+   "action",
+   "Warms the Spleen and Stomach"
+  ],
+  [
+   "action",
+   "Warms the channels"
+  ],
+  [
+   "action",
+   "Warms the channels, warms the womb, stops bleeding and calms the fetus"
+  ],
+  [
+   "category",
+   "Aromatyczne transformujące Wilgoć"
+  ],
+  [
+   "category",
+   "Do stosowania zewnętrznego"
+  ],
+  [
+   "category",
+   "Medycyna ludowa"
+  ],
+  [
+   "category",
+   "Oczyszczające Gorąco"
+  ],
+  [
+   "category",
+   "Odżywiające Krew"
+  ],
+  [
+   "category",
+   "Ogrzewające Wnętrze"
+  ],
+  [
+   "category",
+   "Otwierające Otwory"
+  ],
+  [
+   "category",
+   "Poruszające Krew"
+  ],
+  [
+   "category",
+   "Przeczyszczające"
+  ],
+  [
+   "category",
+   "Regulujące Qi"
+  ],
+  [
+   "category",
+   "Tamujące krwawienie"
+  ],
+  [
+   "category",
+   "Tonizujące Qi"
+  ],
+  [
+   "category",
+   "Tonizujące Yang"
+  ],
+  [
+   "category",
+   "Tonizujące Yin"
+  ],
+  [
+   "category",
+   "Transformujące Flegmę"
+  ],
+  [
+   "category",
+   "Uspokajające Shen"
+  ],
+  [
+   "category",
+   "Usuwające Wiatr-Wilgoć"
+  ],
+  [
+   "category",
+   "Usuwające Wilgoć"
+  ],
+  [
+   "category",
+   "Uwalniające Powierzchnię"
+  ],
+  [
+   "category",
+   "Wspomagające trawienie"
+  ],
+  [
+   "category",
+   "Wygaszające Wiatr"
+  ],
+  [
+   "category",
+   "Ściągające"
+  ],
+  [
+   "channel",
+   "Jelito cienkie"
+  ],
+  [
+   "channel",
+   "Jelito grube"
+  ],
+  [
+   "channel",
+   "Nerki"
+  ],
+  [
+   "channel",
+   "Pęcherz moczowy"
+  ],
+  [
+   "channel",
+   "Płuca"
+  ],
+  [
+   "channel",
+   "Serce"
+  ],
+  [
+   "channel",
+   "Wątroba"
+  ],
+  [
+   "channel",
+   "Śledziona"
+  ],
+  [
+   "channel",
+   "Żołądek"
+  ],
+  [
+   "contraindication",
+   "bardzo toksyczne (Very Toxic)"
+  ],
+  [
+   "contraindication",
+   "lekko toksyczne (Slightly Toxic)"
+  ],
+  [
+   "contraindication",
+   "toksyczne (Toxic)"
+  ],
+  [
+   "indication",
+   "AIDS/HIV"
+  ],
+  [
+   "indication",
+   "Abdominal fullness and distention"
+  ],
+  [
+   "indication",
+   "Abdominal masses"
+  ],
+  [
+   "indication",
+   "Abdominal pain"
+  ],
+  [
+   "indication",
+   "Acid reflux"
+  ],
+  [
+   "indication",
+   "Acute exacerbations of chronic nephritis"
+  ],
+  [
+   "indication",
+   "Acute infectious multiple neuritis"
+  ],
+  [
+   "indication",
+   "Acute myelitis (inflammation of the spinal cord)"
+  ],
+  [
+   "indication",
+   "Addison’s Disease"
+  ],
+  [
+   "indication",
+   "Addison’sdisease"
+  ],
+  [
+   "indication",
+   "Albuminuria"
+  ],
+  [
+   "indication",
+   "Allergies"
+  ],
+  [
+   "indication",
+   "Alopecia"
+  ],
+  [
+   "indication",
+   "Amenorrhea"
+  ],
+  [
+   "indication",
+   "Amyotrophic lateral sclerosis (ALS)"
+  ],
+  [
+   "indication",
+   "Anemia with fever"
+  ],
+  [
+   "indication",
+   "Anorexia"
+  ],
+  [
+   "indication",
+   "Anuria"
+  ],
+  [
+   "indication",
+   "Aphthae"
+  ],
+  [
+   "indication",
+   "Arteriosclerosis"
+  ],
+  [
+   "indication",
+   "Arteriostenosis"
+  ],
+  [
+   "indication",
+   "Arthralgia"
+  ],
+  [
+   "indication",
+   "Arthritis"
+  ],
+  [
+   "indication",
+   "Arthropathy"
+  ],
+  [
+   "indication",
+   "Asthma"
+  ],
+  [
+   "indication",
+   "Atrophy (Wei) Syndrome"
+  ],
+  [
+   "indication",
+   "Autonomic dystonia"
+  ],
+  [
+   "indication",
+   "Bad breath"
+  ],
+  [
+   "indication",
+   "Benign prostatic hypertrophy"
+  ],
+  [
+   "indication",
+   "Beriberi"
+  ],
+  [
+   "indication",
+   "Blepharitis"
+  ],
+  [
+   "indication",
+   "Bone spur"
+  ],
+  [
+   "indication",
+   "Bone spurs"
+  ],
+  [
+   "indication",
+   "Bronchitis"
+  ],
+  [
+   "indication",
+   "COPD"
+  ],
+  [
+   "indication",
+   "Candida albicans"
+  ],
+  [
+   "indication",
+   "Cataract"
+  ],
+  [
+   "indication",
+   "Cerebral hemorrhage"
+  ],
+  [
+   "indication",
+   "Cerebral vascular accident"
+  ],
+  [
+   "indication",
+   "Cholelithiasis"
+  ],
+  [
+   "indication",
+   "Chronic Functional Immuno-Deficiency Syndrome (CFIDS)"
+  ],
+  [
+   "indication",
+   "Chronic bronchial asthma"
+  ],
+  [
+   "indication",
+   "Chronic bronchitis"
+  ],
+  [
+   "indication",
+   "Chronic cystitis"
+  ],
+  [
+   "indication",
+   "Chronic diffuse nephritis"
+  ],
+  [
+   "indication",
+   "Chronic enteritis"
+  ],
+  [
+   "indication",
+   "Chronic gastritis"
+  ],
+  [
+   "indication",
+   "Chronic glomerulonephritis"
+  ],
+  [
+   "indication",
+   "Chronic gonorrhea"
+  ],
+  [
+   "indication",
+   "Chronic hepatitis"
+  ],
+  [
+   "indication",
+   "Chronic interstitial nephritis"
+  ],
+  [
+   "indication",
+   "Chronic pancreatitis"
+  ],
+  [
+   "indication",
+   "Chronic pelvic inflammatory disease"
+  ],
+  [
+   "indication",
+   "Chronic prostatitis"
+  ],
+  [
+   "indication",
+   "Chronic pyelonephritis"
+  ],
+  [
+   "indication",
+   "Chronic renal failure"
+  ],
+  [
+   "indication",
+   "Chronic rhinitis"
+  ],
+  [
+   "indication",
+   "Chronic tonsillitis"
+  ],
+  [
+   "indication",
+   "Chronic urethritis"
+  ],
+  [
+   "indication",
+   "Chyluria"
+  ],
+  [
+   "indication",
+   "Cicatrisation"
+  ],
+  [
+   "indication",
+   "Cirrhosis of the Liver"
+  ],
+  [
+   "indication",
+   "Climacteric syndrome"
+  ],
+  [
+   "indication",
+   "Conjunctivitis"
+  ],
+  [
+   "indication",
+   "Constipation"
+  ],
+  [
+   "indication",
+   "Cor pulmonare"
+  ],
+  [
+   "indication",
+   "Coronary artery disease"
+  ],
+  [
+   "indication",
+   "Cough"
+  ],
+  [
+   "indication",
+   "Cystic tuberculosis"
+  ],
+  [
+   "indication",
+   "Cystitis"
+  ],
+  [
+   "indication",
+   "Cystolithiasis"
+  ],
+  [
+   "indication",
+   "Dandruff"
+  ],
+  [
+   "indication",
+   "Deformed vertebrae"
+  ],
+  [
+   "indication",
+   "Degenerative joint disease"
+  ],
+  [
+   "indication",
+   "Depression"
+  ],
+  [
+   "indication",
+   "Dermatitis"
+  ],
+  [
+   "indication",
+   "Diabetes insipidus"
+  ],
+  [
+   "indication",
+   "Diabetes mellitus"
+  ],
+  [
+   "indication",
+   "Diarrhea"
+  ],
+  [
+   "indication",
+   "Discoloration of the skin"
+  ],
+  [
+   "indication",
+   "Dizziness"
+  ],
+  [
+   "indication",
+   "Dry hair"
+  ],
+  [
+   "indication",
+   "Dry skin"
+  ],
+  [
+   "indication",
+   "Dysentery"
+  ],
+  [
+   "indication",
+   "Dysmenorrhea"
+  ],
+  [
+   "indication",
+   "Dyspnea"
+  ],
+  [
+   "indication",
+   "Dyspnea on exertion"
+  ],
+  [
+   "indication",
+   "Dysuria"
+  ],
+  [
+   "indication",
+   "Dysuria during pregnancy"
+  ],
+  [
+   "indication",
+   "Eczema"
+  ],
+  [
+   "indication",
+   "Edema during pregnancy"
+  ],
+  [
+   "indication",
+   "Emphysema"
+  ],
+  [
+   "indication",
+   "Endocrine disorders"
+  ],
+  [
+   "indication",
+   "Enuresis"
+  ],
+  [
+   "indication",
+   "Epidemic eruption"
+  ],
+  [
+   "indication",
+   "Epilepsy"
+  ],
+  [
+   "indication",
+   "Epistaxis"
+  ],
+  [
+   "indication",
+   "Epstein Barr Virus"
+  ],
+  [
+   "indication",
+   "Esophageal cancer"
+  ],
+  [
+   "indication",
+   "Facial and ankle edema"
+  ],
+  [
+   "indication",
+   "Facial paralysis"
+  ],
+  [
+   "indication",
+   "Facial tics and spasms"
+  ],
+  [
+   "indication",
+   "Fasciolopsis (large Intestine fluke)"
+  ],
+  [
+   "indication",
+   "Fatigue"
+  ],
+  [
+   "indication",
+   "Fever in the head and extremities"
+  ],
+  [
+   "indication",
+   "Forgetfulness"
+  ],
+  [
+   "indication",
+   "Galacturia"
+  ],
+  [
+   "indication",
+   "Gastralgia on an empty Stomach"
+  ],
+  [
+   "indication",
+   "Gastric and duodenal ulcer"
+  ],
+  [
+   "indication",
+   "Gastroenteritis"
+  ],
+  [
+   "indication",
+   "Gastroptosis"
+  ],
+  [
+   "indication",
+   "Generalized cramping and pain in the epigastric region"
+  ],
+  [
+   "indication",
+   "Genital itching"
+  ],
+  [
+   "indication",
+   "Genital warts"
+  ],
+  [
+   "indication",
+   "Gingivitis"
+  ],
+  [
+   "indication",
+   "Glaucoma"
+  ],
+  [
+   "indication",
+   "Gonorrhea"
+  ],
+  [
+   "indication",
+   "Gout"
+  ],
+  [
+   "indication",
+   "Gu syndrome"
+  ],
+  [
+   "indication",
+   "Guillain-Barre disease"
+  ],
+  [
+   "indication",
+   "Gynecomastia"
+  ],
+  [
+   "indication",
+   "Hardening of the skin"
+  ],
+  [
+   "indication",
+   "Hashimoto'sthyroiditis"
+  ],
+  [
+   "indication",
+   "Hay fever"
+  ],
+  [
+   "indication",
+   "Headache"
+  ],
+  [
+   "indication",
+   "Heat stroke"
+  ],
+  [
+   "indication",
+   "Hematemesis"
+  ],
+  [
+   "indication",
+   "Hematuria"
+  ],
+  [
+   "indication",
+   "Hepatomegaly"
+  ],
+  [
+   "indication",
+   "Hyperaldosteronism"
+  ],
+  [
+   "indication",
+   "Hyperglycemia"
+  ],
+  [
+   "indication",
+   "Hyperlipoproteinemia"
+  ],
+  [
+   "indication",
+   "Hypertension"
+  ],
+  [
+   "indication",
+   "Hypotension"
+  ],
+  [
+   "indication",
+   "Hypothyroidism"
+  ],
+  [
+   "indication",
+   "Hysteria"
+  ],
+  [
+   "indication",
+   "Hysterical paralysis"
+  ],
+  [
+   "indication",
+   "Impotence"
+  ],
+  [
+   "indication",
+   "Inappropriate erection"
+  ],
+  [
+   "indication",
+   "Indigestion"
+  ],
+  [
+   "indication",
+   "Infantile diarrhea"
+  ],
+  [
+   "indication",
+   "Infertility"
+  ],
+  [
+   "indication",
+   "Irregular menstruation"
+  ],
+  [
+   "indication",
+   "Jaundice"
+  ],
+  [
+   "indication",
+   "Keratitis"
+  ],
+  [
+   "indication",
+   "Keratosis"
+  ],
+  [
+   "indication",
+   "Knee pain"
+  ],
+  [
+   "indication",
+   "Late menstruation"
+  ],
+  [
+   "indication",
+   "Leg Qi"
+  ],
+  [
+   "indication",
+   "Leukorrhagia"
+  ],
+  [
+   "indication",
+   "Lily Syndrome"
+  ],
+  [
+   "indication",
+   "Lily syndrome"
+  ],
+  [
+   "indication",
+   "Liver cancer"
+  ],
+  [
+   "indication",
+   "Low back pain"
+  ],
+  [
+   "indication",
+   "Lumbago"
+  ],
+  [
+   "indication",
+   "Lung cancer"
+  ],
+  [
+   "indication",
+   "Macular degeneration"
+  ],
+  [
+   "indication",
+   "Malaria with splenomegaly"
+  ],
+  [
+   "indication",
+   "Meniere’sdisease"
+  ],
+  [
+   "indication",
+   "Menopause syndrome"
+  ],
+  [
+   "indication",
+   "Menorrhagia"
+  ],
+  [
+   "indication",
+   "Menstrual disorders"
+  ],
+  [
+   "indication",
+   "Menstrual pain and cramps"
+  ],
+  [
+   "indication",
+   "Mental confusion"
+  ],
+  [
+   "indication",
+   "Metrorrhagia"
+  ],
+  [
+   "indication",
+   "Morning sickness"
+  ],
+  [
+   "indication",
+   "Multiple sclerosis"
+  ],
+  [
+   "indication",
+   "Mumps"
+  ],
+  [
+   "indication",
+   "Myasthenia gravis"
+  ],
+  [
+   "indication",
+   "Narcolepsy"
+  ],
+  [
+   "indication",
+   "Nausea/Vomiting"
+  ],
+  [
+   "indication",
+   "Neck pain and stiffness"
+  ],
+  [
+   "indication",
+   "Nephroatrophy"
+  ],
+  [
+   "indication",
+   "Nephrolithiasis"
+  ],
+  [
+   "indication",
+   "Nephrosclerosis"
+  ],
+  [
+   "indication",
+   "Nephrotic syndrome"
+  ],
+  [
+   "indication",
+   "Nephrotuberculosis"
+  ],
+  [
+   "indication",
+   "Nervous breakdown"
+  ],
+  [
+   "indication",
+   "Neuralgia"
+  ],
+  [
+   "indication",
+   "Neurasthenia"
+  ],
+  [
+   "indication",
+   "Neurodermatitis"
+  ],
+  [
+   "indication",
+   "Neurogenic tinnitus"
+  ],
+  [
+   "indication",
+   "Neurosis"
+  ],
+  [
+   "indication",
+   "Nocturia"
+  ],
+  [
+   "indication",
+   "Numbness of the joints"
+  ],
+  [
+   "indication",
+   "Numbness of the legs"
+  ],
+  [
+   "indication",
+   "Obesity"
+  ],
+  [
+   "indication",
+   "Oliguria"
+  ],
+  [
+   "indication",
+   "Oliguria with edema"
+  ],
+  [
+   "indication",
+   "Optic atrophy"
+  ],
+  [
+   "indication",
+   "Oral leukoplakia"
+  ],
+  [
+   "indication",
+   "Oral ulcers"
+  ],
+  [
+   "indication",
+   "Osteoarthritis"
+  ],
+  [
+   "indication",
+   "Palpitations"
+  ],
+  [
+   "indication",
+   "Panarthralgia"
+  ],
+  [
+   "indication",
+   "Paralysis"
+  ],
+  [
+   "indication",
+   "Paralysis of the detrusor muscle"
+  ],
+  [
+   "indication",
+   "Parasites"
+  ],
+  [
+   "indication",
+   "Pediatric diarrhea"
+  ],
+  [
+   "indication",
+   "Pelvic cellulitis"
+  ],
+  [
+   "indication",
+   "Perimenopausal syndrome"
+  ],
+  [
+   "indication",
+   "Periodic paralysis"
+  ],
+  [
+   "indication",
+   "Periodontal disease"
+  ],
+  [
+   "indication",
+   "Periodontitis"
+  ],
+  [
+   "indication",
+   "Pernicious vomiting (gravid hyperemesis)"
+  ],
+  [
+   "indication",
+   "Pertussis"
+  ],
+  [
+   "indication",
+   "Pharyngitis"
+  ],
+  [
+   "indication",
+   "Pinworms"
+  ],
+  [
+   "indication",
+   "Pityriasis rosae"
+  ],
+  [
+   "indication",
+   "Polyneuritis"
+  ],
+  [
+   "indication",
+   "Polyuria"
+  ],
+  [
+   "indication",
+   "Poor appetite"
+  ],
+  [
+   "indication",
+   "Poor vision"
+  ],
+  [
+   "indication",
+   "Post-stroke debility"
+  ],
+  [
+   "indication",
+   "Post-surgical urinary incontinence"
+  ],
+  [
+   "indication",
+   "Postpartum dysuria"
+  ],
+  [
+   "indication",
+   "Postpartum urinary retention"
+  ],
+  [
+   "indication",
+   "Premature ejaculation"
+  ],
+  [
+   "indication",
+   "Prematurely gray hair"
+  ],
+  [
+   "indication",
+   "Premenstrual syndrome"
+  ],
+  [
+   "indication",
+   "Primary hyperaldosteronism"
+  ],
+  [
+   "indication",
+   "Profuse perspiration"
+  ],
+  [
+   "indication",
+   "Progressive muscular dystrophy"
+  ],
+  [
+   "indication",
+   "Prostamegaly"
+  ],
+  [
+   "indication",
+   "Prostate cancer"
+  ],
+  [
+   "indication",
+   "Prostatitis"
+  ],
+  [
+   "indication",
+   "Proteinuria"
+  ],
+  [
+   "indication",
+   "Pulmonary tuberculosis"
+  ],
+  [
+   "indication",
+   "Pyelitis"
+  ],
+  [
+   "indication",
+   "Pyelonephritis"
+  ],
+  [
+   "indication",
+   "Pyloric stenosis"
+  ],
+  [
+   "indication",
+   "Rectal prolapse"
+  ],
+  [
+   "indication",
+   "Rectoptosis"
+  ],
+  [
+   "indication",
+   "Recurrent aphthous ulcers"
+  ],
+  [
+   "indication",
+   "Red eyes"
+  ],
+  [
+   "indication",
+   "Renal tuberculosis"
+  ],
+  [
+   "indication",
+   "Rheumatic fever"
+  ],
+  [
+   "indication",
+   "Rheumatoid arthritis"
+  ],
+  [
+   "indication",
+   "Roundworms"
+  ],
+  [
+   "indication",
+   "Scanty menstruation"
+  ],
+  [
+   "indication",
+   "Scapulohumeral periarthritis"
+  ],
+  [
+   "indication",
+   "Scars with swelling"
+  ],
+  [
+   "indication",
+   "Schistosomiasis"
+  ],
+  [
+   "indication",
+   "Sciatica"
+  ],
+  [
+   "indication",
+   "Seborrheic dermatitis"
+  ],
+  [
+   "indication",
+   "Senile cystoatrophy"
+  ],
+  [
+   "indication",
+   "Senile dementia"
+  ],
+  [
+   "indication",
+   "Senile itching"
+  ],
+  [
+   "indication",
+   "Sjogren'ssyndrome"
+  ],
+  [
+   "indication",
+   "Sleep walking"
+  ],
+  [
+   "indication",
+   "Somnolence"
+  ],
+  [
+   "indication",
+   "Sore throat"
+  ],
+  [
+   "indication",
+   "Spermatorrhea"
+  ],
+  [
+   "indication",
+   "Splenomegaly"
+  ],
+  [
+   "indication",
+   "Spontaneous perspiration"
+  ],
+  [
+   "indication",
+   "Stomach cancer"
+  ],
+  [
+   "indication",
+   "Stomach flu"
+  ],
+  [
+   "indication",
+   "Stomatitis"
+  ],
+  [
+   "indication",
+   "Strangury"
+  ],
+  [
+   "indication",
+   "Stroke"
+  ],
+  [
+   "indication",
+   "Systemic lupus erythematosis"
+  ],
+  [
+   "indication",
+   "Systemic lupus erythematosus"
+  ],
+  [
+   "indication",
+   "Tapeworms"
+  ],
+  [
+   "indication",
+   "The sequelae of poliomyelitis"
+  ],
+  [
+   "indication",
+   "Thick, white vaginal discharge"
+  ],
+  [
+   "indication",
+   "Thirst"
+  ],
+  [
+   "indication",
+   "Tinea"
+  ],
+  [
+   "indication",
+   "Tinnitus"
+  ],
+  [
+   "indication",
+   "Toe Pain"
+  ],
+  [
+   "indication",
+   "Tonsillitis"
+  ],
+  [
+   "indication",
+   "Trichomonas"
+  ],
+  [
+   "indication",
+   "Trichomonas vaginalis"
+  ],
+  [
+   "indication",
+   "Tuberculosis"
+  ],
+  [
+   "indication",
+   "Turbid urine"
+  ],
+  [
+   "indication",
+   "Unilateral pain"
+  ],
+  [
+   "indication",
+   "Upper back pain"
+  ],
+  [
+   "indication",
+   "Urethritis"
+  ],
+  [
+   "indication",
+   "Urinary incontinence"
+  ],
+  [
+   "indication",
+   "Urinary retention"
+  ],
+  [
+   "indication",
+   "Urinary retention from spinal cord injuries"
+  ],
+  [
+   "indication",
+   "Urinary tract infection"
+  ],
+  [
+   "indication",
+   "Urinary tract infections"
+  ],
+  [
+   "indication",
+   "Urolithiasis"
+  ],
+  [
+   "indication",
+   "Urticaria"
+  ],
+  [
+   "indication",
+   "Uterine myoma"
+  ],
+  [
+   "indication",
+   "Uteritis"
+  ],
+  [
+   "indication",
+   "Vaginal bacterial infection"
+  ],
+  [
+   "indication",
+   "Vaginal discharge"
+  ],
+  [
+   "indication",
+   "Vaginal itch"
+  ],
+  [
+   "indication",
+   "Vaginitis"
+  ],
+  [
+   "indication",
+   "Vegetative nerve disturbance"
+  ],
+  [
+   "indication",
+   "Vertigo"
+  ],
+  [
+   "indication",
+   "Vesicle calculus"
+  ],
+  [
+   "indication",
+   "Vitreous opacity"
+  ],
+  [
+   "indication",
+   "Weakness"
+  ],
+  [
+   "indication",
+   "Whole body pain"
+  ],
+  [
+   "indication",
+   "Yawning"
+  ],
+  [
+   "indication",
+   "Yeast infection"
+  ],
+  [
+   "pattern",
+   "Abdominal masses due to Qi and Blood Stagnation"
+  ],
+  [
+   "pattern",
+   "Atrophy disorder (Wei Syndrome) due to Liver and Kidney Deficiency"
+  ],
+  [
+   "pattern",
+   "Bai He Bing (Lily Syndrome)"
+  ],
+  [
+   "pattern",
+   "Bai He Bing (Lily Syndrome) with pronounced Upper Jiao symptoms"
+  ],
+  [
+   "pattern",
+   "Blood Stagnation with Damp-Heat"
+  ],
+  [
+   "pattern",
+   "Blood Stagnation with Phlegm Accumulation"
+  ],
+  [
+   "pattern",
+   "Damp-Heat in the Liver and Gallbladder"
+  ],
+  [
+   "pattern",
+   "Damp-Heat with a feeling of underlying Cold due to Blood Deficiency (Anemia)"
+  ],
+  [
+   "pattern",
+   "Dampness"
+  ],
+  [
+   "pattern",
+   "Esophageal Cancer due to Damp-Heat in the Spleen and Stomach"
+  ],
+  [
+   "pattern",
+   "Heart Blood and Lung Yin Deficiency with Wind-Damp-Heat"
+  ],
+  [
+   "pattern",
+   "Jin Ye Stasis"
+  ],
+  [
+   "pattern",
+   "Kidney Yang Deficiency"
+  ],
+  [
+   "pattern",
+   "Kidney Yin Deficiency"
+  ],
+  [
+   "pattern",
+   "Kidney Yin and Yang Deficiency"
+  ],
+  [
+   "pattern",
+   "Late-stage or aftermath of Ying or Xue Stage Heat"
+  ],
+  [
+   "pattern",
+   "Late-stage or aftermath of Ying or Xue Stage Heat with improper purging damaging Stomach Qi"
+  ],
+  [
+   "pattern",
+   "Leg Qi"
+  ],
+  [
+   "pattern",
+   "Lily Syndrome Bai He Bing due to Heart Yin Deficiency"
+  ],
+  [
+   "pattern",
+   "Lily Syndrome Bai He Bing due to Heart and Lung Yin Deficiency"
+  ],
+  [
+   "pattern",
+   "Lily Syndrome Bai He Bing due to Liver Qi Stagnation with Liver Yin Deficiency"
+  ],
+  [
+   "pattern",
+   "Lily Syndrome Bai He Bing due to Lung and Kidney Yin Deficiency"
+  ],
+  [
+   "pattern",
+   "Lily Syndrome Bai He Bing due to Stagnation of Spleen Qi with Lung impairment"
+  ],
+  [
+   "pattern",
+   "Lily Syndrome due to Phlegm-Heat (Re Tan)"
+  ],
+  [
+   "pattern",
+   "Liver Qi Stagnation"
+  ],
+  [
+   "pattern",
+   "Liver Qi Stagnation with Yin Deficiency"
+  ],
+  [
+   "pattern",
+   "Liver and Kidney Yin Deficiency with Spleen Qi Deficiency and Heart Blood Stasis"
+  ],
+  [
+   "pattern",
+   "Lung Qi and Yin Deficiency"
+  ],
+  [
+   "pattern",
+   "Milky Lin (cloudy urination) due to Kidney Yang Deficiency"
+  ],
+  [
+   "pattern",
+   "Parasites"
+  ],
+  [
+   "pattern",
+   "Phlegm Dampness"
+  ],
+  [
+   "pattern",
+   "Phlegm-Damp Blocking the Channels"
+  ],
+  [
+   "pattern",
+   "Qi and Blood Stagnation"
+  ],
+  [
+   "pattern",
+   "Qi and Blood Stagnation with Qi Stagnation more prominent"
+  ],
+  [
+   "pattern",
+   "Qi and Yin Deficiency Heat"
+  ],
+  [
+   "pattern",
+   "Qi, Blood and Phlegm Stagnation"
+  ],
+  [
+   "pattern",
+   "Scars with swelling due to Blood Stagnation"
+  ],
+  [
+   "pattern",
+   "Spleen Deficiency Edema"
+  ],
+  [
+   "pattern",
+   "Spleen and Stomach Deficiency Cold with Qi and Blood Stagnation"
+  ],
+  [
+   "pattern",
+   "Summerheat and Dampness with Liver and Gallbladder Heat"
+  ],
+  [
+   "pattern",
+   "Tan Yin"
+  ],
+  [
+   "pattern",
+   "Toxic Heat"
+  ],
+  [
+   "pattern",
+   "Toxic Heat with Phlegm"
+  ],
+  [
+   "pattern",
+   "Urinary Bladder Damp-Heat"
+  ],
+  [
+   "pattern",
+   "Wind-Cold-Damp"
+  ],
+  [
+   "pattern",
+   "Wind-Damp-Heat Bi"
+  ],
+  [
+   "pattern",
+   "Wind-Dampness with Blood Deficiency and Blood Stagnation"
+  ],
+  [
+   "pattern",
+   "Wind-Dampness with Qi and Blood Deficiency"
+  ],
+  [
+   "pattern",
+   "Wind-Heat"
+  ],
+  [
+   "pattern",
+   "Xiao Ke"
+  ],
+  [
+   "pattern",
+   "Yang Ming Jing with Interior Dampness"
+  ],
+  [
+   "pattern",
+   "Yin and Blood Deficiency"
+  ],
+  [
+   "pattern",
+   "Yin, Blood and Jing Deficiency"
+  ],
+  [
+   "symptom",
+   "\"Steaming Bone\" tidal fever"
+  ],
+  [
+   "symptom",
+   "A Pale or yellowish complexion"
+  ],
+  [
+   "symptom",
+   "A bitter taste in the mouth"
+  ],
+  [
+   "symptom",
+   "A burning sensation on the skin surface"
+  ],
+  [
+   "symptom",
+   "A chronic dry cough"
+  ],
+  [
+   "symptom",
+   "A cold sensation in the lower half of the body"
+  ],
+  [
+   "symptom",
+   "A dusky complexion"
+  ],
+  [
+   "symptom",
+   "A flabby abdomen"
+  ],
+  [
+   "symptom",
+   "A general feeling of Heat"
+  ],
+  [
+   "symptom",
+   "A gray face"
+  ],
+  [
+   "symptom",
+   "A heavy head"
+  ],
+  [
+   "symptom",
+   "A history of trauma to the toe(s)"
+  ],
+  [
+   "symptom",
+   "A low or soft voice"
+  ],
+  [
+   "symptom",
+   "A sallow facial complexion"
+  ],
+  [
+   "symptom",
+   "A soft voice"
+  ],
+  [
+   "symptom",
+   "A tasteless, greasy sensation in the mouth"
+  ],
+  [
+   "symptom",
+   "A waxy, pale complexion"
+  ],
+  [
+   "symptom",
+   "A weak lower body"
+  ],
+  [
+   "symptom",
+   "A weak, dry cough"
+  ],
+  [
+   "symptom",
+   "Abdomen is soft to the touch"
+  ],
+  [
+   "symptom",
+   "Abdominal an"
+  ],
+  [
+   "symptom",
+   "Abdominal and epigastric distention after eating"
+  ],
+  [
+   "symptom",
+   "Abdominal distention"
+  ],
+  [
+   "symptom",
+   "Abdominal distention and discomfort"
+  ],
+  [
+   "symptom",
+   "Abdominal distention and fullness"
+  ],
+  [
+   "symptom",
+   "Abdominal distention, fullness and pain"
+  ],
+  [
+   "symptom",
+   "Abdominal pain"
+  ],
+  [
+   "symptom",
+   "Abdominal pain which becomes worse as the period approaches"
+  ],
+  [
+   "symptom",
+   "Abdominal pain with periods"
+  ],
+  [
+   "symptom",
+   "Absentmindedness"
+  ],
+  [
+   "symptom",
+   "Aches and weakness in the waist and legs"
+  ],
+  [
+   "symptom",
+   "Aching and painful extremities"
+  ],
+  [
+   "symptom",
+   "Achy and uncomfortable flesh and bones of the hands and feet"
+  ],
+  [
+   "symptom",
+   "Acid reflux"
+  ],
+  [
+   "symptom",
+   "Acute lower abdominal pain"
+  ],
+  [
+   "symptom",
+   "Affected joints are burning hot to the touch"
+  ],
+  [
+   "symptom",
+   "Afternoon fever"
+  ],
+  [
+   "symptom",
+   "Aggravated by pressure"
+  ],
+  [
+   "symptom",
+   "Alopecia"
+  ],
+  [
+   "symptom",
+   "Alopecia occurs over the vertex or at the lateral frontal areas"
+  ],
+  [
+   "symptom",
+   "Altered bowel habits"
+  ],
+  [
+   "symptom",
+   "Alternating chills and fever"
+  ],
+  [
+   "symptom",
+   "Amenorrhea"
+  ],
+  [
+   "symptom",
+   "An abnormal appetite and behavior"
+  ],
+  [
+   "symptom",
+   "Anhidrosis"
+  ],
+  [
+   "symptom",
+   "Anorexia"
+  ],
+  [
+   "symptom",
+   "Anxiety"
+  ],
+  [
+   "symptom",
+   "Anxiety before periods"
+  ],
+  [
+   "symptom",
+   "Asthenia"
+  ],
+  [
+   "symptom",
+   "Aversion to Cold"
+  ],
+  [
+   "symptom",
+   "Aversion to Wind"
+  ],
+  [
+   "symptom",
+   "Aversion to Wind and Cold"
+  ],
+  [
+   "symptom",
+   "Aversion to life"
+  ],
+  [
+   "symptom",
+   "Back soreness"
+  ],
+  [
+   "symptom",
+   "Belching"
+  ],
+  [
+   "symptom",
+   "Black stool"
+  ],
+  [
+   "symptom",
+   "Bleeding is hesitant with clots"
+  ],
+  [
+   "symptom",
+   "Bleeding with clots"
+  ],
+  [
+   "symptom",
+   "Blood Stagnation: more pain than distention"
+  ],
+  [
+   "symptom",
+   "Blood tinged sputum (when Yin Deficiency Fire is present)"
+  ],
+  [
+   "symptom",
+   "Blue purple if there is Cold"
+  ],
+  [
+   "symptom",
+   "Blue, dark or purplish discoloration of skin in small or large areas"
+  ],
+  [
+   "symptom",
+   "Blue, dark or purplish discoloration of skin in small or large areas,"
+  ],
+  [
+   "symptom",
+   "Blurred vision"
+  ],
+  [
+   "symptom",
+   "Bone spur on the heel"
+  ],
+  [
+   "symptom",
+   "Bones and joints sore and painful"
+  ],
+  [
+   "symptom",
+   "Both cheeks slightly red"
+  ],
+  [
+   "symptom",
+   "Breast and hypochondria pain"
+  ],
+  [
+   "symptom",
+   "Breast distention and pain"
+  ],
+  [
+   "symptom",
+   "Breast distention and pain before and during menses"
+  ],
+  [
+   "symptom",
+   "Breast swelling and tenderness unrelated to menstruation"
+  ],
+  [
+   "symptom",
+   "Bright red or dark red Blood"
+  ],
+  [
+   "symptom",
+   "Bright shiny white skin"
+  ],
+  [
+   "symptom",
+   "Chest and flank distention and pain"
+  ],
+  [
+   "symptom",
+   "Chest and/or epigastric fullness"
+  ],
+  [
+   "symptom",
+   "Chest distention"
+  ],
+  [
+   "symptom",
+   "Chest pain"
+  ],
+  [
+   "symptom",
+   "Chest tightness"
+  ],
+  [
+   "symptom",
+   "Chills in the waist and feet"
+  ],
+  [
+   "symptom",
+   "Chronic coughing with sparse sputum"
+  ],
+  [
+   "symptom",
+   "Chronic lumbar soreness"
+  ],
+  [
+   "symptom",
+   "Cicatrisation"
+  ],
+  [
+   "symptom",
+   "Clusters of red, flat pimples"
+  ],
+  [
+   "symptom",
+   "Cold body"
+  ],
+  [
+   "symptom",
+   "Cold hands and feet"
+  ],
+  [
+   "symptom",
+   "Cold limbs"
+  ],
+  [
+   "symptom",
+   "Cold lower abdomen"
+  ],
+  [
+   "symptom",
+   "Constipation"
+  ],
+  [
+   "symptom",
+   "Cough with sticky, yellow, difficult to expectorate sputum"
+  ],
+  [
+   "symptom",
+   "Coughing"
+  ],
+  [
+   "symptom",
+   "Cramps and pain in the epigastrium"
+  ],
+  [
+   "symptom",
+   "Craves food the hates food"
+  ],
+  [
+   "symptom",
+   "Craves food then hates food"
+  ],
+  [
+   "symptom",
+   "Dark complexion"
+  ],
+  [
+   "symptom",
+   "Dark red complexion"
+  ],
+  [
+   "symptom",
+   "Dark urine"
+  ],
+  [
+   "symptom",
+   "Deafness"
+  ],
+  [
+   "symptom",
+   "Decreased and dark-colored menses that contain clots or"
+  ],
+  [
+   "symptom",
+   "Decreased menses with light colored Blood and no blood clots"
+  ],
+  [
+   "symptom",
+   "Delirious speech"
+  ],
+  [
+   "symptom",
+   "Depression"
+  ],
+  [
+   "symptom",
+   "Diarrhea"
+  ],
+  [
+   "symptom",
+   "Diarrhea with foul smell or"
+  ],
+  [
+   "symptom",
+   "Difficulty walking and moving"
+  ],
+  [
+   "symptom",
+   "Discoloration of the skin"
+  ],
+  [
+   "symptom",
+   "Discomfort or a constricted sensation in the area of the chest and diaphragm"
+  ],
+  [
+   "symptom",
+   "Dislike of oily foods"
+  ],
+  [
+   "symptom",
+   "Dislike of pressure"
+  ],
+  [
+   "symptom",
+   "Distended abdominal pain, one or two days before or during menstruation which is worse with pressure"
+  ],
+  [
+   "symptom",
+   "Distention"
+  ],
+  [
+   "symptom",
+   "Distention and pain in the chest and flanks"
+  ],
+  [
+   "symptom",
+   "Distention and pain in the sides or flanks"
+  ],
+  [
+   "symptom",
+   "Distention of the chest"
+  ],
+  [
+   "symptom",
+   "Dizziness"
+  ],
+  [
+   "symptom",
+   "Does not know what he/she wants"
+  ],
+  [
+   "symptom",
+   "Does not like to talk"
+  ],
+  [
+   "symptom",
+   "Dry bowl movements"
+  ],
+  [
+   "symptom",
+   "Dry eyes"
+  ],
+  [
+   "symptom",
+   "Dry hair"
+  ],
+  [
+   "symptom",
+   "Dry mouth"
+  ],
+  [
+   "symptom",
+   "Dry mouth and throat"
+  ],
+  [
+   "symptom",
+   "Dry mouth and tongue"
+  ],
+  [
+   "symptom",
+   "Dry mouth with a bitter taste"
+  ],
+  [
+   "symptom",
+   "Dry skin"
+  ],
+  [
+   "symptom",
+   "Dry stools"
+  ],
+  [
+   "symptom",
+   "Dry throat"
+  ],
+  [
+   "symptom",
+   "Dry vagina"
+  ],
+  [
+   "symptom",
+   "Dryness"
+  ],
+  [
+   "symptom",
+   "Dull complexion"
+  ],
+  [
+   "symptom",
+   "Dull-pale complexion"
+  ],
+  [
+   "symptom",
+   "Dysmenorrhea"
+  ],
+  [
+   "symptom",
+   "Dyspnea"
+  ],
+  [
+   "symptom",
+   "Dysuria"
+  ],
+  [
+   "symptom",
+   "Early menses"
+  ],
+  [
+   "symptom",
+   "Early menstruation"
+  ],
+  [
+   "symptom",
+   "Easily angered"
+  ],
+  [
+   "symptom",
+   "Easily startled"
+  ],
+  [
+   "symptom",
+   "Edema"
+  ],
+  [
+   "symptom",
+   "Edema of the face and feet"
+  ],
+  [
+   "symptom",
+   "Emaciation"
+  ],
+  [
+   "symptom",
+   "Emotional instability"
+  ],
+  [
+   "symptom",
+   "Epigastric mass"
+  ],
+  [
+   "symptom",
+   "Epigastric pain"
+  ],
+  [
+   "symptom",
+   "Epistaxis"
+  ],
+  [
+   "symptom",
+   "Erratic behavior"
+  ],
+  [
+   "symptom",
+   "Especially facial and limb edema"
+  ],
+  [
+   "symptom",
+   "Exacerbated by Cold and Dampness"
+  ],
+  [
+   "symptom",
+   "Excessive appetite"
+  ],
+  [
+   "symptom",
+   "Excessive urination"
+  ],
+  [
+   "symptom",
+   "Excruciating abdominal pain with cold"
+  ],
+  [
+   "symptom",
+   "Face is dull yellow"
+  ],
+  [
+   "symptom",
+   "Facial complexion pale and sallow"
+  ],
+  [
+   "symptom",
+   "Fatigue"
+  ],
+  [
+   "symptom",
+   "Fatigue (severe)"
+  ],
+  [
+   "symptom",
+   "Feels cold then not cold"
+  ],
+  [
+   "symptom",
+   "Feels hot then not hot"
+  ],
+  [
+   "symptom",
+   "Fever"
+  ],
+  [
+   "symptom",
+   "Fever with exhaustion"
+  ],
+  [
+   "symptom",
+   "Feverish body parts"
+  ],
+  [
+   "symptom",
+   "Five Sole Heat"
+  ],
+  [
+   "symptom",
+   "Five sole Heat"
+  ],
+  [
+   "symptom",
+   "Five sole Heat or"
+  ],
+  [
+   "symptom",
+   "Fixed pain with swelling in the toe(s)"
+  ],
+  [
+   "symptom",
+   "Fixed, palpable masses"
+  ],
+  [
+   "symptom",
+   "Flaccid paralysis (Wei syndrome), weakness"
+  ],
+  [
+   "symptom",
+   "Food allergies"
+  ],
+  [
+   "symptom",
+   "Forgetfulness"
+  ],
+  [
+   "symptom",
+   "Foul intestinal gas"
+  ],
+  [
+   "symptom",
+   "Four limbs feel tired and heavy"
+  ],
+  [
+   "symptom",
+   "Frequent cloudy, milky urination"
+  ],
+  [
+   "symptom",
+   "Frequent urination"
+  ],
+  [
+   "symptom",
+   "Frequent, clear abundant urination"
+  ],
+  [
+   "symptom",
+   "Fullness and distention of the chest and hypochondrium"
+  ],
+  [
+   "symptom",
+   "General disquietude"
+  ],
+  [
+   "symptom",
+   "Generalized body aches and pains"
+  ],
+  [
+   "symptom",
+   "Genital warts"
+  ],
+  [
+   "symptom",
+   "Gradually worsening afternoon fevers"
+  ],
+  [
+   "symptom",
+   "Great thirst with a desire to drink"
+  ],
+  [
+   "symptom",
+   "Hard abdominal masses that produce pain"
+  ],
+  [
+   "symptom",
+   "Hard stool"
+  ],
+  [
+   "symptom",
+   "Hard stools"
+  ],
+  [
+   "symptom",
+   "Hardening of the skin"
+  ],
+  [
+   "symptom",
+   "Headache"
+  ],
+  [
+   "symptom",
+   "Headaches"
+  ],
+  [
+   "symptom",
+   "Hearing loss"
+  ],
+  [
+   "symptom",
+   "Heartburn"
+  ],
+  [
+   "symptom",
+   "Heaviness of the body and limbs"
+  ],
+  [
+   "symptom",
+   "Heavy discharge"
+  ],
+  [
+   "symptom",
+   "Heavy period"
+  ],
+  [
+   "symptom",
+   "Heavy sensation in the shoulder and back"
+  ],
+  [
+   "symptom",
+   "Hematemesis"
+  ],
+  [
+   "symptom",
+   "Hematuria"
+  ],
+  [
+   "symptom",
+   "Hemiplegia"
+  ],
+  [
+   "symptom",
+   "Hemoptysis"
+  ],
+  [
+   "symptom",
+   "Hemoptysis with frothy, fresh Blood"
+  ],
+  [
+   "symptom",
+   "Hepatobiliary symptoms"
+  ],
+  [
+   "symptom",
+   "Hiccup"
+  ],
+  [
+   "symptom",
+   "High fever"
+  ],
+  [
+   "symptom",
+   "Hoarse voice, low voice or loss of voice"
+  ],
+  [
+   "symptom",
+   "Hoarseness"
+  ],
+  [
+   "symptom",
+   "Hopelessness"
+  ],
+  [
+   "symptom",
+   "Hypochondriac distention"
+  ],
+  [
+   "symptom",
+   "Hypomenorrhea with dark purple Blood"
+  ],
+  [
+   "symptom",
+   "If heat is Internal, only fever"
+  ],
+  [
+   "symptom",
+   "If severe, may be incontinence of urine"
+  ],
+  [
+   "symptom",
+   "Immobile masses below the hypochondrium or in the abdomen"
+  ],
+  [
+   "symptom",
+   "Impaired vision"
+  ],
+  [
+   "symptom",
+   "Inability to conceive for many years"
+  ],
+  [
+   "symptom",
+   "Inability to rotate the body"
+  ],
+  [
+   "symptom",
+   "Inappropriate anger"
+  ],
+  [
+   "symptom",
+   "Incontinence of urine"
+  ],
+  [
+   "symptom",
+   "Infertility"
+  ],
+  [
+   "symptom",
+   "Infrequent menstruation"
+  ],
+  [
+   "symptom",
+   "Insomnia"
+  ],
+  [
+   "symptom",
+   "Insomnia with much dreaming"
+  ],
+  [
+   "symptom",
+   "Intense itching"
+  ],
+  [
+   "symptom",
+   "Irregular menses"
+  ],
+  [
+   "symptom",
+   "Irregular menses or"
+  ],
+  [
+   "symptom",
+   "Irregular menstruation"
+  ],
+  [
+   "symptom",
+   "Irregular periods"
+  ],
+  [
+   "symptom",
+   "Irregular stools"
+  ],
+  [
+   "symptom",
+   "Irritability"
+  ],
+  [
+   "symptom",
+   "Irritability before periods"
+  ],
+  [
+   "symptom",
+   "Itching"
+  ],
+  [
+   "symptom",
+   "Itching in throat"
+  ],
+  [
+   "symptom",
+   "Itching of the genital area"
+  ],
+  [
+   "symptom",
+   "Itching sores"
+  ],
+  [
+   "symptom",
+   "Joint degeneration or deformity in the lumbar region"
+  ],
+  [
+   "symptom",
+   "Joint pain"
+  ],
+  [
+   "symptom",
+   "Joint swelling, pain and heaviness"
+  ],
+  [
+   "symptom",
+   "Joints are warm to the touch (may be burning and swollen)"
+  ],
+  [
+   "symptom",
+   "Knee pain"
+  ],
+  [
+   "symptom",
+   "Lassitude"
+  ],
+  [
+   "symptom",
+   "Lassitude due to Summerheat"
+  ],
+  [
+   "symptom",
+   "Late menses or"
+  ],
+  [
+   "symptom",
+   "Lethargy"
+  ],
+  [
+   "symptom",
+   "Light headedness"
+  ],
+  [
+   "symptom",
+   "Light menses or"
+  ],
+  [
+   "symptom",
+   "Listless speech"
+  ],
+  [
+   "symptom",
+   "Lochioschesis"
+  ],
+  [
+   "symptom",
+   "Long-term infertility"
+  ],
+  [
+   "symptom",
+   "Loose stools"
+  ],
+  [
+   "symptom",
+   "Loose stools or"
+  ],
+  [
+   "symptom",
+   "Loose, watery stools or"
+  ],
+  [
+   "symptom",
+   "Loss of libido"
+  ],
+  [
+   "symptom",
+   "Low back and knees sore and painful"
+  ],
+  [
+   "symptom",
+   "Low back and knees sore and weak"
+  ],
+  [
+   "symptom",
+   "Low back pain"
+  ],
+  [
+   "symptom",
+   "Low grade fever"
+  ],
+  [
+   "symptom",
+   "Low-grade fever"
+  ],
+  [
+   "symptom",
+   "Low-grade fever in the afternoon"
+  ],
+  [
+   "symptom",
+   "Lower abdominal distention and pain, especially along the sides of the abdomen"
+  ],
+  [
+   "symptom",
+   "Lower back pain"
+  ],
+  [
+   "symptom",
+   "Malaise"
+  ],
+  [
+   "symptom",
+   "Malar flush"
+  ],
+  [
+   "symptom",
+   "Malar flush (especially in afternoon)"
+  ],
+  [
+   "symptom",
+   "Mania"
+  ],
+  [
+   "symptom",
+   "May be chills and fever"
+  ],
+  [
+   "symptom",
+   "May be mania (severe)"
+  ],
+  [
+   "symptom",
+   "May be numbness in the lower abdomen"
+  ],
+  [
+   "symptom",
+   "May have flushed face (Yang floating upward)"
+  ],
+  [
+   "symptom",
+   "May have persistent diarrhea"
+  ],
+  [
+   "symptom",
+   "May have severe perspiration (Yang floating upward)"
+  ],
+  [
+   "symptom",
+   "Maybe abdominal pain on palpation"
+  ],
+  [
+   "symptom",
+   "Maybe acid regurgitation or vomiting"
+  ],
+  [
+   "symptom",
+   "Maybe asthma"
+  ],
+  [
+   "symptom",
+   "Maybe cough"
+  ],
+  [
+   "symptom",
+   "Maybe drawing pain down the internal aspect of arm (especially the left arm)"
+  ],
+  [
+   "symptom",
+   "Maybe greasy urine"
+  ],
+  [
+   "symptom",
+   "Maybe hoarse voice"
+  ],
+  [
+   "symptom",
+   "Maybe pain in shin, foot, and heel"
+  ],
+  [
+   "symptom",
+   "Maybe premenstrual breast distention"
+  ],
+  [
+   "symptom",
+   "Maybe thirst or thirst with no desire to drink"
+  ],
+  [
+   "symptom",
+   "Maybe vomiting"
+  ],
+  [
+   "symptom",
+   "Melancholy"
+  ],
+  [
+   "symptom",
+   "Menstrual blood is generally thick and dense"
+  ],
+  [
+   "symptom",
+   "Mental disorientation"
+  ],
+  [
+   "symptom",
+   "Mental disturbance"
+  ],
+  [
+   "symptom",
+   "Mental instability"
+  ],
+  [
+   "symptom",
+   "Mental restlessness"
+  ],
+  [
+   "symptom",
+   "Mouth, tongue and lip ulcerations"
+  ],
+  [
+   "symptom",
+   "Much dreaming"
+  ],
+  [
+   "symptom",
+   "Muddled thinking"
+  ],
+  [
+   "symptom",
+   "Multiple sores, carbuncles furuncles or abscesses"
+  ],
+  [
+   "symptom",
+   "Muscle aches"
+  ],
+  [
+   "symptom",
+   "Muscular atrophy"
+  ],
+  [
+   "symptom",
+   "Nausea"
+  ],
+  [
+   "symptom",
+   "Nausea/Vomiting"
+  ],
+  [
+   "symptom",
+   "Nervousness"
+  ],
+  [
+   "symptom",
+   "Night blindness"
+  ],
+  [
+   "symptom",
+   "Night fevers"
+  ],
+  [
+   "symptom",
+   "Night sweating"
+  ],
+  [
+   "symptom",
+   "Night sweats"
+  ],
+  [
+   "symptom",
+   "No aversion to Cold"
+  ],
+  [
+   "symptom",
+   "No constipation"
+  ],
+  [
+   "symptom",
+   "No sputum expectorated"
+  ],
+  [
+   "symptom",
+   "Nocturia"
+  ],
+  [
+   "symptom",
+   "Numbness"
+  ],
+  [
+   "symptom",
+   "Numbness in the lower extremities"
+  ],
+  [
+   "symptom",
+   "Numbness of limbs"
+  ],
+  [
+   "symptom",
+   "Numbness of the extremities"
+  ],
+  [
+   "symptom",
+   "Obsessions"
+  ],
+  [
+   "symptom",
+   "Ocular pain"
+  ],
+  [
+   "symptom",
+   "Often affects people in their twenties and thirties"
+  ],
+  [
+   "symptom",
+   "Oliguria with dark urine"
+  ],
+  [
+   "symptom",
+   "Oral ulcers"
+  ],
+  [
+   "symptom",
+   "Pain (in chest and/or arm) tends to be severe and intermittent"
+  ],
+  [
+   "symptom",
+   "Pain and cramps in the lower abdomen"
+  ],
+  [
+   "symptom",
+   "Pain and distention of the head"
+  ],
+  [
+   "symptom",
+   "Pain in the ribs"
+  ],
+  [
+   "symptom",
+   "Pain in the trunk and extremities"
+  ],
+  [
+   "symptom",
+   "Pain is worse with pressure"
+  ],
+  [
+   "symptom",
+   "Pain that is fixed, stabbing and /or severe"
+  ],
+  [
+   "symptom",
+   "Pain that is fixed, stabbing and /or severe or"
+  ],
+  [
+   "symptom",
+   "Pain worse at night"
+  ],
+  [
+   "symptom",
+   "Pain worse with pressure and movement"
+  ],
+  [
+   "symptom",
+   "Painful periods"
+  ],
+  [
+   "symptom",
+   "Pains that move around"
+  ],
+  [
+   "symptom",
+   "Pale complexion"
+  ],
+  [
+   "symptom",
+   "Pale face"
+  ],
+  [
+   "symptom",
+   "Pale face and lips"
+  ],
+  [
+   "symptom",
+   "Palpable pain in the Gallbladder region"
+  ],
+  [
+   "symptom",
+   "Palpitations"
+  ],
+  [
+   "symptom",
+   "Palpitations with a stifling sensation in chest"
+  ],
+  [
+   "symptom",
+   "Pan is worse with pressure"
+  ],
+  [
+   "symptom",
+   "Panting and irritability to the point of having difficulty lying down"
+  ],
+  [
+   "symptom",
+   "Papules"
+  ],
+  [
+   "symptom",
+   "Paralysis"
+  ],
+  [
+   "symptom",
+   "Period either scanty or heavy"
+  ],
+  [
+   "symptom",
+   "Persistent swelling"
+  ],
+  [
+   "symptom",
+   "Poor appetite"
+  ],
+  [
+   "symptom",
+   "Poor memory"
+  ],
+  [
+   "symptom",
+   "Poor muscle tone"
+  ],
+  [
+   "symptom",
+   "Possible abnormal vaginal discharge which is yellow and foul-smelling"
+  ],
+  [
+   "symptom",
+   "Possible low-grade fever"
+  ],
+  [
+   "symptom",
+   "Possibly a history of late menarche"
+  ],
+  [
+   "symptom",
+   "Premenstrual breast tension"
+  ],
+  [
+   "symptom",
+   "Prickly Heat"
+  ],
+  [
+   "symptom",
+   "Profuse perspiration"
+  ],
+  [
+   "symptom",
+   "Profuse, red, yellow or white vaginal discharge"
+  ],
+  [
+   "symptom",
+   "Prolonged menstrual cycle"
+  ],
+  [
+   "symptom",
+   "Purple lips"
+  ],
+  [
+   "symptom",
+   "Purple nails"
+  ],
+  [
+   "symptom",
+   "Purplish-red with clots"
+  ],
+  [
+   "symptom",
+   "Qi Stagnation: more distention than pain"
+  ],
+  [
+   "symptom",
+   "Radiating pain in the legs"
+  ],
+  [
+   "symptom",
+   "Rapid breathing with a harsh voice"
+  ],
+  [
+   "symptom",
+   "Rectal itching and burning especially at night"
+  ],
+  [
+   "symptom",
+   "Recurrent fever with night sweats or hemoptysis"
+  ],
+  [
+   "symptom",
+   "Red cheeks"
+  ],
+  [
+   "symptom",
+   "Red eyes"
+  ],
+  [
+   "symptom",
+   "Red face"
+  ],
+  [
+   "symptom",
+   "Red purple if there is Heat"
+  ],
+  [
+   "symptom",
+   "Red throat"
+  ],
+  [
+   "symptom",
+   "Red wheals"
+  ],
+  [
+   "symptom",
+   "Redness of the affected joints"
+  ],
+  [
+   "symptom",
+   "Reduced range of motion"
+  ],
+  [
+   "symptom",
+   "Reluctance to speak"
+  ],
+  [
+   "symptom",
+   "Respiratory symptoms with hepatomegaly"
+  ],
+  [
+   "symptom",
+   "Restless fever"
+  ],
+  [
+   "symptom",
+   "Restlessness"
+  ],
+  [
+   "symptom",
+   "Restricted movement"
+  ],
+  [
+   "symptom",
+   "Restricted movement ameliorated by movement for a short time and warmth"
+  ],
+  [
+   "symptom",
+   "Right upper quadrant pain"
+  ],
+  [
+   "symptom",
+   "Right-sided rib distention and pain"
+  ],
+  [
+   "symptom",
+   "Scant amount"
+  ],
+  [
+   "symptom",
+   "Scanty menses or"
+  ],
+  [
+   "symptom",
+   "Scanty periods"
+  ],
+  [
+   "symptom",
+   "Scanty urination"
+  ],
+  [
+   "symptom",
+   "Scanty urine"
+  ],
+  [
+   "symptom",
+   "Scanty, dark urine"
+  ],
+  [
+   "symptom",
+   "Scanty, pale-colored menses"
+  ],
+  [
+   "symptom",
+   "Scanty, sticky phlegm or"
+  ],
+  [
+   "symptom",
+   "Scars with swelling"
+  ],
+  [
+   "symptom",
+   "Sciatica"
+  ],
+  [
+   "symptom",
+   "Sciatica pain"
+  ],
+  [
+   "symptom",
+   "Severe edema of the legs (may prevent walking)"
+  ],
+  [
+   "symptom",
+   "Severe itching"
+  ],
+  [
+   "symptom",
+   "Severe pain in the sinews and muscle of the shoulders area"
+  ],
+  [
+   "symptom",
+   "Severe wheezing"
+  ],
+  [
+   "symptom",
+   "Severe, dry hacking cough"
+  ],
+  [
+   "symptom",
+   "Severe, dry hacking cough or"
+  ],
+  [
+   "symptom",
+   "Short, reddish urination"
+  ],
+  [
+   "symptom",
+   "Shortness of breath"
+  ],
+  [
+   "symptom",
+   "Shoulder stiffness"
+  ],
+  [
+   "symptom",
+   "Slight anemia"
+  ],
+  [
+   "symptom",
+   "Sluggish intake"
+  ],
+  [
+   "symptom",
+   "Small amounts of difficult to expectorate sputum"
+  ],
+  [
+   "symptom",
+   "Soft stools"
+  ],
+  [
+   "symptom",
+   "Sometimes blood-streaked sputum"
+  ],
+  [
+   "symptom",
+   "Sometimes facial edema"
+  ],
+  [
+   "symptom",
+   "Sore throat"
+  ],
+  [
+   "symptom",
+   "Soreness of the lower back"
+  ],
+  [
+   "symptom",
+   "Sores"
+  ],
+  [
+   "symptom",
+   "Spasms or contractures of muscles and sinews"
+  ],
+  [
+   "symptom",
+   "Spermatorrhea"
+  ],
+  [
+   "symptom",
+   "Spontaneous perspiration"
+  ],
+  [
+   "symptom",
+   "Spontaneous sweating"
+  ],
+  [
+   "symptom",
+   "Spots before the eyes"
+  ],
+  [
+   "symptom",
+   "Sputum difficult to expectorate or"
+  ],
+  [
+   "symptom",
+   "Stabbing pain in the anterior region over the Heart"
+  ],
+  [
+   "symptom",
+   "Stabbing pain in the lower abdomen"
+  ],
+  [
+   "symptom",
+   "Sterility"
+  ],
+  [
+   "symptom",
+   "Stomach pain"
+  ],
+  [
+   "symptom",
+   "Stools difficult to pass"
+  ],
+  [
+   "symptom",
+   "Sudden mood swings"
+  ],
+  [
+   "symptom",
+   "Suffocating sensation in the chest"
+  ],
+  [
+   "symptom",
+   "Sweating"
+  ],
+  [
+   "symptom",
+   "Sweating with little or no exertion"
+  ],
+  [
+   "symptom",
+   "Sweet sticky taste or bitter taste in mouth"
+  ],
+  [
+   "symptom",
+   "Swelling around the umbilicus"
+  ],
+  [
+   "symptom",
+   "Swelling of the throat"
+  ],
+  [
+   "symptom",
+   "Swollen feet"
+  ],
+  [
+   "symptom",
+   "Swollen painful joints (especially lower limbs)"
+  ],
+  [
+   "symptom",
+   "Swollen throat"
+  ],
+  [
+   "symptom",
+   "Symptoms improve after eating"
+  ],
+  [
+   "symptom",
+   "Tendency to hemorrhage dark Blood or clots"
+  ],
+  [
+   "symptom",
+   "Tendency to hemorrhage dark blood or clots"
+  ],
+  [
+   "symptom",
+   "Tendency to sigh"
+  ],
+  [
+   "symptom",
+   "Tendency toward Liver enlargement"
+  ],
+  [
+   "symptom",
+   "Tenseness in the lower abdomen"
+  ],
+  [
+   "symptom",
+   "The condition is long and seems incurable"
+  ],
+  [
+   "symptom",
+   "The discharge may be white, yellow, red or red and white"
+  ],
+  [
+   "symptom",
+   "The hair loss is insidious"
+  ],
+  [
+   "symptom",
+   "The pain is intense and moves around"
+  ],
+  [
+   "symptom",
+   "The pain is worse at night"
+  ],
+  [
+   "symptom",
+   "The scalp is frequently greasy or itchy with dandruff"
+  ],
+  [
+   "symptom",
+   "There may be Yang jaundice that is bright and sometimes itches"
+  ],
+  [
+   "symptom",
+   "Thick, white vaginal discharge"
+  ],
+  [
+   "symptom",
+   "Thirst"
+  ],
+  [
+   "symptom",
+   "Thirst with frequent, copious urination (Xiao Ke)"
+  ],
+  [
+   "symptom",
+   "Thirst with no desire to drink"
+  ],
+  [
+   "symptom",
+   "Thirst, may not have a desire to drink"
+  ],
+  [
+   "symptom",
+   "Throat dry and painful"
+  ],
+  [
+   "symptom",
+   "Tidal fever"
+  ],
+  [
+   "symptom",
+   "Tinnitus"
+  ],
+  [
+   "symptom",
+   "Toe(s) purplish"
+  ],
+  [
+   "symptom",
+   "Toothache"
+  ],
+  [
+   "symptom",
+   "Tremors"
+  ],
+  [
+   "symptom",
+   "Unbearable swelling and pain of the lower extremities"
+  ],
+  [
+   "symptom",
+   "Unproductive cough or"
+  ],
+  [
+   "symptom",
+   "Urinary difficulty"
+  ],
+  [
+   "symptom",
+   "Urinary difficulty with edema or Spasmodic pain in the lower abdomen"
+  ],
+  [
+   "symptom",
+   "Vaginal discharge"
+  ],
+  [
+   "symptom",
+   "Varicose and spider veins"
+  ],
+  [
+   "symptom",
+   "Vertigo"
+  ],
+  [
+   "symptom",
+   "Vomiting"
+  ],
+  [
+   "symptom",
+   "Watery stools with undigested food"
+  ],
+  [
+   "symptom",
+   "Weak voice"
+  ],
+  [
+   "symptom",
+   "Weakness of the lower extremities"
+  ],
+  [
+   "symptom",
+   "Weight loss"
+  ],
+  [
+   "symptom",
+   "Wheezing"
+  ],
+  [
+   "symptom",
+   "Whole body edema which may develop at onset of pregnancy or some months after conception"
+  ],
+  [
+   "symptom",
+   "Whole body pain"
+  ],
+  [
+   "symptom",
+   "Will breathe most comfortably while leaning against something"
+  ],
+  [
+   "symptom",
+   "Worse with exposure to Heat"
+  ],
+  [
+   "symptom",
+   "Worse with movement"
+  ],
+  [
+   "symptom",
+   "Yang jaundice (sclera and skin are bright yellow)"
+  ],
+  [
+   "symptom",
+   "Yellow urine"
+  ],
+  [
+   "symptom",
+   "symptoms are better with cold"
+  ],
+  [
+   "taste",
+   "aromatyczny"
+  ],
+  [
+   "taste",
+   "cierpki"
+  ],
+  [
+   "taste",
+   "gorzki"
+  ],
+  [
+   "taste",
+   "kwaśny"
+  ],
+  [
+   "taste",
+   "mdły"
+  ],
+  [
+   "taste",
+   "ostry"
+  ],
+  [
+   "taste",
+   "słodki"
+  ],
+  [
+   "taste",
+   "słony"
+  ],
+  [
+   "thermal",
+   "chłodne"
+  ],
+  [
+   "thermal",
+   "ciepłe"
+  ],
+  [
+   "thermal",
+   "gorące"
+  ],
+  [
+   "thermal",
+   "lekko ciepłe"
+  ],
+  [
+   "thermal",
+   "lekko zimne"
+  ],
+  [
+   "thermal",
+   "neutralne"
+  ],
+  [
+   "thermal",
+   "zimne"
+  ]
+ ],
+ "notesSeparator": "\n\nZaimportowano z American Dragon",
+ "sourceField": "Treść zaimportowana ze strony źródłowej — niezweryfikowana",
+ "mergedTranslations": {
+  "bai-shao": "White Peony Root, Peony",
+  "bai-zhu": "Atractylodis Rhizome, Ovate Atractylodis, White Atractylodis, Large-headed Atractylodis Rhizome"
+ }
+}

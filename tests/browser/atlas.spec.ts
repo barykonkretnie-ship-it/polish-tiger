@@ -1,15 +1,15 @@
 import {test,expect} from '@playwright/test';
 test('Nawigacja, wyszukiwanie, karta i powiązanie zwrotne',async({page})=>{
  await page.goto('/');await expect(page.getByRole('heading',{name:'Poznaj zioła. Zrozum powiązania.'})).toBeVisible();
- await page.getByRole('button',{name:'Przeglądaj zioła →'}).click();await expect(page.locator('.record-card')).toHaveCount(68);
+ await page.getByRole('button',{name:'Przeglądaj zioła →'}).click();await expect(page.locator('.record-card')).toHaveCount(20);
  await page.getByLabel('Szukaj w ziołach').fill('Panax');await expect(page.locator('.record-card')).toHaveCount(1);await page.getByRole('button',{name:'Ren Shen ↗',exact:true}).click();await expect(page.getByRole('heading',{name:'Ren Shen',exact:true})).toBeVisible();
  await page.getByRole('button',{name:'Si Jun Zi Tang →',exact:true}).click();await expect(page.getByRole('heading',{name:'Si Jun Zi Tang',exact:true})).toBeVisible();await page.getByRole('button',{name:'Ren Shen →',exact:true}).click();await expect(page.getByRole('heading',{name:'Ren Shen',exact:true})).toBeVisible();
- await page.getByRole('button',{name:'Formuły',exact:true}).click();await page.getByLabel('Szukaj w formułach').fill('');await expect(page.locator('.record-card')).toHaveCount(60);
+ await page.getByRole('button',{name:'Formuły',exact:true}).click();await page.getByLabel('Szukaj w formułach').fill('');await expect(page.locator('.record-card')).toHaveCount(10);
  await page.getByLabel('Szukaj w formułach').fill('nieistniejacy');await expect(page.getByRole('heading',{name:'Brak dopasowań'})).toBeVisible();
 });
 test('Filtrowanie, oddzielne wymiary i mobilny układ',async({page})=>{
- await page.setViewportSize({width:390,height:844});await page.goto('/');await page.getByRole('button',{name:'Zioła',exact:true}).click();await page.getByLabel('neutralne',{exact:true}).check();await expect(page.locator('.record-card')).toHaveCount(18);
- await expect(page.getByText('Pasuje: Termika: neutralne',{exact:true})).toHaveCount(18);
+ await page.setViewportSize({width:390,height:844});await page.goto('/');await page.getByRole('button',{name:'Zioła',exact:true}).click();await page.getByLabel('neutralne',{exact:true}).check();await expect(page.locator('.record-card')).toHaveCount(3);
+ await expect(page.getByText('Pasuje: Termika: neutralne',{exact:true})).toHaveCount(3);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
 });
 test('Niezalogowany użytkownik nie może zapisywać',async({request})=>{
