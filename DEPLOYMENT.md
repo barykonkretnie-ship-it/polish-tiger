@@ -33,6 +33,10 @@ Połączenie produkcyjne używa TLS z weryfikacją certyfikatu. Jeśli Supabase 
 
 Schemat nie powinien być dodawany do listy schematów wystawianych przez Supabase Data API. Tabele mają włączone RLS bez polityk publicznego dostępu; serwer używa połączenia właściciela bazy. Nie umieszczaj danych uwierzytelniających bazy w przeglądarce. W dalszym etapie warto oddzielić konto migracyjne od konta aplikacji o ograniczonych uprawnieniach.
 
+## Szybka ścieżka: Neon z Vercel Marketplace
+
+Zamiast Supabase można w projekcie Vercel wybrać **Storage → Create Database → Neon** i połączyć bazę z projektem. Integracja sama dodaje `DATABASE_URL`/`POSTGRES_URL`, które aplikacja przyjmuje, gdy brak `POLISH_TIGER_DATABASE_URL`. Schemat i próbka 20 + 10 tworzą się automatycznie przy pierwszym zapytaniu (ta sama idempotentna operacja co `db:setup`), więc ręczna inicjalizacja nie jest wymagana.
+
 ## 3. Import i wdrożenie
 
 W Vercel wybierz **Add New → Project**, repozytorium `barykonkretnie-ship-it/polish-tiger`, framework Next.js i katalog główny repozytorium. Wybierz Node.js 24.x. `vercel.json` określa `npm ci` i `npm run build`. Dodaj trzy powyższe zmienne przed wdrożeniem. Nie inicjalizuj bazy przy każdym buildzie — użyj osobno `db:setup`.

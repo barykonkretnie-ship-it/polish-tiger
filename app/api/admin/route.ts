@@ -10,7 +10,7 @@ export async function POST(req:NextRequest){
  let data;try{data=await req.json();}catch{return NextResponse.json({error:'Nieprawidłowe dane'},{status:400});}
  if(data.action==='login'){
   const password=process.env.POLISH_TIGER_ADMIN_PASSWORD;
-  if(configured()&&(process.env.VERCEL||process.env.POLISH_TIGER_DATABASE_URL)){
+  if(configured()&&(process.env.VERCEL||process.env.POLISH_TIGER_DATABASE_URL||process.env.DATABASE_URL||process.env.POSTGRES_URL)){
    try{
     const {allowLoginAttempt}=await import('../../../lib/db-postgres');
     const ip=req.headers.get('x-forwarded-for')?.split(',')[0].trim()||'unknown';

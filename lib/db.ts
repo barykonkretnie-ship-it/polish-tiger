@@ -2,7 +2,7 @@ import type {RecordUpdate} from './types';
 export type {Term,RecordData} from './types';
 export const dimensions:Record<string,string>={category:'Kategoria',thermal:'Termika',taste:'Smak',channel:'Kanał',organ:'Narząd',action:'Działanie TCM',direction:'Kierunek działania',pattern:'Wzorzec TCM',symptom:'Objaw',indication:'Wskazanie',contraindication:'Przeciwwskazanie'};
 async function backend(){
- if(process.env.POLISH_TIGER_DATABASE_URL)return import('./db-postgres');
+ if(process.env.POLISH_TIGER_DATABASE_URL||process.env.DATABASE_URL||process.env.POSTGRES_URL)return import('./db-postgres');
  if(process.env.VERCEL)throw new Error('Vercel requires POLISH_TIGER_DATABASE_URL; SQLite is only supported locally.');
  return import('./db-sqlite');
 }

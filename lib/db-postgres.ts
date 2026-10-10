@@ -2,17 +2,22 @@ import postgres from 'postgres';
 import {herbs,formulas} from './sample';
 import type {Term,RecordData,RecordUpdate} from './types';
 let connection:ReturnType<typeof postgres>|undefined;
+let initialized:Promise<void>|undefined;
+// Vercel Marketplace databases (Neon, Supabase) inject DATABASE_URL/POSTGRES_URL instead of the project-specific name.
+export function databaseUrl(){return process.env.POLISH_TIGER_DATABASE_URL||process.env.DATABASE_URL||process.env.POSTGRES_URL||'';}
 function database(){
  if(connection)return connection;
- const url=process.env.POLISH_TIGER_DATABASE_URL;
+ const url=databaseUrl();
  if(!url)throw new Error('Missing POLISH_TIGER_DATABASE_URL');
  const hostname=new URL(url).hostname;
  // Only an isolated loopback test database may operate without TLS.
  const local=process.env.POLISH_TIGER_DATABASE_SSL==='local-test'&&['127.0.0.1','localhost','[::1]'].includes(hostname)&&!process.env.VERCEL;
- connection=postgres(url,{ssl:local?false:{rejectUnauthorized:true},prepare:false,max:1,idle_timeout:20,connect_timeout:10});
+ connection=postgres(url,{ssl:local?false:{rejectUnauthorized:true},prepare:false,max:1,idle_timeout:20,connect_timeout:10,onnotice:()=>{}});
  return connection;
 }
-export async function closeDatabase(){if(connection){await connection.end();connection=undefined;}}
+export async function closeDatabase(){if(connection){await connection.end();connection=undefined;}initialized=undefined;}
+// The schema and sample are created on first use, so a fresh database works without running db:setup by hand.
+async function ready(){initialized??=initializePostgres().catch(error=>{initialized=undefined;throw error;});await initialized;return database();}
 export async function initializePostgres(){
  const sql=database();
  await sql.begin(async tx=>{
@@ -54,9 +59,9 @@ ALTER TABLE polish_tiger.login_attempts ENABLE ROW LEVEL SECURITY;`);
   await tx`INSERT INTO polish_tiger.metadata VALUES('seed-v1',${new Date().toISOString()})`;
  });
 }
-export async function dictionary():Promise<Term[]>{return await database()`SELECT * FROM polish_tiger.terms ORDER BY dimension,label` as unknown as Term[];}
+export async function dictionary():Promise<Term[]>{return await (await ready())`SELECT * FROM polish_tiger.terms ORDER BY dimension,label` as unknown as Term[];}
 export async function records():Promise<RecordData[]>{
- const sql=database();
+ const sql=await ready();
  const [rows,terms,ingredients,sources]=await sql.begin(async tx=>[
   await tx`SELECT * FROM polish_tiger.records ORDER BY name`,
   await tx`SELECT rt.record_id,t.* FROM polish_tiger.record_terms rt JOIN polish_tiger.terms t ON rt.term_id=t.id ORDER BY t.label`,
@@ -71,17 +76,17 @@ export async function records():Promise<RecordData[]>{
  })) as unknown as RecordData[];
 }
 export async function updateRecord(id:string,data:RecordUpdate){
- await database().begin(async tx=>{
+ await (await ready()).begin(async tx=>{
   const rows=await tx`UPDATE polish_tiger.records SET name=${data.name},translation=${data.translation},notes=${data.notes} WHERE id=${id} RETURNING id`;
   if(!rows.length)throw new Error('Brak rekordu');
   await tx`DELETE FROM polish_tiger.record_terms WHERE record_id=${id}`;
   for(const termId of new Set(data.termIds))await tx`INSERT INTO polish_tiger.record_terms VALUES(${id},${termId})`;
  });
 }
-export async function updateTerm(id:number,label:string,synonyms:string){const result=await database()`UPDATE polish_tiger.terms SET label=${label},synonyms=${synonyms} WHERE id=${id} RETURNING id`;if(!result.length)throw new Error('Brak terminu');}
-export async function createTerm(dimension:string,label:string,synonyms:string){await database()`INSERT INTO polish_tiger.terms(dimension,label,synonyms) VALUES(${dimension},${label},${synonyms})`;}
+export async function updateTerm(id:number,label:string,synonyms:string){const result=await (await ready())`UPDATE polish_tiger.terms SET label=${label},synonyms=${synonyms} WHERE id=${id} RETURNING id`;if(!result.length)throw new Error('Brak terminu');}
+export async function createTerm(dimension:string,label:string,synonyms:string){await (await ready())`INSERT INTO polish_tiger.terms(dimension,label,synonyms) VALUES(${dimension},${label},${synonyms})`;}
 export async function allowLoginAttempt(key:string){
- const sql=database();
+ const sql=await ready();
  const rows=await sql`INSERT INTO polish_tiger.login_attempts(key,window_start,attempts) VALUES(${key},NOW(),1)
  ON CONFLICT(key) DO UPDATE SET
  attempts=CASE WHEN polish_tiger.login_attempts.window_start<NOW()-INTERVAL '15 minutes' THEN 1 ELSE polish_tiger.login_attempts.attempts+1 END,
