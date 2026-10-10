@@ -2,7 +2,19 @@
 
 Wdrożenie Vercel + Supabase: [instrukcja krok po kroku](DEPLOYMENT.md). PostgreSQL jest obsługiwany przez serwerowe `POLISH_TIGER_DATABASE_URL`; lokalnie bez tej zmiennej nadal działa SQLite. Na Vercel wymagane są baza PostgreSQL, hasło dostępu i sekret sesji.
 
-Prywatny prototyp edukacyjnego atlasu TCM: dokładnie 20 ziół i 10 formuł. Wszystkie dane próbki są **demonstracyjne i niezweryfikowane**. Nie pobierano treści American Dragon, nie uruchamiano masowego importu ani AI. Odnośnik do strony głównej American Dragon oznacza źródło referencyjne projektu, nie cytowanie lub weryfikację konkretnego rekordu. Nie podano dawek ani porad leczenia.
+Prywatny prototyp edukacyjnego atlasu TCM: 68 ziół i 60 formuł. Pierwotna próbka 20 + 10 jest **demonstracyjna i niezweryfikowana**.
+
+## Import American Dragon
+
+Za zgodą właściciela projektu zaimportowano z https://www.americandragon.com/ (Dr Joel Penner) pierwsze 50 ziół ze spisu Pinyin i pierwsze 50 klasycznych formuł ze spisu A–G (alfabetycznie; ponumerowane protokoły chorobowe typu „Acne #5” pominięto). Bai Shao i Bai Zhu były już w próbce, więc zostały uzupełnione, a nie zdublowane.
+
+- `scripts/americandragon/parse.py` czyta pobrane strony HTML, a `transform.py` buduje `lib/americandragon.json`.
+- Termika, smak, kanały i kategorie są mapowane na polskie słowniki atlasu. Działania, wzorce, objawy i wskazania pozostają po angielsku, jak w źródle.
+- Dawkowanie, przeciwwskazania, niezgodności, interakcje zioło–lek, kombinacje i modyfikacje są w uwagach rekordu, z linkiem i datą pobrania.
+- Skład formuł łączy się z kartami ziół istniejącymi w atlasie; pozostałe składniki są wymienione w uwagach.
+- Import wykonuje się raz (znacznik `import-americandragon-v1`) i zachowuje wcześniejsze edycje.
+
+Treść źródłowa jest chroniona prawem autorskim i niezweryfikowana; atlas jest prywatny (za logowaniem) i służy wyłącznie nauce. Nie jest to zalecenie leczenia.
 
 ## Architektura
 

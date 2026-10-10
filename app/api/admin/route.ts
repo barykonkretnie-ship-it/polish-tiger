@@ -25,7 +25,7 @@ export async function POST(req:NextRequest){
  if(data.action==='logout'){const res=NextResponse.json({ok:true});res.cookies.delete('pt_admin');return res;}
  try{
   if(data.action==='record'){
-   if(typeof data.id!=='string'||typeof data.name!=='string'||!data.name.trim()||data.name.length>200||typeof data.translation!=='string'||data.translation.length>300||typeof data.notes!=='string'||data.notes.length>10000||!Array.isArray(data.termIds)||!data.termIds.every((v:unknown)=>Number.isInteger(v)))throw Error('Nieprawidłowe pola rekordu');
+   if(typeof data.id!=='string'||typeof data.name!=='string'||!data.name.trim()||data.name.length>200||typeof data.translation!=='string'||data.translation.length>300||typeof data.notes!=='string'||data.notes.length>100000||!Array.isArray(data.termIds)||!data.termIds.every((v:unknown)=>Number.isInteger(v)))throw Error('Nieprawidłowe pola rekordu');
    await updateRecord(data.id,{name:data.name.trim(),translation:data.translation,notes:data.notes,termIds:data.termIds});
   }else if(data.action==='term'){
    if(!Number.isInteger(data.id)||typeof data.label!=='string'||!data.label.trim()||data.label.length>200||typeof data.synonyms!=='string'||data.synonyms.length>1000)throw Error('Nieprawidłowy termin');

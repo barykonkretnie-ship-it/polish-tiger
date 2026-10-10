@@ -2,6 +2,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { herbs, formulas } from './sample';
+import {importMarker,importedOn,importedRecords,importedSourceField,importedStatus} from './americandragon';
 
 import type { Term, RecordData } from './types';
 const directory = process.env.POLISH_TIGER_DATA_DIR || path.join(process.cwd(), 'data');
@@ -36,6 +37,24 @@ if (!db.prepare("SELECT value FROM metadata WHERE key='seed-v1'").get()) {
   }
   for(const [id] of [...herbs,...formulas]) db.prepare('INSERT INTO sources(record_id,field,url,status) VALUES(?,?,?,?)').run(id,'Źródło referencyjne projektu — nie potwierdzenie danych rekordu','https://www.americandragon.com/','niezweryfikowane');
   db.prepare("INSERT INTO metadata VALUES('seed-v1',?)").run(new Date().toISOString());
+  db.exec('COMMIT');
+ } catch(e) { db.exec('ROLLBACK'); throw e; }
+}
+// Adds the American Dragon records once. Records already in the atlas keep their name and edits and gain the imported data.
+if (!db.prepare('SELECT value FROM metadata WHERE key=?').get(importMarker)) {
+ db.exec('BEGIN');
+ try {
+  for(const r of importedRecords) {
+   const updated=db.prepare("UPDATE records SET latin=CASE WHEN latin='' THEN ? ELSE latin END,translation=CASE WHEN translation='' THEN ? ELSE translation END,status=?,notes=notes||? WHERE id=?").run(r.latin,r.translation,importedStatus,'\n\n'+r.notes,r.id);
+   if(!updated.changes) db.prepare('INSERT INTO records(id,kind,name,latin,translation,status,notes) VALUES(?,?,?,?,?,?,?)').run(r.id,r.kind,r.name,r.latin,r.translation,importedStatus,r.notes);
+   for(const [dimension,labels] of Object.entries(r.terms)) for(const label of labels) {
+    db.prepare('INSERT OR IGNORE INTO terms(dimension,label) VALUES(?,?)').run(dimension,label);
+    db.prepare('INSERT OR IGNORE INTO record_terms VALUES(?,(SELECT id FROM terms WHERE dimension=? AND label=?))').run(r.id,dimension,label);
+   }
+   for(const i of r.ingredients||[]) db.prepare('INSERT OR IGNORE INTO ingredients(formula_id,herb_id,quantity,role,preparation) VALUES(?,?,?,?,?)').run(r.id,i.herb_id,i.quantity,i.role,i.preparation);
+   db.prepare('INSERT INTO sources(record_id,field,url,status,checked_at) VALUES(?,?,?,?,?)').run(r.id,importedSourceField,r.url,'niezweryfikowane',importedOn);
+  }
+  db.prepare('INSERT INTO metadata VALUES(?,?)').run(importMarker,new Date().toISOString());
   db.exec('COMMIT');
  } catch(e) { db.exec('ROLLBACK'); throw e; }
 }

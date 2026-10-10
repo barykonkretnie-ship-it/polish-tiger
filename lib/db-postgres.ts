@@ -1,6 +1,7 @@
 import postgres from 'postgres';
 import {herbs,formulas} from './sample';
 import type {Term,RecordData,RecordUpdate} from './types';
+import {importMarker,importedOn,importedRecords,importedSourceField,importedStatus} from './americandragon';
 let connection:ReturnType<typeof postgres>|undefined;
 let initialized:Promise<void>|undefined;
 // Vercel Marketplace databases (Neon, Supabase) inject DATABASE_URL/POSTGRES_URL instead of the project-specific name.
@@ -38,7 +39,12 @@ ALTER TABLE polish_tiger.sources ENABLE ROW LEVEL SECURITY;
 ALTER TABLE polish_tiger.metadata ENABLE ROW LEVEL SECURITY;
 ALTER TABLE polish_tiger.login_attempts ENABLE ROW LEVEL SECURITY;`);
   // This private schema is not exposed through the Supabase browser REST API.
-  if((await tx`SELECT value FROM polish_tiger.metadata WHERE key='seed-v1'`).length)return;
+  if(!(await tx`SELECT value FROM polish_tiger.metadata WHERE key='seed-v1'`).length)await seed(tx);
+  if(!(await tx`SELECT value FROM polish_tiger.metadata WHERE key=${importMarker}`).length)await importAmericanDragon(tx);
+ });
+}
+type Tx=postgres.TransactionSql;
+async function seed(tx:Tx){
   const existing=await tx`SELECT count(*)::int AS total FROM polish_tiger.records`;
   if(existing[0].total!==0)throw new Error('Refusing to seed a nonempty database without a seed marker.');
   const note='Próbka demonstracyjna do testowania interfejsu. Klasyfikacje i skład wymagają weryfikacji, w tym postaci przetworzenia surowców. Nie jest to receptura ani zalecenie leczenia.';
@@ -57,7 +63,22 @@ ALTER TABLE polish_tiger.login_attempts ENABLE ROW LEVEL SECURITY;`);
   }
   for(const [id] of [...herbs,...formulas])await tx`INSERT INTO polish_tiger.sources(record_id,field,url,status) VALUES(${id},'Źródło referencyjne projektu — nie potwierdzenie danych rekordu','https://www.americandragon.com/','niezweryfikowane')`;
   await tx`INSERT INTO polish_tiger.metadata VALUES('seed-v1',${new Date().toISOString()})`;
- });
+}
+// Adds the American Dragon records once. Records already in the atlas keep their name and edits and gain the imported data.
+async function importAmericanDragon(tx:Tx){
+ for(const r of importedRecords){
+  const updated=await tx`UPDATE polish_tiger.records SET latin=CASE WHEN latin='' THEN ${r.latin} ELSE latin END,translation=CASE WHEN translation='' THEN ${r.translation} ELSE translation END,status=${importedStatus},notes=notes||${'\n\n'+r.notes} WHERE id=${r.id} RETURNING id`;
+  if(!updated.length)await tx`INSERT INTO polish_tiger.records(id,kind,name,latin,translation,status,notes) VALUES(${r.id},${r.kind},${r.name},${r.latin},${r.translation},${importedStatus},${r.notes})`;
+  const pairs=Object.entries(r.terms).flatMap(([dimension,labels])=>labels.map(label=>[dimension,label]));
+  if(pairs.length){
+   const dimensions=tx.array(pairs.map(p=>p[0])),labels=tx.array(pairs.map(p=>p[1]));
+   await tx`INSERT INTO polish_tiger.terms(dimension,label) SELECT * FROM unnest(${dimensions}::text[],${labels}::text[]) ON CONFLICT DO NOTHING`;
+   await tx`INSERT INTO polish_tiger.record_terms(record_id,term_id) SELECT ${r.id},t.id FROM polish_tiger.terms t JOIN unnest(${dimensions}::text[],${labels}::text[]) AS u(d,l) ON t.dimension=u.d AND t.label=u.l ON CONFLICT DO NOTHING`;
+  }
+  for(const i of r.ingredients||[])await tx`INSERT INTO polish_tiger.ingredients(formula_id,herb_id,quantity,role,preparation) VALUES(${r.id},${i.herb_id},${i.quantity},${i.role},${i.preparation}) ON CONFLICT DO NOTHING`;
+  await tx`INSERT INTO polish_tiger.sources(record_id,field,url,status,checked_at) VALUES(${r.id},${importedSourceField},${r.url},'niezweryfikowane',${importedOn})`;
+ }
+ await tx`INSERT INTO polish_tiger.metadata VALUES(${importMarker},${new Date().toISOString()})`;
 }
 export async function dictionary():Promise<Term[]>{const sql=await ready();return await sql`SELECT * FROM polish_tiger.terms ORDER BY dimension,label` as unknown as Term[];}
 export async function records():Promise<RecordData[]>{
