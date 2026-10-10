@@ -14,7 +14,8 @@ Według dokumentu „Polish Tiger — pobieranie danych i dedykowana baza”. Da
 - Pochodzenie: `field_evidence` przechowuje dla każdego pola wartość, URL, rewizję, cytowany fragment, datę pobrania, parser z wersją, status wartości (`source`…`human_approved`) i kompletność (`present`/`missing_in_source`/`unreadable`/`needs_review`).
 - Niepewne odczyty, nieznane sekcje, rozbieżne nazwy i błędy pobrania trafiają do `review_queue`. Każdy przebieg ma raport w `import_runs`.
 - Zakres pilota: `db/pilot-sample.json`, czyli dokładnie 20 + 10. Pełny import wymaga `IMPORT_ALLOW_FULL_IMPORT=true`. Tłumaczenie AI jest wyłączone i niewdrożone.
-- **Pobieranie jest wstrzymane** (`IMPORT_SOURCE_RIGHTS_CONFIRMED=false`) do decyzji o prawach do treści; szczegóły w `docs/source-audit.md`.
+- Uruchomienie na Vercelu (gdy sesja nie ma dostępu do bazy): `GET /api/internal/source-import?stage=migrate|discover|fetch&batch=N|report` pod adresem konkretnego wdrożenia (chronionym Vercel Authentication). Działa tylko przy `IMPORT_TRIGGER_ENABLED=true`; na domenie produkcyjnej zawsze zwraca 404. Ustawienia importera są zmiennymi projektu, a połączenie z bazą zostaje na serwerze.
+- Pobieranie wymaga `IMPORT_SOURCE_RIGHTS_CONFIRMED=true`; decyzję właściciela dla pilota opisuje `docs/source-audit.md`.
 
 Nieuzgodniony import 50 + 50 z 2026-10-10 został wycofany. `lib/rollback.ts` jednorazowo usuwa go z istniejących baz (znacznik `rollback-americandragon-v1`) i zachowuje edycje rekordów próbki.
 

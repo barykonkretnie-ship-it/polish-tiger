@@ -16,7 +16,8 @@ export type PilotEntry={id:string;name:string;url:string};
 export type Pilot={herbs:PilotEntry[];formulas:PilotEntry[]};
 const S='polish_tiger_source';
 
-export function loadPilot(file=path.join(import.meta.dirname,'..','..','db','pilot-sample.json')):Pilot{
+// Paths resolve from the project root (npm scripts, tests and the deployed function all run there).
+export function loadPilot(file=path.join(process.cwd(),'db','pilot-sample.json')):Pilot{
  const p=JSON.parse(readFileSync(file,'utf8')) as Pilot;
  if(p.herbs.length!==20||p.formulas.length!==10)throw new Error('Zakres pilota musi mieć dokładnie 20 ziół i 10 formuł.');
  return p;
@@ -65,13 +66,12 @@ export async function discover(sql:Sql,config:ImportConfig,fetcher:PoliteFetcher
     await item(tx,runId,Number(page.id),url,'fetched',{http:res.status,attempts:res.attempts,ms:Date.now()-started,message:`rewizja ${rev}`});
     const {found,skipped}=discoverLinks(res.body!,url,index.type,index.folder,config.sourceBaseUrl);
     bump(counters,'skipped_links',skipped.length);
-    for(const link of found){
-     if(seen.has(link.url)){bump(counters,'duplicate');continue;}
-     seen.add(link.url);
-     const inserted=await tx`INSERT INTO ${tx(S)}.source_pages(canonical_url,original_url,page_type,index_label,discovered_via,discovery_run_id)
-      VALUES(${link.url},${link.original},${link.type},${link.label},${url},${runId}) ON CONFLICT(canonical_url) DO NOTHING RETURNING id`;
-     bump(counters,inserted.length?'new':'known');
-    }
+    const fresh=found.filter(link=>{if(seen.has(link.url)){bump(counters,'duplicate');return false;}seen.add(link.url);return true;});
+    // One statement per index: thousands of links must not mean thousands of round trips.
+    const inserted=fresh.length?await tx`INSERT INTO ${tx(S)}.source_pages(canonical_url,original_url,page_type,index_label,discovered_via,discovery_run_id)
+     SELECT u.url,u.original,${index.type},u.label,${url},${runId} FROM unnest(${tx.array(fresh.map(l=>l.url))}::text[],${tx.array(fresh.map(l=>l.original))}::text[],${tx.array(fresh.map(l=>l.label))}::text[]) AS u(url,original,label)
+     ON CONFLICT(canonical_url) DO NOTHING RETURNING id`:[];
+    bump(counters,'new',inserted.length);bump(counters,'known',fresh.length-inserted.length);
    });
    bump(counters,'index_pages');
   }
@@ -79,15 +79,22 @@ export async function discover(sql:Sql,config:ImportConfig,fetcher:PoliteFetcher
  }catch(error){return {runId,report:await finishRun(sql,runId,'failed',counters,String(error))};}
 }
 
-/** Fetches card pages in scope, one at a time, and parses each straight after a successful fetch (document 3.3–3.5, 9.4–9.6). */
-export async function fetchAndParse(sql:Sql,config:ImportConfig,fetcher:PoliteFetcher,scope:Scope,pilot:Pilot=loadPilot()){
+/** Fetches card pages in scope, one at a time, and parses each straight after a successful fetch (document 3.3–3.5, 9.4–9.6).
+ * With options.batch only pages not yet parsed by the current parser are taken, at most that many, so a run can be split into short calls. */
+export async function fetchAndParse(sql:Sql,config:ImportConfig,fetcher:PoliteFetcher,scope:Scope,pilot:Pilot=loadPilot(),options:{batch?:number}={}){
  if(!config.sourceRightsConfirmed)throw new RightsNotConfirmed();
  if(scope==='all'&&!config.allowFullImport)throw new Error('Pełny import wymaga IMPORT_ALLOW_FULL_IMPORT=true po osobnej akceptacji właściciela projektu.');
  const wanted=scope==='pilot'?[...pilot.herbs.map(p=>({...p,kind:'herb' as const})),...pilot.formulas.map(p=>({...p,kind:'formula' as const}))]
   :(await sql`SELECT canonical_url AS url,page_type AS kind,index_label AS name FROM ${sql(S)}.source_pages WHERE page_type IN ('herb','formula') ORDER BY page_type,index_label`).map(r=>({url:r.url as string,kind:r.kind as 'herb'|'formula',name:r.name as string,id:slug(r.name as string)}));
+ if(options.batch){
+  const parsed=new Set((await sql`SELECT p.canonical_url FROM ${sql(S)}.source_pages p WHERE EXISTS(SELECT 1 FROM ${sql(S)}.herbs h WHERE h.source_page_id=p.id AND h.parser_version=${PARSER_VERSION}) OR EXISTS(SELECT 1 FROM ${sql(S)}.formulas f WHERE f.source_page_id=p.id AND f.parser_version=${PARSER_VERSION})`).map(r=>r.canonical_url as string));
+  const pending=wanted.filter(w=>!parsed.has(w.url));
+  if(pending.length>config.maxPages)throw new Error(`Zakres ma ${pending.length} stron do pobrania, a IMPORT_MAX_PAGES=${config.maxPages}. Zakres nie jest przycinany po cichu.`);
+  wanted.splice(0,wanted.length,...pending.slice(0,options.batch));
+ }
  if(wanted.length>config.maxPages)throw new Error(`Zakres ma ${wanted.length} stron, a IMPORT_MAX_PAGES=${config.maxPages}. Zakres nie jest przycinany po cichu.`);
  const before=await recordCounts(sql);
- const runId=await startRun(sql,'fetch',{scope,pages:wanted.length,before},config);
+ const runId=await startRun(sql,'fetch',{scope,pages:wanted.length,batch:options.batch??null,before},config);
  const counters:Record<string,number>={};
  try{
   for(const entry of wanted){

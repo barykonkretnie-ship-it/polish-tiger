@@ -4,7 +4,7 @@ import {readdirSync,readFileSync} from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 
-export async function migrate(sql:postgres.Sql,dir=path.join(import.meta.dirname,'..','..','db','migrations')){
+export async function migrate(sql:postgres.Sql,dir=path.join(process.cwd(),'db','migrations')){
  const applied:string[]=[];
  await sql.begin(async tx=>{
   await tx`SELECT pg_advisory_xact_lock(71482027)`;

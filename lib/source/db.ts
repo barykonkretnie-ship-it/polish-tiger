@@ -29,7 +29,7 @@ export function tunnel(proxy:string,host:string,port:number):Promise<Socket>{
 /** Connection for scripts. Loopback test databases may skip TLS only with POLISH_TIGER_DATABASE_SSL=local-test. */
 export function connect(url:string,env:Record<string,string|undefined>=process.env){
  const u=new URL(url),host=u.hostname.replace(/^\[|\]$/g,''),port=Number(u.port)||5432;
- const local=env.POLISH_TIGER_DATABASE_SSL==='local-test'&&LOOPBACK.includes(u.hostname);
+ const local=env.POLISH_TIGER_DATABASE_SSL==='local-test'&&LOOPBACK.includes(u.hostname)&&!env.VERCEL;
  const proxy=env.HTTPS_PROXY||env.https_proxy;
  const viaProxy=!!proxy&&!bypassed(host,env.NO_PROXY||env.no_proxy||'');
  return postgres(url,{
