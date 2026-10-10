@@ -114,7 +114,8 @@ test('Połączenie z bazą przez tunel HTTP CONNECT (sieć tylko przez proxy)',{
  });
  await new Promise<void>(r=>proxy.listen(0,'127.0.0.1',()=>r()));
  const proxyUrl=`http://127.0.0.1:${(proxy.address() as {port:number}).port}`;
- const sql=postgres(url!,{max:1,onnotice:()=>{},socket:()=>tunnel(proxyUrl,target.hostname,Number(target.port)||5432)});
+ // postgres.js supports a custom socket factory but its typings omit it.
+ const sql=postgres(url!,{max:1,onnotice:()=>{},socket:()=>tunnel(proxyUrl,target.hostname,Number(target.port)||5432)} as postgres.Options<{}>);
  try{
   assert.equal((await sql`SELECT 41+1 AS n`)[0].n,42);
   assert.deepEqual(seen,[`${target.hostname}:${Number(target.port)||5432}`]);
