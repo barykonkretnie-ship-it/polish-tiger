@@ -1,8 +1,8 @@
 import { NextRequest,NextResponse } from 'next/server';
 import {createHmac} from 'node:crypto';
-import { authorized,equal,token,configured } from '../../../lib/auth';
+import { authorized,equal,token,configured,configurationIssues } from '../../../lib/auth';
 import { updateRecord,updateTerm,createTerm,records,dictionary,dimensions } from '../../../lib/db';
-export async function GET(){return NextResponse.json({authenticated:await authorized(),configured:configured()});}
+export async function GET(){return NextResponse.json({authenticated:await authorized(),configured:configured(),configurationIssues:configurationIssues()});}
 export async function POST(req:NextRequest){
  let sameOrigin=false;
  try {const origin=new URL(req.headers.get('origin')||'');sameOrigin=['http:','https:'].includes(origin.protocol)&&origin.host===req.headers.get('host');}catch{}
