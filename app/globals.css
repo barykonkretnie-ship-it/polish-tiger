@@ -29,3 +29,6 @@ button.link{background:none;border:0;padding:0;color:inherit;text-decoration:und
 @media (max-width:600px){.back-to-top{right:16px;bottom:16px}}
 .filter-search{width:100%;margin:8px 0 4px}
 .filters details{max-height:320px;overflow:auto}
+.protocol-groups{display:grid;gap:12px}
+.protocol-groups summary{cursor:pointer}
+.protocol-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}

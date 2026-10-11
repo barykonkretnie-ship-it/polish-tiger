@@ -1,7 +1,7 @@
 // Server-side trigger for the source importer, for hosts that cannot reach the database themselves.
 // It answers only when IMPORT_TRIGGER_ENABLED=true and only on this deployment's own URL (VERCEL_URL), which
 // Vercel Authentication protects; the public production domain always gets 404. Database credentials stay on the server.
-// GET ?stage=migrate | export&ids=a,b | translations[&file=NAME] | publish | discover | candidates | fetch[&batch=N][&list=NAME] | atlas-add&list=NAME
+// GET ?stage=migrate | export&ids=a,b (max 25) | translations[&file=NAME] | publish | discover | candidates | fetch[&batch=N][&list=NAME] | atlas-add&list=NAME
 //     | parse[&force=true] | report[&run=ID] | review | atlas
 import path from 'node:path';
 import {NextRequest,NextResponse} from 'next/server';
@@ -31,7 +31,7 @@ export async function GET(req:NextRequest){
   // Translation workflow (document section 7): export source text, load reviewed-to-be translations, publish tags.
   if(stage==='export'){
    const ids=(req.nextUrl.searchParams.get('ids')||'').split(',').filter(Boolean);
-   if(!ids.length||ids.length>10)return NextResponse.json({error:'Podaj 1–10 identyfikatorów w ids.'},{status:400});
+   if(!ids.length||ids.length>25)return NextResponse.json({error:'Podaj 1–25 identyfikatorów w ids.'},{status:400});
    return NextResponse.json(await exportSource(sql,ids));
   }
   if(stage==='translations'){
