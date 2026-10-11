@@ -1,8 +1,9 @@
 // Server-side trigger for the source importer, for hosts that cannot reach the database themselves.
 // It answers only when IMPORT_TRIGGER_ENABLED=true and only on this deployment's own URL (VERCEL_URL), which
 // Vercel Authentication protects; the public production domain always gets 404. Database credentials stay on the server.
-// GET ?stage=migrate | export&ids=a,b | translations | publish | discover | candidates | fetch[&batch=N][&list=NAME] | atlas-add&list=NAME
+// GET ?stage=migrate | export&ids=a,b | translations[&file=NAME] | publish | discover | candidates | fetch[&batch=N][&list=NAME] | atlas-add&list=NAME
 //     | parse[&force=true] | report[&run=ID] | review | atlas
+import path from 'node:path';
 import {NextRequest,NextResponse} from 'next/server';
 import {loadConfig,ConfigError} from '../../../../lib/source/config';
 import {connect} from '../../../../lib/source/db';
@@ -34,8 +35,10 @@ export async function GET(req:NextRequest){
    return NextResponse.json(await exportSource(sql,ids));
   }
   if(stage==='translations'){
-   const file=loadTranslationFile();
-   if(!file)return NextResponse.json({error:'Brak db/translations/pilot-pl.json w tym wdrożeniu.'},{status:404});
+   const name=req.nextUrl.searchParams.get('file')||'pilot-pl';
+   if(!/^[a-z0-9-]+$/.test(name))return NextResponse.json({error:'Nieprawidłowa nazwa pliku.'},{status:400});
+   const file=loadTranslationFile(path.join(process.cwd(),'db','translations',`${name}.json`));
+   if(!file)return NextResponse.json({error:`Brak db/translations/${name}.json w tym wdrożeniu.`},{status:404});
    return NextResponse.json(await storeTranslations(sql,file));
   }
   if(stage==='publish'){await records();return NextResponse.json(await publishTranslatedTags(sql));}
