@@ -3,7 +3,7 @@
 // in Polish where a translation exists (falls back to the English source, marked "EN").
 import type {RecordData,SourceInfo} from '../lib/types';
 
-type Props={record:RecordData;source:SourceInfo;open:(id:string)=>void;known:Set<string>;tone:(id:string)=>string};
+type Props={record:RecordData;source:SourceInfo;open:(id:string)=>void;known:Set<string>;tone:(id:string)=>string;icon:(id:string)=>string};
 const MISSING:Record<string,string>={missing_in_source:'brak w źródle',unreadable:'nie odczytano — do przeglądu',needs_review:'do przeglądu'};
 
 /** Polish value when translated, otherwise the source value; the flag tells the caller which one it got. */
@@ -27,16 +27,16 @@ function Field({label,source,field,inline,latin}:{label:string;source:SourceInfo
 /** Combination cells list Latin and Pinyin alternately; the Pinyin names are what the reader needs. */
 function pinyinOnly(lines:string[]){const out:string[]=[];for(let i=0;i<lines.length;i+=2)out.push(lines[i+1]||lines[i]);return out.join(' + ');}
 
-export default function SourceDetails({record,source,open,known,tone}:Props){
+export default function SourceDetails({record,source,open,known,tone,icon}:Props){
  const herb=record.kind==='herb';
  const notesPl=source.pl?.ingredient_notes as {position:number;notes:string[]}[]|undefined;
  const conditionsPl=source.pl?.modification_conditions as {position:number;condition:string}[]|undefined;
  const actions=pick(source,'actions'),combos=pick(source,'combinations'),notes=pick(source,'notes');
  return <>
-  {herb?record.related.length>0&&<section className="panel"><h2>Powiązane formuły</h2>{record.related.map(i=><div className="relation" key={i.id}><button onClick={()=>open(i.id)}>{i.name} →</button></div>)}</section>
+  {herb?record.related.length>0&&<section className="panel"><h2>Powiązane formuły</h2>{record.related.map(i=><div className="relation" key={i.id}><button onClick={()=>open(i.id)}>{i.name} <span aria-hidden="true">{icon(i.id)}</span></button></div>)}</section>
   :<section className="panel"><h2>Skład formuły</h2>
    {source.ingredients.map(i=>{const pl=notesPl?.find(n=>n.position===i.position)?.notes;return <div className="relation" key={i.position}>
-    {i.herbId&&known.has(i.herbId)?<button className={`tone ${tone(i.herbId!)}`} onClick={()=>open(i.herbId!)}>{i.pinyin} →</button>:<span className="ingredient">{i.pinyin}</span>}
+    {i.herbId&&known.has(i.herbId)?<button className={`tone ${tone(i.herbId!)}`} onClick={()=>open(i.herbId!)}>{i.pinyin} <span aria-hidden="true">{icon(i.herbId!)}</span></button>:<span className="ingredient">{i.pinyin}</span>}
     <small>{[i.latin,i.dosage&&`Dawka: ${i.dosage}`,i.optional&&'opcjonalnie'].filter(Boolean).join(' · ')}</small>
     {(pl||i.notes).length>0&&<p className="src-note">{(pl||i.notes).join(' ')} <En on={!pl}/></p>}</div>;})}
   </section>}

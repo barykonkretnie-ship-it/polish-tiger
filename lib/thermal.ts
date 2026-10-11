@@ -18,3 +18,12 @@ export function thermalTone(record:RecordData):Tone|null{
  const tones=new Set(record.terms.filter(t=>t.dimension==='thermal').map(t=>toneOf(t.label)).filter(Boolean));
  return tones.size===1?[...tones][0] as Tone:null;
 }
+
+const ICONS:Record<Tone,string>={cold:'🧊',warm:'🔥',neutral:'🍃'};
+/** Emoji shown next to a record name: the herb's thermal nature, a cup of tea for formulas. */
+export function recordIcon(record?:RecordData):string{
+ if(!record)return '';
+ if(record.kind==='formula')return '🍵';
+ const t=thermalTone(record);
+ return t?ICONS[t]:'';
+}
