@@ -20,7 +20,8 @@ const list=(v:unknown)=>(Array.isArray(v)?v:v==null?[]:[v]).map(String);
 function Field({label,source,field,inline,latin}:{label:string;source:SourceInfo;field:string;inline?:boolean;latin?:boolean}){
  const picked=pick(source,field),{value,missing}=picked,en=picked.en&&!latin;
  const items=list(value);
- return <div className="src-field"><strong>{label}:</strong>{' '}{missing?<span className="missing">{missing}</span>:inline||items.length<2?<>{items.join(', ')} <En on={en}/></>:<><En on={en}/><ul>{items.map((x,i)=><li key={i}>{x}</li>)}</ul></>}</div>;
+ if(missing)return null;
+ return <div className="src-field"><strong>{label}:</strong>{' '}{inline||items.length<2?<>{items.join(', ')} <En on={en}/></>:<><En on={en}/><ul>{items.map((x,i)=><li key={i}>{x}</li>)}</ul></>}</div>;
 }
 
 /** Combination cells list Latin and Pinyin alternately; the Pinyin names are what the reader needs. */
@@ -31,17 +32,16 @@ export default function SourceDetails({record,source,open,known}:Props){
  const notesPl=source.pl?.ingredient_notes as {position:number;notes:string[]}[]|undefined;
  const conditionsPl=source.pl?.modification_conditions as {position:number;condition:string}[]|undefined;
  const actions=pick(source,'actions'),combos=pick(source,'combinations'),notes=pick(source,'notes');
- const translated=!!source.pl&&Object.keys(source.pl).length>0;
  return <>
-  {herb?<section className="panel"><h2>Powiązane formuły</h2>{record.related.length?record.related.map(i=><div className="relation" key={i.id}><button onClick={()=>open(i.id)}>{i.name} →</button></div>):<p className="missing">brak formuł w atlasie</p>}</section>
-  :<section className="panel"><h2>Skład formuły</h2><p className="muted">Kolejność i dawki według źródła; nawias oznacza składnik opcjonalny lub zamiennik.</p>
+  {herb?record.related.length>0&&<section className="panel"><h2>Powiązane formuły</h2>{record.related.map(i=><div className="relation" key={i.id}><button onClick={()=>open(i.id)}>{i.name} →</button></div>)}</section>
+  :<section className="panel"><h2>Skład formuły</h2>
    {source.ingredients.map(i=>{const pl=notesPl?.find(n=>n.position===i.position)?.notes;return <div className="relation" key={i.position}>
     {i.herbId&&known.has(i.herbId)?<button onClick={()=>open(i.herbId!)}>{i.pinyin} →</button>:<span className="ingredient">{i.pinyin}</span>}
-    <small>{i.latin} · Dawka: {i.dosage||'brak w źródle'}{i.optional?' · opcjonalnie':''}</small>
+    <small>{[i.latin,i.dosage&&`Dawka: ${i.dosage}`,i.optional&&'opcjonalnie'].filter(Boolean).join(' · ')}</small>
     {(pl||i.notes).length>0&&<p className="src-note">{(pl||i.notes).join(' ')} <En on={!pl}/></p>}</div>;})}
   </section>}
 
-  {herb?<section className="panel"><h2>Działania i wskazania</h2>{actions.missing?<p className="missing">{actions.missing}</p>:<><En on={actions.en}/><ul className="src-list">{(actions.value as {action:string;indications:string[]}[]).map((a,i)=><li key={i}><strong>{a.action}</strong>{a.indications.length>0&&<ul>{a.indications.map((x,j)=><li key={j}>{x}</li>)}</ul>}</li>)}</ul></>}</section>
+  {herb?!actions.missing&&<section className="panel"><h2>Działania i wskazania</h2>{<><En on={actions.en}/><ul className="src-list">{(actions.value as {action:string;indications:string[]}[]).map((a,i)=><li key={i}><strong>{a.action}</strong>{a.indications.length>0&&<ul>{a.indications.map((x,j)=><li key={j}>{x}</li>)}</ul>}</li>)}</ul></>}</section>
   :<section className="panel"><h2>Objawy i diagnostyka</h2><Field label="Objawy kliniczne" source={source} field="manifestations"/><Field label="Język" source={source} field="tongue" inline/><Field label="Nalot" source={source} field="coating" inline/><Field label="Puls" source={source} field="pulse" inline/></section>}
 
   <section className="panel"><h2>Bezpieczeństwo i przygotowanie</h2>
@@ -49,16 +49,14 @@ export default function SourceDetails({record,source,open,known}:Props){
    <Field label="Przeciwwskazania" source={source} field="contraindications"/>
    {herb&&<Field label="Niezgodności" source={source} field="incompatibilities"/>}
    <Field label="Interakcje zioło–lek" source={source} field="interactions"/>
-   {!herb&&<div className="src-field"><strong>Modyfikacje:</strong>{' '}{source.modifications.length?<ul>{[...source.modifications.reduce((m,x)=>{const c=conditionsPl?.find(p=>p.position===x.position)?.condition||x.condition;return m.set(c,[...(m.get(c)||[]),`${x.operation==='add'?'+':x.operation==='remove'?'−':'·'} ${x.ingredient}`]);},new Map<string,string[]>())].map(([c,items])=><li key={c}>{c}: {items.join(', ')}</li>)}</ul>:<span className="missing">brak w źródle</span>}</div>}
-   <p className="muted">Brak informacji o przeciwwskazaniach nie oznacza bezpieczeństwa stosowania. Dane ze źródła, niezweryfikowane; to nie jest zalecenie leczenia.</p>
-  </section>
+   {!herb&&source.modifications.length>0&&<div className="src-field"><strong>Modyfikacje:</strong>{' '}{<ul>{[...source.modifications.reduce((m,x)=>{const c=conditionsPl?.find(p=>p.position===x.position)?.condition||x.condition;return m.set(c,[...(m.get(c)||[]),`${x.operation==='add'?'+':x.operation==='remove'?'−':'·'} ${x.ingredient}`]);},new Map<string,string[]>())].map(([c,items])=><li key={c}>{c}: {items.join(', ')}</li>)}</ul>}</div>}
+     </section>
 
-  {herb&&<section className="panel"><h2>Główne kombinacje</h2>{combos.missing?<p className="missing">{combos.missing}</p>:<><En on={combos.en}/><ul className="src-list">{(source.fields.combinations.value as {herbs:string[];indication:string}[]).map((c,i)=>{const pl=combos.en?null:(combos.value as string[])[i];return <li key={i}><strong>{pinyinOnly(c.herbs)}</strong>{(pl??c.indication)&&<> — {pl??c.indication}</>}</li>;})}</ul></>}</section>}
+  {herb&&!combos.missing&&<section className="panel"><h2>Główne kombinacje</h2>{<><En on={combos.en}/><ul className="src-list">{(source.fields.combinations.value as {herbs:string[];indication:string}[]).map((c,i)=>{const pl=combos.en?null:(combos.value as string[])[i];return <li key={i}><strong>{pinyinOnly(c.herbs)}</strong>{(pl??c.indication)&&<> — {pl??c.indication}</>}</li>;})}</ul></>}</section>}
 
-  <section className="panel"><h2>Pochodzenie i uwagi</h2>
+  <section className="panel"><h2>{notes.missing?'Źródło':'Uwagi'}</h2>
    {notes.missing?null:<><En on={notes.en}/><ul className="src-list">{list(notes.value).map((x,i)=><li key={i}>{x}</li>)}</ul></>}
-   <p><a href={source.url} target="_blank" rel="noreferrer">Karta {source.pinyin} w American Dragon ↗</a></p>
-   <p className="muted">Źródło: American Dragon (dr Joel Penner), pobrano {new Date(source.fetchedAt).toLocaleDateString('pl-PL')} · parser {source.parserVersion}. {translated?'Tłumaczenie AI według glosariusza gl-1 — do przeglądu.':'Tekst źródłowy po angielsku.'} Rekord niezweryfikowany merytorycznie.</p>
+   <p className="muted">Źródło: <a href={source.url} target="_blank" rel="noreferrer">American Dragon — {source.pinyin} ↗</a> (dr Joel Penner)</p>
   </section>
  </>;
 }
