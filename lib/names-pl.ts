@@ -1,0 +1,23 @@
+// Polish common names of the pilot herbs (botanical source and the part used), shown under the Pinyin name.
+export const POLISH_NAMES:Record<string,string>={
+ 'ren-shen':'Żeń-szeń — korzeń',
+ 'bai-zhu':'Atraktylodes wielkogłówkowy — kłącze',
+ 'fu-ling':'Poria kokosowa — grzyb',
+ 'gan-cao':'Lukrecja uralska — korzeń',
+ 'shu-di-huang':'Rehmannia lepka — korzeń przetworzony',
+ 'dang-gui':'Arcydzięgiel chiński — korzeń',
+ 'bai-shao':'Piwonia biała — korzeń',
+ 'chuan-xiong':'Lubczyk syczuański — kłącze',
+ 'huang-qi':'Traganek błoniasty — korzeń',
+ 'shan-zhu-yu':'Dereń japoński — owoc',
+ 'gui-zhi':'Cynamonowiec chiński — gałązka',
+ 'sheng-jiang':'Imbir — świeże kłącze',
+ 'da-zao':'Głożyna pospolita (jujuba) — owoc',
+ 'ban-xia':'Pinellia trójlistkowa — kłącze przetworzone',
+ 'chen-pi':'Mandarynka — leżakowana skórka',
+ 'chai-hu':'Przewiercień chiński — korzeń',
+ 'huang-qin':'Tarczyca bajkalska — korzeń',
+ 'shan-yao':'Pochrzyn chiński — kłącze',
+ 'mu-dan-pi':'Piwonia drzewiasta — kora korzenia',
+ 'ze-xie':'Żabieniec — kłącze',
+};

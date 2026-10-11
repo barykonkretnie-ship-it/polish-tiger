@@ -152,5 +152,6 @@ test('Tłumaczenia: eksport ze skrótami, wgranie, konflikt przy zmianie źród�
   await sql`UPDATE polish_tiger_source.field_evidence SET value='["Exam Excess"]'::jsonb WHERE record_id='test-tang' AND field='syndromes'`;
   cur=await currentTranslations(sql);assert.equal(cur.get('test-tang')?.syndromes,undefined);
   assert.deepEqual(tagsFor('herb',cur.get('test-gen')!),{thermal:['ciepłe'],contraindication:['lekko toksyczne'],taste:['słodki']});
+  assert.deepEqual(tagsFor('herb',{temperature:['neutralne (surowy) (Gan Cao)','ciepłe (prażony) (Zhi Gan Cao)']}),{thermal:['neutralne']},'postacie przetworzone nie trafiają do termiki');
  }finally{await sql`DROP SCHEMA IF EXISTS polish_tiger_source CASCADE`;await sql.end();}
 });

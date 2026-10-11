@@ -22,7 +22,13 @@ export function tagsFor(kind:'herb'|'formula',pl:Record<string,unknown>){
  const add=(dim:string,labels:string[])=>{for(const l of labels){const t=l.replace(/\.$/,'').slice(0,200);if(t&&!(tags[dim]??=[]).includes(t))tags[dim].push(t);}};
  for(const [field,dim] of Object.entries(kind==='herb'?HERB_DIMS:FORMULA_DIMS)){
   const values=primary(pl[field]);
-  if(field==='temperature'){add('contraindication',values.filter(v=>/toksyczn/i.test(v)));add(dim,values.filter(v=>!/toksyczn/i.test(v)));}
+  if(field==='temperature'){
+   add('contraindication',values.filter(v=>/toksyczn/i.test(v)));
+   // "neutralne (surowy) (Gan Cao)" / "ciepłe (prażony) (Zhi Gan Cao)": qualified values describe processed forms; only the first, bare one is a tag.
+   const thermal=values.filter(v=>!/toksyczn/i.test(v));
+   const qualified=thermal.some(v=>/\(/.test(v));
+   add(dim,(qualified?thermal.slice(0,1):thermal).map(v=>v.replace(/\s*\(.*$/,'')));
+  }
   else add(dim,values);
  }
  if(kind==='herb'&&Array.isArray(pl.actions))add('action',(pl.actions as {action:string}[]).map(a=>a.action));
@@ -48,9 +54,9 @@ export async function publishTranslatedTags(sql:postgres.Sql){
    await tx`UPDATE polish_tiger.records SET status=${PUBLISHED_STATUS} WHERE id=${id}`;
    result.records++;
   }
-  // Demo vocabulary nothing uses any more would only clutter the filters; user-made terms are kept.
+  // Demo vocabulary and thermal labels nothing uses any more would only clutter the filters and dictionary.
   const orphans=await tx`SELECT id,dimension,label FROM polish_tiger.terms t WHERE NOT EXISTS(SELECT 1 FROM polish_tiger.record_terms rt WHERE rt.term_id=t.id)`;
-  for(const o of orphans)if(sampleVocabulary.has(o.dimension+'|'+o.label)){await tx`DELETE FROM polish_tiger.terms WHERE id=${o.id}`;result.removedDemoTerms++;}
+  for(const o of orphans)if(sampleVocabulary.has(o.dimension+'|'+o.label)||o.dimension==='thermal'){await tx`DELETE FROM polish_tiger.terms WHERE id=${o.id}`;result.removedDemoTerms++;}
  });
  return result;
 }
