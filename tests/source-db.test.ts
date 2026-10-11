@@ -155,3 +155,23 @@ test('Tłumaczenia: eksport ze skrótami, wgranie, konflikt przy zmianie źród�
   assert.deepEqual(tagsFor('herb',{temperature:['neutralne (surowy) (Gan Cao)','ciepłe (prażony) (Zhi Gan Cao)']}),{thermal:['neutralne']},'postacie przetworzone nie trafiają do termiki');
  }finally{await sql`DROP SCHEMA IF EXISTS polish_tiger_source CASCADE`;await sql.end();}
 });
+
+test('Kolejna partia: pobranie listy i dodanie rekordów do atlasu z powiązaniem składu',{skip:!url},async()=>{
+ const sql=postgres(url!,{max:1,onnotice:()=>{},prepare:false});
+ const {addToAtlas}=await import('../lib/source/atlas');
+ try{
+  await sql`DROP SCHEMA IF EXISTS polish_tiger_source CASCADE`;await sql`DROP SCHEMA IF EXISTS polish_tiger CASCADE`;await migrate(sql);
+  await sql.unsafe(`CREATE SCHEMA polish_tiger;
+   CREATE TABLE polish_tiger.records(id TEXT PRIMARY KEY,kind TEXT NOT NULL,name TEXT NOT NULL,latin TEXT NOT NULL DEFAULT '',translation TEXT NOT NULL DEFAULT '',status TEXT NOT NULL DEFAULT 'demonstracyjne',verified_at TEXT,notes TEXT NOT NULL DEFAULT '');
+   CREATE TABLE polish_tiger.ingredients(formula_id TEXT REFERENCES polish_tiger.records(id),herb_id TEXT REFERENCES polish_tiger.records(id),quantity TEXT NOT NULL DEFAULT 'brak danych',role TEXT NOT NULL DEFAULT 'do weryfikacji',preparation TEXT NOT NULL DEFAULT 'do weryfikacji',PRIMARY KEY(formula_id,herb_id));`);
+  const {fetcher}=fakeSite();await discover(sql,env(),fetcher);
+  const report=(await fetchAndParse(sql,env(),fetcher,'list',pilot,{batch:5})).report as {counters:Record<string,number>};
+  assert.equal(report.counters.fetched,2);
+  const first=await addToAtlas(sql,{herbs:[...pilot.herbs,{id:'nie-ma',name:'Nie Ma',url:HERB+'x'}],formulas:pilot.formulas});
+  assert.equal(first.herbs,1);assert.equal(first.formulas,1);assert.deepEqual(first.missingInSource,['nie-ma']);
+  const linked=await sql`SELECT herb_id FROM polish_tiger_source.formula_ingredients WHERE formula_id='test-tang' AND herb_id='test-gen'`;
+  assert.equal(first.links,linked.length?1:0,'skład formuły łączy się z ziołem z atlasu');
+  const again=await addToAtlas(sql,{herbs:pilot.herbs,formulas:pilot.formulas});
+  assert.deepEqual([again.herbs,again.formulas,again.links],[0,0,0],'ponowne dodanie nie duplikuje');
+ }finally{await sql`DROP SCHEMA IF EXISTS polish_tiger_source CASCADE`;await sql`DROP SCHEMA IF EXISTS polish_tiger CASCADE`;await sql.end();}
+});

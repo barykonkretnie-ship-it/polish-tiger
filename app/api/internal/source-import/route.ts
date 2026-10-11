@@ -1,13 +1,15 @@
 // Server-side trigger for the source importer, for hosts that cannot reach the database themselves.
 // It answers only when IMPORT_TRIGGER_ENABLED=true and only on this deployment's own URL (VERCEL_URL), which
 // Vercel Authentication protects; the public production domain always gets 404. Database credentials stay on the server.
-// GET ?stage=migrate | export&ids=a,b | translations | publish | discover | fetch[&batch=N] | parse[&force=true] | report[&run=ID] | review | atlas
+// GET ?stage=migrate | export&ids=a,b | translations | publish | discover | candidates | fetch[&batch=N][&list=NAME] | atlas-add&list=NAME
+//     | parse[&force=true] | report[&run=ID] | review | atlas
 import {NextRequest,NextResponse} from 'next/server';
 import {loadConfig,ConfigError} from '../../../../lib/source/config';
 import {connect} from '../../../../lib/source/db';
 import {migrate} from '../../../../lib/source/migrate';
 import {PoliteFetcher} from '../../../../lib/source/fetcher';
-import {discover,fetchAndParse,reparse,buildReport,RightsNotConfirmed} from '../../../../lib/source/importer';
+import {discover,fetchAndParse,reparse,buildReport,RightsNotConfirmed,loadBatch} from '../../../../lib/source/importer';
+import {addToAtlas} from '../../../../lib/source/atlas';
 import {records} from '../../../../lib/db';
 import {exportSource,loadTranslationFile,storeTranslations} from '../../../../lib/source/translations';
 import {publishTranslatedTags} from '../../../../lib/source/publish';
@@ -37,13 +39,20 @@ export async function GET(req:NextRequest){
    return NextResponse.json(await storeTranslations(sql,file));
   }
   if(stage==='publish'){await records();return NextResponse.json(await publishTranslatedTags(sql));}
+  // Discovered card pages, to choose the next batch from (ids are the importer's slugs).
+  if(stage==='candidates'){
+   const pages=await sql`SELECT page_type AS kind,index_label AS name,canonical_url AS url,status FROM polish_tiger_source.source_pages WHERE page_type IN ('herb','formula') ORDER BY page_type,index_label`;
+   return NextResponse.json(pages);
+  }
+  if(stage==='atlas-add'){await records();return NextResponse.json(await addToAtlas(sql,loadBatch(req.nextUrl.searchParams.get('list')||'')));}
   const config=loadConfig({...process.env,IMPORT_DATABASE_URL:dbUrl});
   const fetcher=new PoliteFetcher({delaySeconds:config.delaySeconds,maxRetries:config.maxRetries,userAgent:config.userAgent});
   if(stage==='discover')return NextResponse.json((await discover(sql,config,fetcher)).report);
   if(stage==='fetch'){
    const batch=Number(req.nextUrl.searchParams.get('batch')||'10');
    if(!Number.isInteger(batch)||batch<1||batch>config.maxPages)return NextResponse.json({error:'Nieprawidłowy batch.'},{status:400});
-   return NextResponse.json((await fetchAndParse(sql,config,fetcher,'pilot',undefined,{batch})).report);
+   const list=req.nextUrl.searchParams.get('list');
+   return NextResponse.json((await fetchAndParse(sql,config,fetcher,list?'list':'pilot',list?loadBatch(list):undefined,{batch})).report);
   }
   if(stage==='parse')return NextResponse.json((await reparse(sql,config,req.nextUrl.searchParams.get('force')==='true')).report);
   if(stage==='atlas'){
@@ -64,7 +73,7 @@ export async function GET(req:NextRequest){
    const markers=await sql`SELECT key FROM polish_tiger.metadata ORDER BY key`.catch(()=>[]);
    return NextResponse.json({records,open,unlinked,atlas,atlasMarkers:markers.map(m=>m.key)});
   }
-  return NextResponse.json({error:'stage: migrate | discover | fetch | parse | report | review | atlas'},{status:400});
+  return NextResponse.json({error:'stage: migrate | discover | candidates | fetch | atlas-add | parse | report | review | atlas'},{status:400});
  }catch(error){
   const message=error instanceof ConfigError||error instanceof RightsNotConfirmed||error instanceof Error?error.message:String(error);
   return NextResponse.json({error:message},{status:500});

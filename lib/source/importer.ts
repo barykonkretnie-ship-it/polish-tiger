@@ -11,7 +11,7 @@ import {slug} from './html';
 import {INDEX_PAGES,canonicalUrl,discoverLinks} from './urls';
 
 type Sql=postgres.Sql;type Tx=postgres.TransactionSql;
-export type Scope='pilot'|'all';
+export type Scope='pilot'|'list'|'all';
 export type PilotEntry={id:string;name:string;url:string};
 export type Pilot={herbs:PilotEntry[];formulas:PilotEntry[]};
 const S='polish_tiger_source';
@@ -20,6 +20,16 @@ const S='polish_tiger_source';
 export function loadPilot(file=path.join(process.cwd(),'db','pilot-sample.json')):Pilot{
  const p=JSON.parse(readFileSync(file,'utf8')) as Pilot;
  if(p.herbs.length!==20||p.formulas.length!==10)throw new Error('Zakres pilota musi mieć dokładnie 20 ziół i 10 formuł.');
+ return p;
+}
+
+/** A further batch approved by the project owner (db/batches/<name>.json): at most 100 herbs and 100 formulas, unique ids. */
+export function loadBatch(name:string):Pilot{
+ if(!/^[a-z0-9-]+$/.test(name))throw new Error('Nieprawidłowa nazwa partii.');
+ const p=JSON.parse(readFileSync(path.join(process.cwd(),'db','batches',`${name}.json`),'utf8')) as Pilot;
+ if(p.herbs.length>100||p.formulas.length>100)throw new Error('Partia może mieć najwyżej 100 ziół i 100 formuł.');
+ const ids=[...p.herbs,...p.formulas].map(e=>e.id);
+ if(new Set(ids).size!==ids.length)throw new Error('Identyfikatory w partii muszą być unikalne.');
  return p;
 }
 
@@ -84,7 +94,7 @@ export async function discover(sql:Sql,config:ImportConfig,fetcher:PoliteFetcher
 export async function fetchAndParse(sql:Sql,config:ImportConfig,fetcher:PoliteFetcher,scope:Scope,pilot:Pilot=loadPilot(),options:{batch?:number}={}){
  if(!config.sourceRightsConfirmed)throw new RightsNotConfirmed();
  if(scope==='all'&&!config.allowFullImport)throw new Error('Pełny import wymaga IMPORT_ALLOW_FULL_IMPORT=true po osobnej akceptacji właściciela projektu.');
- const wanted=scope==='pilot'?[...pilot.herbs.map(p=>({...p,kind:'herb' as const})),...pilot.formulas.map(p=>({...p,kind:'formula' as const}))]
+ const wanted=scope!=='all'?[...pilot.herbs.map(p=>({...p,kind:'herb' as const})),...pilot.formulas.map(p=>({...p,kind:'formula' as const}))]
   :(await sql`SELECT canonical_url AS url,page_type AS kind,index_label AS name FROM ${sql(S)}.source_pages WHERE page_type IN ('herb','formula') ORDER BY page_type,index_label`).map(r=>({url:r.url as string,kind:r.kind as 'herb'|'formula',name:r.name as string,id:slug(r.name as string)}));
  if(options.batch){
   const parsed=new Set((await sql`SELECT p.canonical_url FROM ${sql(S)}.source_pages p WHERE EXISTS(SELECT 1 FROM ${sql(S)}.herbs h WHERE h.source_page_id=p.id AND h.parser_version=${PARSER_VERSION}) OR EXISTS(SELECT 1 FROM ${sql(S)}.formulas f WHERE f.source_page_id=p.id AND f.parser_version=${PARSER_VERSION})`).map(r=>r.canonical_url as string));
