@@ -1,5 +1,6 @@
 import type {RecordUpdate} from './types';
 import {POLISH_NAMES} from './names-pl';
+import {compareTerms} from './term-order';
 export type {Term,RecordData} from './types';
 export const dimensions:Record<string,string>={category:'Kategoria',thermal:'Termika',taste:'Smak',channel:'Kanał',organ:'Narząd',action:'Działanie TCM',direction:'Kierunek działania',pattern:'Wzorzec TCM',symptom:'Objaw',indication:'Wskazanie',contraindication:'Przeciwwskazanie'};
 async function backend(){
@@ -8,8 +9,8 @@ async function backend(){
  return import('./db-sqlite');
 }
 /** Herbs without an edited Polish name get the built-in one, so it is shown and searchable. */
-export async function records(){return (await (await backend()).records()).map(r=>r.kind==='herb'&&!r.translation&&POLISH_NAMES[r.id]?{...r,translation:POLISH_NAMES[r.id]}:r);}
-export async function dictionary(){return (await backend()).dictionary();}
+export async function records(){return (await (await backend()).records()).map(r=>({...r,translation:r.kind==='herb'&&!r.translation&&POLISH_NAMES[r.id]?POLISH_NAMES[r.id]:r.translation,terms:[...r.terms].sort(compareTerms)}));}
+export async function dictionary(){return [...await (await backend()).dictionary()].sort(compareTerms);}
 export async function updateRecord(id:string,data:RecordUpdate){return (await backend()).updateRecord(id,data);}
 export async function updateTerm(id:number,label:string,synonyms:string){return (await backend()).updateTerm(id,label,synonyms);}
 export async function createTerm(dimension:string,label:string,synonyms:string){return (await backend()).createTerm(dimension,label,synonyms);}
