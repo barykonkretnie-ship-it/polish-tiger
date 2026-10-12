@@ -61,7 +61,9 @@ export async function GET(req:NextRequest){
   if(stage==='atlas'){
    // Runs the atlas's own initialization (including the one-time rollback) and returns its record counts.
    const all=await records();
-   return NextResponse.json({herbs:all.filter(r=>r.kind==='herb').length,formulas:all.filter(r=>r.kind==='formula').length});
+   // Records carrying a published thermal (herbs) or action term show that the publish stage reached them.
+   const tagged=await sql`SELECT r.kind,count(DISTINCT r.id)::int AS n FROM polish_tiger.records r JOIN polish_tiger.record_terms rt ON rt.record_id=r.id JOIN polish_tiger.terms t ON t.id=rt.term_id WHERE t.dimension IN ('thermal','action') GROUP BY r.kind`;
+   return NextResponse.json({herbs:all.filter(r=>r.kind==='herb').length,formulas:all.filter(r=>r.kind==='formula').length,tagged});
   }
   if(stage==='report'){
    const run=Number(req.nextUrl.searchParams.get('run'))||Number((await sql`SELECT max(id) AS id FROM polish_tiger_source.import_runs`)[0].id);
