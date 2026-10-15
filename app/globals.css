@@ -32,3 +32,5 @@ button.link{background:none;border:0;padding:0;color:inherit;text-decoration:und
 .protocol-groups{display:grid;gap:12px}
 .protocol-groups summary{cursor:pointer}
 .protocol-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.filters .check .count{margin-left:auto;color:var(--muted,#777);font-size:.8em}
+.group-filter .check{display:flex;gap:.4em;align-items:center}
