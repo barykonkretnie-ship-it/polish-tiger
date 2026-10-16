@@ -13,4 +13,8 @@ test('Grupy główne łączą warianty tej samej kategorii',()=>{
 test('Kategoria złożona trafia do każdej grupy, nieznana do „Inne”',()=>{
  assert.deepEqual(categoryGroups('Usuwające Wilgoć (moczopędne); Oczyszczające Gorąco'),['heat','drain-damp']);
  assert.deepEqual(categoryGroups('Anomalous Herbs'),['other']);
+ assert.deepEqual(categoryGroups('Herbs that Warm the Middle'),['warm-interior']);
+ assert.deepEqual(categoryGroups('Herbs that Dispel Dampness'),['drain-damp']);
+ assert.deepEqual(categoryGroups('Herbs that Clear Heat and Dispel Dampness'),['heat']);
+ assert.deepEqual(categoryGroups('Substances for External Application'),['topical']);
 });
