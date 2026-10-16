@@ -17,4 +17,6 @@ test('Kategoria złożona trafia do każdej grupy, nieznana do „Inne”',()=>{
  assert.deepEqual(categoryGroups('Herbs that Dispel Dampness'),['drain-damp']);
  assert.deepEqual(categoryGroups('Herbs that Clear Heat and Dispel Dampness'),['heat']);
  assert.deepEqual(categoryGroups('Substances for External Application'),['topical']);
+ assert.deepEqual(categoryGroups('Herbs that Regulate the Blood: Herbs that Sop Bleeding'),['bleeding']);
+ assert.deepEqual(categoryGroups('Herbs that Promote the Movement of Qi'),['qi']);
 });
