@@ -33,7 +33,9 @@ export default function SourceDetails({record,source,open,known,tone,icon}:Props
  const conditionsPl=source.pl?.modification_conditions as {position:number;condition:string}[]|undefined;
  const actions=pick(source,'actions'),combos=pick(source,'combinations'),notes=pick(source,'notes');
  return <>
-  {herb?record.related.length>0&&<section className="panel"><h2>Powiązane formuły</h2>{record.related.map(i=><div className="relation" key={i.id}><button onClick={()=>open(i.id)}>{i.name} <span aria-hidden="true">{icon(i.id)}</span></button></div>)}</section>
+  {herb?record.related.length>0&&<section className="panel"><h2>Powiązane formuły <span className="muted">({record.related.length})</span></h2>{(()=>{const item=(i:{id:string;name:string})=><div className="relation" key={i.id}><button onClick={()=>open(i.id)}>{i.name} <span aria-hidden="true">{icon(i.id)}</span></button></div>;
+   // Common herbs appear in dozens of formulas; show the first five and fold the rest.
+   return <>{record.related.slice(0,5).map(item)}{record.related.length>5&&<details className="more-related"><summary>Pokaż pozostałe ({record.related.length-5})</summary>{record.related.slice(5).map(item)}</details>}</>;})()}</section>
   :<section className="panel"><h2>Skład formuły</h2>
    {source.ingredients.map(i=>{const pl=notesPl?.find(n=>n.position===i.position)?.notes;return <div className="relation" key={i.position}>
     {i.herbId&&known.has(i.herbId)?<button className={`tone ${tone(i.herbId!)}`} onClick={()=>open(i.herbId!)}>{i.pinyin} <span aria-hidden="true">{icon(i.herbId!)}</span></button>:<span className="ingredient">{i.pinyin}</span>}
