@@ -11,7 +11,8 @@ async function backend(){
  return import('./db-sqlite');
 }
 /** Herbs without an edited Polish name get the built-in one, so it is shown and searchable. */
-export async function records(){return (await (await backend()).records()).map(r=>({...r,translation:r.translation||(r.kind==='herb'?POLISH_NAMES[r.id]:r.kind==='formula'?protocolInfo(r.name)?.label:undefined)||r.translation,terms:[...r.terms].sort(compareTerms),groups:r.kind==='herb'?[...new Set(r.terms.filter(t=>t.dimension==='category').flatMap(t=>categoryGroups(t.label)))]:[]}));}
+/** opts.light skips source texts for the list; opts.ids limits the result (see RecordsOptions). */
+export async function records(opts:{light?:boolean;ids?:string[]}={}){return (await (await backend()).records(opts)).map(r=>({...r,translation:r.translation||(r.kind==='herb'?POLISH_NAMES[r.id]:r.kind==='formula'?protocolInfo(r.name)?.label:undefined)||r.translation,terms:[...r.terms].sort(compareTerms),groups:r.kind==='herb'?[...new Set(r.terms.filter(t=>t.dimension==='category').flatMap(t=>categoryGroups(t.label)))]:[]}));}
 export async function dictionary(){return [...await (await backend()).dictionary()].sort(compareTerms);}
 export async function updateRecord(id:string,data:RecordUpdate){return (await backend()).updateRecord(id,data);}
 export async function updateTerm(id:number,label:string,synonyms:string){return (await backend()).updateTerm(id,label,synonyms);}
@@ -21,7 +22,7 @@ export async function removeTag(id:string,termId:number){return (await backend()
 export async function deleteTag(termId:number){return (await backend()).deleteTag(termId);}
 export async function setUserNote(id:string,text:string){return (await backend()).setUserNote(id,text);}
 /** One record as records() shows it, so a save can answer with just the changed card. */
-export async function recordById(id:string){return (await records()).find(r=>r.id===id)??null;}
+export async function recordById(id:string){return (await records({ids:[id]})).find(r=>r.id===id)??null;}
 export async function products(){return [...await (await backend()).products()];}
 export async function saveProduct(p:Omit<Product,'id'>&{id?:number}){return (await backend()).saveProduct(p);}
 export async function deleteProduct(id:number){return (await backend()).deleteProduct(id);}

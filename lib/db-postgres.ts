@@ -67,20 +67,24 @@ ALTER TABLE polish_tiger.login_attempts ENABLE ROW LEVEL SECURITY;`);
  });
 }
 export async function dictionary():Promise<Term[]>{const sql=await ready();return await sql`SELECT * FROM polish_tiger.terms ORDER BY dimension,label` as unknown as Term[];}
-export async function records():Promise<RecordData[]>{
- const sql=await ready();
+/** Options for records(): light leaves out the source texts (the list needs only the temperature), ids limits the result. */
+export type RecordsOptions={light?:boolean;ids?:string[]};
+function groupBy<T>(rows:readonly T[],key:(row:T)=>string){const out=new Map<string,T[]>();for(const row of rows){const k=key(row);(out.get(k)??out.set(k,[]).get(k)!).push(row);}return out;}
+export async function records(opts:RecordsOptions={}):Promise<RecordData[]>{
+ const sql=await ready(),ids=opts.ids;
  const [rows,terms,ingredients,sources]=await sql.begin(async tx=>[
-  await tx`SELECT * FROM polish_tiger.records ORDER BY name`,
-  await tx`SELECT rt.record_id,rt.by_user AS "byUser",t.* FROM polish_tiger.record_terms rt JOIN polish_tiger.terms t ON rt.term_id=t.id ORDER BY t.label`,
-  await tx`SELECT i.*,h.name AS herb_name,f.name AS formula_name FROM polish_tiger.ingredients i JOIN polish_tiger.records h ON h.id=i.herb_id JOIN polish_tiger.records f ON f.id=i.formula_id ORDER BY h.name`,
-  await tx`SELECT * FROM polish_tiger.sources ORDER BY id`,
+  await tx`SELECT * FROM polish_tiger.records WHERE ${ids?tx`id=ANY(${ids})`:tx`true`} ORDER BY name`,
+  await tx`SELECT rt.record_id,rt.by_user AS "byUser",t.* FROM polish_tiger.record_terms rt JOIN polish_tiger.terms t ON rt.term_id=t.id WHERE ${ids?tx`rt.record_id=ANY(${ids})`:tx`true`} ORDER BY t.label`,
+  await tx`SELECT i.*,h.name AS herb_name,f.name AS formula_name FROM polish_tiger.ingredients i JOIN polish_tiger.records h ON h.id=i.herb_id JOIN polish_tiger.records f ON f.id=i.formula_id WHERE ${ids?tx`i.formula_id=ANY(${ids}) OR i.herb_id=ANY(${ids})`:tx`true`} ORDER BY h.name`,
+  await tx`SELECT * FROM polish_tiger.sources WHERE ${ids?tx`record_id=ANY(${ids})`:tx`true`} ORDER BY id`,
  ]);
- const source=await sourceInfo(sql);
+ const source=await sourceInfo(sql,opts);
+ const termsOf=groupBy(terms,t=>t.record_id),partsOf=groupBy(ingredients,i=>i.formula_id),usedIn=groupBy(ingredients,i=>i.herb_id),sourcesOf=groupBy(sources,s=>s.record_id);
  return rows.map(r=>({...r,source:source.get(r.id)??null,
-  terms:terms.filter(t=>t.record_id===r.id).map(({record_id,...t})=>t),
-  ingredients:ingredients.filter(i=>i.formula_id===r.id).map(i=>({id:i.herb_id,name:i.herb_name,quantity:i.quantity,role:i.role,preparation:i.preparation})),
-  related:ingredients.filter(i=>i.herb_id===r.id).map(i=>({id:i.formula_id,name:i.formula_name})),
-  sources:sources.filter(s=>s.record_id===r.id).map(({record_id,id,...s})=>s),
+  terms:(termsOf.get(r.id)??[]).map(({record_id,...t})=>t),
+  ingredients:(partsOf.get(r.id)??[]).map(i=>({id:i.herb_id,name:i.herb_name,quantity:i.quantity,role:i.role,preparation:i.preparation})),
+  related:(usedIn.get(r.id)??[]).map(i=>({id:i.formula_id,name:i.formula_name})),
+  sources:(sourcesOf.get(r.id)??[]).map(({record_id,id,...s})=>s),
  })) as unknown as RecordData[];
 }
 export async function updateRecord(id:string,data:RecordUpdate){
@@ -145,23 +149,29 @@ async function rollbackAmericanDragon(tx:postgres.TransactionSql){
 }
 
 /** Source-layer data for atlas records with the same id, from each record's current revision. Empty until the importer has run. */
-async function sourceInfo(sql:ReturnType<typeof postgres>){
+async function latestTemperatures(sql:ReturnType<typeof postgres>){
+ if(!(await sql`SELECT to_regclass('polish_tiger_source.translations') AS t`)[0].t)return [];
+ return await sql`SELECT DISTINCT ON (record_id) record_id,translated_text FROM polish_tiger_source.translations WHERE language='pl' AND field='temperature' AND status IN ('human_approved','ai_proposed') ORDER BY record_id,(status='human_approved') DESC,created_at DESC`;
+}
+async function sourceInfo(sql:ReturnType<typeof postgres>,{light,ids}:RecordsOptions={}){
  const out=new Map<string,SourceInfo>();
  if(!(await sql`SELECT to_regclass('polish_tiger_source.field_evidence') AS t`)[0].t)return out;
  const S='polish_tiger_source';
  const [records,fields,ingredients,modifications]=await Promise.all([
   sql`SELECT c.id,c.pinyin,c.chinese,c.parser_version,p.canonical_url,r.fetched_at FROM (SELECT id,pinyin,chinese,parser_version,source_page_id,revision_id FROM ${sql(S)}.herbs UNION ALL SELECT id,pinyin,chinese,parser_version,source_page_id,revision_id FROM ${sql(S)}.formulas) c
-   JOIN ${sql(S)}.source_pages p ON p.id=c.source_page_id JOIN ${sql(S)}.source_page_revisions r ON r.id=c.revision_id`,
+   JOIN ${sql(S)}.source_pages p ON p.id=c.source_page_id JOIN ${sql(S)}.source_page_revisions r ON r.id=c.revision_id WHERE ${ids?sql`c.id=ANY(${ids})`:sql`true`}`,
   sql`SELECT e.record_id,e.field,e.value,e.completeness FROM ${sql(S)}.field_evidence e
-   JOIN (SELECT id,revision_id FROM ${sql(S)}.herbs UNION ALL SELECT id,revision_id FROM ${sql(S)}.formulas) c ON c.id=e.record_id AND c.revision_id=e.revision_id`,
-  sql`SELECT formula_id,position,pinyin_raw,latin_raw,dosage_raw,is_optional,notes,herb_id FROM ${sql(S)}.formula_ingredients ORDER BY formula_id,position`,
-  sql`SELECT formula_id,position,condition,operation,ingredient_raw FROM ${sql(S)}.formula_modifications ORDER BY formula_id,position`,
+   JOIN (SELECT id,revision_id FROM ${sql(S)}.herbs UNION ALL SELECT id,revision_id FROM ${sql(S)}.formulas) c ON c.id=e.record_id AND c.revision_id=e.revision_id
+   WHERE ${light?sql`e.field='temperature'`:sql`true`} AND ${ids?sql`e.record_id=ANY(${ids})`:sql`true`}`,
+  light?[]:sql`SELECT formula_id,position,pinyin_raw,latin_raw,dosage_raw,is_optional,notes,herb_id FROM ${sql(S)}.formula_ingredients WHERE ${ids?sql`formula_id=ANY(${ids})`:sql`true`} ORDER BY formula_id,position`,
+  light?[]:sql`SELECT formula_id,position,condition,operation,ingredient_raw FROM ${sql(S)}.formula_modifications WHERE ${ids?sql`formula_id=ANY(${ids})`:sql`true`} ORDER BY formula_id,position`,
  ]);
- for(const r of records)out.set(r.id,{url:r.canonical_url,fetchedAt:new Date(r.fetched_at).toISOString(),parserVersion:r.parser_version,pinyin:r.pinyin,chinese:r.chinese,fields:{},ingredients:[],modifications:[]});
+ for(const r of records)out.set(r.id,{url:r.canonical_url,fetchedAt:new Date(r.fetched_at).toISOString(),parserVersion:r.parser_version,pinyin:r.pinyin,chinese:r.chinese,fields:{},ingredients:[],modifications:[],...(light?{partial:true}:{})});
  for(const f of fields){const s=out.get(f.record_id);if(s)s.fields[f.field]={value:f.value,completeness:f.completeness};}
  for(const i of ingredients)out.get(i.formula_id)?.ingredients.push({position:i.position,pinyin:i.pinyin_raw,latin:i.latin_raw,dosage:i.dosage_raw,optional:i.is_optional,notes:i.notes,herbId:i.herb_id});
  for(const m of modifications)out.get(m.formula_id)?.modifications.push({position:m.position,condition:m.condition,operation:m.operation,ingredient:m.ingredient_raw});
- const translations=await currentTranslations(sql);
+ // The list only shows a thermal tone, so it skips the per-field source-hash check that full translations need.
+ const translations=light?new Map<string,Record<string,unknown>>((await latestTemperatures(sql)).map(r=>[r.record_id as string,{temperature:JSON.parse(r.translated_text)}] as [string,Record<string,unknown>])):await currentTranslations(sql,ids);
  for(const [id,pl] of translations){const s=out.get(id);if(s)s.pl=pl;}
  return out;
 }

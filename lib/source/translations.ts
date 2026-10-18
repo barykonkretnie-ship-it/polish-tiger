@@ -81,11 +81,11 @@ export async function storeTranslations(sql:postgres.Sql,file:TranslationFile){
 
 /** Latest usable Polish translation per record and field: approved before proposed, and only while the source text
  * it was made from is still the current one (a changed source hides it until it is translated again). */
-export async function currentTranslations(sql:postgres.Sql){
+export async function currentTranslations(sql:postgres.Sql,ids?:string[]){
  const out=new Map<string,Record<string,unknown>>();
  if(!(await sql`SELECT to_regclass('polish_tiger_source.translations') AS t`)[0].t)return out;
  const rows=await sql`SELECT DISTINCT ON (record_id,field,source_hash) record_id,field,source_hash,translated_text FROM ${sql(S)}.translations
-  WHERE language=${LANGUAGE} AND status IN ('human_approved','ai_proposed') ORDER BY record_id,field,source_hash,(status='human_approved') DESC,created_at DESC`;
+  WHERE language=${LANGUAGE} AND status IN ('human_approved','ai_proposed') AND ${ids?sql`record_id=ANY(${ids})`:sql`true`} ORDER BY record_id,field,source_hash,(status='human_approved') DESC,created_at DESC`;
  if(!rows.length)return out;
  const current=await exportSource(sql,[...new Set(rows.map(r=>r.record_id as string))]);
  for(const r of rows){
