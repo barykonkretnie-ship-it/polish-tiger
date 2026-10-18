@@ -25,7 +25,8 @@ test('PostgreSQL: relacje, zapis, rollback i powtarzalny seed',{skip:!process.en
   const action=ren.terms.find(t=>t.dimension==='action')!;await db.removeTag(ren.id,action.id);await db.deleteTag(action.id);
   await db.addTag(ren.id,'indication',label);const own=(await db.records()).find(r=>r.id===ren.id)!.terms.find(t=>t.label===label)!;assert.equal(own.byUser,true);
   await db.updateRecord(ren.id,{...update,notes:ren.notes,termIds:[]});const after=(await db.records()).find(r=>r.id===ren.id)!;
-  assert.ok(after.terms.some(t=>t.id===action.id&&!t.byUser));assert.ok(!after.terms.some(t=>t.id===own.id));
+  assert.ok(after.terms.some(t=>t.id===action.id&&!t.byUser));
+  await db.setUserNote(ren.id,'Moja uwaga');assert.equal((await db.recordById(ren.id))?.user_notes,'Moja uwaga');await db.setUserNote(ren.id,'');assert.ok(!after.terms.some(t=>t.id===own.id));
 assert.ok((await db.records()).find(r=>r.id===ren.id)!.terms.some(t=>t.id===action.id));
   const key='test-'+randomUUID();
   for(let i=0;i<10;i++)assert.equal(await pg.allowLoginAttempt(key),true);

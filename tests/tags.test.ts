@@ -4,7 +4,7 @@ import {mkdtempSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 process.env.POLISH_TIGER_DATA_DIR=mkdtempSync(path.join(tmpdir(),'polish-tiger-tags-'));
-const {records,dictionary,addTag,removeTag,deleteTag,updateRecord}=await import('../lib/db-sqlite');
+const {records,dictionary,addTag,removeTag,deleteTag,updateRecord,setUserNote}=await import('../lib/db-sqlite');
 const {matches}=await import('../lib/search');
 const mine=()=>dictionary().filter(t=>t.dimension==='mine');
 test('Własne znaczniki: dodawanie, wyszukiwanie, filtr i usuwanie',()=>{
@@ -33,4 +33,9 @@ test('Własne wpisy w dowolnym wymiarze są oznaczone i usuwalne; importowane ni
  assert.ok(f().terms.some(t=>t.id===imported.id),'edycja nie usuwa importu');assert.ok(!f().terms.some(t=>t.id===own.id),'edycja może usunąć mój wpis');
  addTag('si-jun-zi-tang','indication','bezsenność');removeTag('si-jun-zi-tang',own.id);assert.ok(!f().terms.some(t=>t.id===own.id));
  assert.ok(dictionary().some(t=>t.id===own.id),'termin spoza "mine" zostaje w słowniku');
+});
+test('Moja uwaga jest zapisywana, wyszukiwalna i nie nadpisuje uwag z importu',()=>{
+ const before=records().find(r=>r.id==='bai-zhu')!;setUserNote('bai-zhu','Sprawdzić dawkę u dzieci');
+ const r=records().find(r=>r.id==='bai-zhu')!;assert.equal(r.user_notes,'Sprawdzić dawkę u dzieci');assert.equal(r.notes,before.notes);
+ assert.ok(matches(r,'dawke u dzieci',{},'AND'));assert.throws(()=>setUserNote('nie-ma','x'));
 });

@@ -1,7 +1,7 @@
 import { NextRequest,NextResponse } from 'next/server';
 import {createHmac} from 'node:crypto';
 import { authorized,equal,token,configured,configurationIssues } from '../../../lib/auth';
-import { updateRecord,updateTerm,createTerm,addTag,removeTag,deleteTag,records,dictionary,dimensions } from '../../../lib/db';
+import { updateRecord,updateTerm,createTerm,addTag,removeTag,deleteTag,setUserNote,recordById,dictionary,dimensions } from '../../../lib/db';
 export async function GET(){return NextResponse.json({authenticated:await authorized(),configured:configured(),configurationIssues:configurationIssues()});}
 export async function POST(req:NextRequest){
  let sameOrigin=false;
@@ -41,7 +41,11 @@ export async function POST(req:NextRequest){
   }else if(data.action==='tag-delete'){
    if(!Number.isInteger(data.termId))throw Error('Nieprawidłowy znacznik');
    await deleteTag(data.termId);
+  }else if(data.action==='note'){
+   if(typeof data.id!=='string'||typeof data.text!=='string'||data.text.length>10000)throw Error('Nieprawidłowa uwaga');
+   await setUserNote(data.id,data.text.trim());
   }else throw Error('Nieznana operacja');
-  return NextResponse.json({ok:true,records:await records(),dictionary:await dictionary()});
+  // The whole atlas is too large for a function response; the client patches its copy from the changed record.
+  return NextResponse.json({ok:true,record:typeof data.id==='string'?await recordById(data.id):null,dictionary:await dictionary()});
  }catch{return NextResponse.json({error:'Nie udało się zapisać. Sprawdź pola i unikalność terminów.'},{status:400});}
 }

@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS ingredients(formula_id TEXT REFERENCES records(id), h
 CREATE TABLE IF NOT EXISTS sources(id INTEGER PRIMARY KEY, record_id TEXT REFERENCES records(id), field TEXT NOT NULL, url TEXT NOT NULL, status TEXT NOT NULL, checked_at TEXT);
 CREATE TABLE IF NOT EXISTS metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);`);
 if(!(db.prepare('PRAGMA table_info(record_terms)').all() as {name:string}[]).some(c=>c.name==='by_user'))db.exec('ALTER TABLE record_terms ADD COLUMN by_user INTEGER NOT NULL DEFAULT 0');
+if(!(db.prepare('PRAGMA table_info(records)').all() as {name:string}[]).some(c=>c.name==='user_notes'))db.exec("ALTER TABLE records ADD COLUMN user_notes TEXT NOT NULL DEFAULT ''");
 function attach(id:string, dimension:string, labels:string) {
  for(const label of labels.split(',').filter(Boolean)) {
   db.prepare('INSERT OR IGNORE INTO terms(dimension,label) VALUES(?,?)').run(dimension,label);
@@ -84,5 +85,6 @@ export function createTerm(dimension:string,label:string,synonyms:string){db.pre
 function transaction(fn:()=>void){db.exec('BEGIN');try{fn();db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}
 export function addTag(id:string,dimension:string,label:string){if(!db.prepare('SELECT id FROM records WHERE id=?').get(id))throw new Error('Brak rekordu');transaction(()=>{db.prepare('INSERT OR IGNORE INTO terms(dimension,label) VALUES(?,?)').run(dimension,label);db.prepare('INSERT OR IGNORE INTO record_terms(record_id,term_id,by_user) VALUES(?,(SELECT id FROM terms WHERE dimension=? AND label=?),1)').run(id,dimension,label);});}
 export function removeTag(id:string,termId:number){transaction(()=>{db.prepare('DELETE FROM record_terms WHERE record_id=? AND term_id=? AND by_user=1').run(id,termId);db.prepare("DELETE FROM terms WHERE id=? AND dimension='mine' AND NOT EXISTS(SELECT 1 FROM record_terms WHERE term_id=terms.id)").run(termId);});}
+export function setUserNote(id:string,text:string){if(!db.prepare('UPDATE records SET user_notes=? WHERE id=?').run(text,id).changes)throw new Error('Brak rekordu');}
 export function deleteTag(termId:number){transaction(()=>{db.prepare("DELETE FROM record_terms WHERE term_id=(SELECT id FROM terms WHERE id=? AND dimension='mine')").run(termId);db.prepare("DELETE FROM terms WHERE id=? AND dimension='mine'").run(termId);});}
 export const dimensions:Record<string,string>={category:'Kategoria',thermal:'Termika',taste:'Smak',channel:'Kanał',organ:'Narząd',action:'Działanie TCM',direction:'Kierunek działania',pattern:'Wzorzec TCM',symptom:'Objaw',indication:'Wskazanie',contraindication:'Przeciwwskazanie'};

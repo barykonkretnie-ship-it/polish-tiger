@@ -19,3 +19,6 @@ export async function createTerm(dimension:string,label:string,synonyms:string){
 export async function addTag(id:string,dimension:string,label:string){return (await backend()).addTag(id,dimension,label);}
 export async function removeTag(id:string,termId:number){return (await backend()).removeTag(id,termId);}
 export async function deleteTag(termId:number){return (await backend()).deleteTag(termId);}
+export async function setUserNote(id:string,text:string){return (await backend()).setUserNote(id,text);}
+/** One record as records() shows it, so a save can answer with just the changed card. */
+export async function recordById(id:string){return (await records()).find(r=>r.id===id)??null;}
