@@ -33,4 +33,4 @@ button.link{background:none;border:0;padding:0;color:inherit;text-decoration:und
 .protocol-groups summary{cursor:pointer}
 .protocol-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .filters .check .count{margin-left:auto;color:var(--muted,#777);font-size:.8em}
-.group-filter .check{display:flex;gap:.4em;align-items:center}
+.group-filter .check{display:flex;gap:.4em;align-items:center}.tag.mine{background:#f4e6f4;border-color:#d9b8dc;color:#6b2f72;font-weight:600}.tag.mine button{padding:0 0 0 6px;color:inherit;font-weight:700;line-height:1}.tag.mine button:hover{background:none;color:#a0263a}.my-tags h2{font-size:22px;margin-bottom:10px}.tag-form{display:flex;gap:10px;align-items:center;margin-top:12px}.tag-form input:not([type=checkbox]){margin:0;flex:1}.mine-filter summary{color:#6b2f72}.mine-filter .check input{accent-color:#8a3f92}.add-term select{margin:0;width:auto;max-width:40%}.legend-mine{font-size:11px}.legend-mine .tag{font-size:10px}

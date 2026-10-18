@@ -1,4 +1,5 @@
-export type Term = {id:number; dimension:string; label:string; synonyms:string};
+/** byUser marks a term the user attached by hand (removable); imported terms are not. */
+export type Term = {id:number; dimension:string; label:string; synonyms:string; byUser?:boolean};
 /** Current source-layer data for a record (polish_tiger_source), as read by the parser; English, unverified. */
 export type SourceInfo = {url:string; fetchedAt:string; parserVersion:string; pinyin:string; chinese:string|null;
  fields:Record<string,{value:unknown; completeness:string}>;

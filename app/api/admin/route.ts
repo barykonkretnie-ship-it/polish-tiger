@@ -1,7 +1,7 @@
 import { NextRequest,NextResponse } from 'next/server';
 import {createHmac} from 'node:crypto';
 import { authorized,equal,token,configured,configurationIssues } from '../../../lib/auth';
-import { updateRecord,updateTerm,createTerm,records,dictionary,dimensions } from '../../../lib/db';
+import { updateRecord,updateTerm,createTerm,addTag,removeTag,deleteTag,records,dictionary,dimensions } from '../../../lib/db';
 export async function GET(){return NextResponse.json({authenticated:await authorized(),configured:configured(),configurationIssues:configurationIssues()});}
 export async function POST(req:NextRequest){
  let sameOrigin=false;
@@ -31,6 +31,16 @@ export async function POST(req:NextRequest){
    if(!Number.isInteger(data.id)||typeof data.label!=='string'||!data.label.trim()||data.label.length>200||typeof data.synonyms!=='string'||data.synonyms.length>1000)throw Error('Nieprawidłowy termin');
    if(data.id===0){if(typeof data.dimension!=='string'||!Object.hasOwn(dimensions,data.dimension))throw Error('Nieprawidłowy wymiar');await createTerm(data.dimension,data.label.trim(),data.synonyms);}
    else await updateTerm(data.id,data.label.trim(),data.synonyms);
+  }else if(data.action==='tag-add'){
+   const dimension=data.dimension??'mine';
+   if(typeof data.id!=='string'||typeof dimension!=='string'||!Object.hasOwn(dimensions,dimension)||typeof data.label!=='string'||!data.label.trim()||data.label.trim().length>200)throw Error('Nieprawidłowy znacznik');
+   await addTag(data.id,dimension,data.label.trim().replace(/\s+/g,' '));
+  }else if(data.action==='tag-remove'){
+   if(typeof data.id!=='string'||!Number.isInteger(data.termId))throw Error('Nieprawidłowy znacznik');
+   await removeTag(data.id,data.termId);
+  }else if(data.action==='tag-delete'){
+   if(!Number.isInteger(data.termId))throw Error('Nieprawidłowy znacznik');
+   await deleteTag(data.termId);
   }else throw Error('Nieznana operacja');
   return NextResponse.json({ok:true,records:await records(),dictionary:await dictionary()});
  }catch{return NextResponse.json({error:'Nie udało się zapisać. Sprawdź pola i unikalność terminów.'},{status:400});}

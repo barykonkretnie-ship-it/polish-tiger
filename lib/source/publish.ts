@@ -39,16 +39,18 @@ export async function publishTranslatedTags(sql:postgres.Sql){
  const translations=await currentTranslations(sql);
  const result={records:0,tags:0,removedDemoTerms:0};
  await sql.begin(async tx=>{
+  // User-added links (by_user) survive republishing; the atlas schema may predate the column.
+  await tx`ALTER TABLE polish_tiger.record_terms ADD COLUMN IF NOT EXISTS by_user BOOLEAN NOT NULL DEFAULT false`;
   for(const [id,pl] of translations){
    const [rec]=await tx`SELECT kind FROM polish_tiger.records WHERE id=${id}`;
    if(!rec)continue;
    const tags=tagsFor(rec.kind,pl);
    for(const [dim,labels] of Object.entries(tags)){
-    await tx`DELETE FROM polish_tiger.record_terms rt USING polish_tiger.terms t WHERE rt.record_id=${id} AND rt.term_id=t.id AND t.dimension=${dim}`;
+    await tx`DELETE FROM polish_tiger.record_terms rt USING polish_tiger.terms t WHERE rt.record_id=${id} AND rt.term_id=t.id AND t.dimension=${dim} AND NOT rt.by_user`;
     if(!labels.length)continue;
     // One statement per dimension, not per label: hundreds of records must publish within one function run.
     await tx`INSERT INTO polish_tiger.terms(dimension,label) SELECT ${dim},l FROM unnest(${tx.array(labels)}::text[]) l ON CONFLICT DO NOTHING`;
-    await tx`INSERT INTO polish_tiger.record_terms(record_id,term_id) SELECT ${id},id FROM polish_tiger.terms WHERE dimension=${dim} AND label=ANY(${tx.array(labels)}::text[]) ON CONFLICT DO NOTHING`;
+    await tx`INSERT INTO polish_tiger.record_terms(record_id,term_id) SELECT ${id},id FROM polish_tiger.terms WHERE dimension=${dim} AND label=ANY(${tx.array(labels)}::text[]) ON CONFLICT(record_id,term_id) DO UPDATE SET by_user=false`;
     result.tags+=labels.length;
    }
    await tx`UPDATE polish_tiger.records SET status=${PUBLISHED_STATUS} WHERE id=${id}`;

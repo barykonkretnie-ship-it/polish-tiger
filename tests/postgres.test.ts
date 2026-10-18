@@ -17,6 +17,16 @@ test('PostgreSQL: relacje, zapis, rollback i powtarzalny seed',{skip:!process.en
   await assert.rejects(db.updateRecord(ren.id,{...update,name:'Nie zapisać',termIds:[-1]}));assert.equal((await db.records()).find(r=>r.id===ren.id)?.name,ren.name);
   await db.updateRecord(ren.id,{...update,notes:ren.notes});
   assert.ok((await db.dictionary()).length>0);
+  const label='Test '+randomUUID(),mine=async()=>(await db.dictionary()).filter(t=>t.dimension==='mine'&&t.label===label);
+  await db.addTag(ren.id,'mine',label);await db.addTag(ren.id,'mine',label);const [tag]=await mine();
+  assert.ok((await db.records()).find(r=>r.id===ren.id)!.terms.some(t=>t.id===tag.id));
+  await db.removeTag(ren.id,tag.id);assert.equal((await mine()).length,0);
+  await db.addTag(ren.id,'mine',label);await db.deleteTag((await mine())[0].id);assert.equal((await mine()).length,0);
+  const action=ren.terms.find(t=>t.dimension==='action')!;await db.removeTag(ren.id,action.id);await db.deleteTag(action.id);
+  await db.addTag(ren.id,'indication',label);const own=(await db.records()).find(r=>r.id===ren.id)!.terms.find(t=>t.label===label)!;assert.equal(own.byUser,true);
+  await db.updateRecord(ren.id,{...update,notes:ren.notes,termIds:[]});const after=(await db.records()).find(r=>r.id===ren.id)!;
+  assert.ok(after.terms.some(t=>t.id===action.id&&!t.byUser));assert.ok(!after.terms.some(t=>t.id===own.id));
+assert.ok((await db.records()).find(r=>r.id===ren.id)!.terms.some(t=>t.id===action.id));
   const key='test-'+randomUUID();
   for(let i=0;i<10;i++)assert.equal(await pg.allowLoginAttempt(key),true);
   assert.equal(await pg.allowLoginAttempt(key),false);
