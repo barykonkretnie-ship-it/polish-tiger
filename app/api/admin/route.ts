@@ -1,7 +1,7 @@
 import { NextRequest,NextResponse } from 'next/server';
 import {createHmac} from 'node:crypto';
 import { authorized,equal,token,configured,configurationIssues } from '../../../lib/auth';
-import { updateRecord,updateTerm,createTerm,addTag,removeTag,deleteTag,setUserNote,recordById,dictionary,dimensions } from '../../../lib/db';
+import { updateRecord,updateTerm,createTerm,addTag,removeTag,deleteTag,setUserNote,recordById,products,saveProduct,deleteProduct,dictionary,dimensions } from '../../../lib/db';
 export async function GET(){return NextResponse.json({authenticated:await authorized(),configured:configured(),configurationIssues:configurationIssues()});}
 export async function POST(req:NextRequest){
  let sameOrigin=false;
@@ -44,8 +44,17 @@ export async function POST(req:NextRequest){
   }else if(data.action==='note'){
    if(typeof data.id!=='string'||typeof data.text!=='string'||data.text.length>10000)throw Error('Nieprawidłowa uwaga');
    await setUserNote(data.id,data.text.trim());
+  }else if(data.action==='product-save'){
+   const ok=(v:unknown,max:number)=>typeof v==='string'&&v.length<=max;
+   if((data.id!==undefined&&!Number.isInteger(data.id))||!ok(data.name,200)||!data.name.trim()||!Array.isArray(data.tags)||data.tags.length>50||!data.tags.every((t:unknown)=>ok(t,100))||!ok(data.link,2000)||!ok(data.notes,10000))throw Error('Nieprawidłowy produkt');
+   const link=data.link.trim();if(link&&!/^https?:\/\//i.test(link))throw Error('Link musi zaczynać się od http:// lub https://');
+   await saveProduct({id:data.id,name:data.name.trim(),tags:[...new Set<string>(data.tags.map((t:string)=>t.trim().replace(/\s+/g,' ')).filter(Boolean))],link,notes:data.notes.trim()});
+   return NextResponse.json({ok:true,products:await products()});
+  }else if(data.action==='product-delete'){
+   if(!Number.isInteger(data.id))throw Error('Nieprawidłowy produkt');
+   await deleteProduct(data.id);return NextResponse.json({ok:true,products:await products()});
   }else throw Error('Nieznana operacja');
   // The whole atlas is too large for a function response; the client patches its copy from the changed record.
   return NextResponse.json({ok:true,record:typeof data.id==='string'?await recordById(data.id):null,dictionary:await dictionary()});
- }catch{return NextResponse.json({error:'Nie udało się zapisać. Sprawdź pola i unikalność terminów.'},{status:400});}
+ }catch(e){return NextResponse.json({error:e instanceof Error&&e.message.startsWith('Link')?e.message:'Nie udało się zapisać. Sprawdź pola i unikalność terminów.'},{status:400});}
 }

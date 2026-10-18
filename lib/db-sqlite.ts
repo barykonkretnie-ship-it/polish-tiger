@@ -4,7 +4,7 @@ import path from 'node:path';
 import { herbs, formulas } from './sample';
 import * as rollback from './rollback';
 
-import type { Term, RecordData } from './types';
+import type { Term, RecordData, Product } from './types';
 const directory = process.env.POLISH_TIGER_DATA_DIR || path.join(process.cwd(), 'data');
 mkdirSync(directory,{recursive:true});
 const db = new DatabaseSync(path.join(directory,'polish-tiger.sqlite'));
@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS sources(id INTEGER PRIMARY KEY, record_id TEXT REFERE
 CREATE TABLE IF NOT EXISTS metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);`);
 if(!(db.prepare('PRAGMA table_info(record_terms)').all() as {name:string}[]).some(c=>c.name==='by_user'))db.exec('ALTER TABLE record_terms ADD COLUMN by_user INTEGER NOT NULL DEFAULT 0');
 if(!(db.prepare('PRAGMA table_info(records)').all() as {name:string}[]).some(c=>c.name==='user_notes'))db.exec("ALTER TABLE records ADD COLUMN user_notes TEXT NOT NULL DEFAULT ''");
+db.exec("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, name TEXT NOT NULL, tags TEXT NOT NULL DEFAULT '[]', link TEXT NOT NULL DEFAULT '', notes TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)");
 function attach(id:string, dimension:string, labels:string) {
  for(const label of labels.split(',').filter(Boolean)) {
   db.prepare('INSERT OR IGNORE INTO terms(dimension,label) VALUES(?,?)').run(dimension,label);
@@ -86,5 +87,8 @@ function transaction(fn:()=>void){db.exec('BEGIN');try{fn();db.exec('COMMIT');}c
 export function addTag(id:string,dimension:string,label:string){if(!db.prepare('SELECT id FROM records WHERE id=?').get(id))throw new Error('Brak rekordu');transaction(()=>{db.prepare('INSERT OR IGNORE INTO terms(dimension,label) VALUES(?,?)').run(dimension,label);db.prepare('INSERT OR IGNORE INTO record_terms(record_id,term_id,by_user) VALUES(?,(SELECT id FROM terms WHERE dimension=? AND label=?),1)').run(id,dimension,label);});}
 export function removeTag(id:string,termId:number){transaction(()=>{db.prepare('DELETE FROM record_terms WHERE record_id=? AND term_id=? AND by_user=1').run(id,termId);db.prepare("DELETE FROM terms WHERE id=? AND dimension='mine' AND NOT EXISTS(SELECT 1 FROM record_terms WHERE term_id=terms.id)").run(termId);});}
 export function setUserNote(id:string,text:string){if(!db.prepare('UPDATE records SET user_notes=? WHERE id=?').run(text,id).changes)throw new Error('Brak rekordu');}
+export function products():Product[]{return (db.prepare('SELECT id,name,tags,link,notes FROM products ORDER BY lower(name),id').all() as unknown as (Omit<Product,'tags'>&{tags:string})[]).map(p=>({...p,tags:JSON.parse(p.tags)}));}
+export function saveProduct(p:Omit<Product,'id'>&{id?:number}){const tags=JSON.stringify(p.tags);if(p.id){if(!db.prepare('UPDATE products SET name=?,tags=?,link=?,notes=? WHERE id=?').run(p.name,tags,p.link,p.notes,p.id).changes)throw new Error('Brak produktu');}else db.prepare('INSERT INTO products(name,tags,link,notes) VALUES(?,?,?,?)').run(p.name,tags,p.link,p.notes);}
+export function deleteProduct(id:number){db.prepare('DELETE FROM products WHERE id=?').run(id);}
 export function deleteTag(termId:number){transaction(()=>{db.prepare("DELETE FROM record_terms WHERE term_id=(SELECT id FROM terms WHERE id=? AND dimension='mine')").run(termId);db.prepare("DELETE FROM terms WHERE id=? AND dimension='mine'").run(termId);});}
 export const dimensions:Record<string,string>={category:'Kategoria',thermal:'Termika',taste:'Smak',channel:'Kanał',organ:'Narząd',action:'Działanie TCM',direction:'Kierunek działania',pattern:'Wzorzec TCM',symptom:'Objaw',indication:'Wskazanie',contraindication:'Przeciwwskazanie'};

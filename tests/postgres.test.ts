@@ -26,6 +26,7 @@ test('PostgreSQL: relacje, zapis, rollback i powtarzalny seed',{skip:!process.en
   await db.addTag(ren.id,'indication',label);const own=(await db.records()).find(r=>r.id===ren.id)!.terms.find(t=>t.label===label)!;assert.equal(own.byUser,true);
   await db.updateRecord(ren.id,{...update,notes:ren.notes,termIds:[]});const after=(await db.records()).find(r=>r.id===ren.id)!;
   assert.ok(after.terms.some(t=>t.id===action.id&&!t.byUser));
+  await db.saveProduct({name:label,tags:['sen'],link:'https://example.com',notes:'n'});const prod=(await db.products()).find(p=>p.name===label)!;assert.deepEqual(prod.tags,['sen']);await db.deleteProduct(prod.id);assert.ok(!(await db.products()).some(p=>p.name===label));
   await db.setUserNote(ren.id,'Moja uwaga');assert.equal((await db.recordById(ren.id))?.user_notes,'Moja uwaga');await db.setUserNote(ren.id,'');assert.ok(!after.terms.some(t=>t.id===own.id));
 assert.ok((await db.records()).find(r=>r.id===ren.id)!.terms.some(t=>t.id===action.id));
   const key='test-'+randomUUID();

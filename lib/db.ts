@@ -1,9 +1,9 @@
-import type {RecordUpdate} from './types';
+import type {RecordUpdate,Product} from './types';
 import {POLISH_NAMES} from './names-pl';
 import {compareTerms} from './term-order';
 import {protocolInfo} from './protocols';
 import {categoryGroups} from './category-groups';
-export type {Term,RecordData} from './types';
+export type {Term,RecordData,Product} from './types';
 export const dimensions:Record<string,string>={mine:'Moje znaczniki',category:'Kategoria',thermal:'Termika',taste:'Smak',channel:'Kanał',organ:'Narząd',action:'Działanie TCM',direction:'Kierunek działania',pattern:'Wzorzec TCM',symptom:'Objaw',indication:'Wskazanie',contraindication:'Przeciwwskazanie'};
 async function backend(){
  if(process.env.POLISH_TIGER_DATABASE_URL||process.env.DATABASE_URL||process.env.POSTGRES_URL)return import('./db-postgres');
@@ -22,3 +22,6 @@ export async function deleteTag(termId:number){return (await backend()).deleteTa
 export async function setUserNote(id:string,text:string){return (await backend()).setUserNote(id,text);}
 /** One record as records() shows it, so a save can answer with just the changed card. */
 export async function recordById(id:string){return (await records()).find(r=>r.id===id)??null;}
+export async function products(){return [...await (await backend()).products()];}
+export async function saveProduct(p:Omit<Product,'id'>&{id?:number}){return (await backend()).saveProduct(p);}
+export async function deleteProduct(id:number){return (await backend()).deleteProduct(id);}
