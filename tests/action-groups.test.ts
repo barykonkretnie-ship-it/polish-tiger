@@ -21,6 +21,6 @@ test('„Pobudza” nie trafia do otworów zmysłów, nieznane działanie do „
  assert.equal(actionGroupLabel('other'),'Inne');assert.equal(new Set(ACTION_GROUPS.map(g=>g.id)).size,ACTION_GROUPS.length);
 });
 test('Filtr grupy działań w wyszukiwaniu',()=>{
- const r={id:'x',kind:'formula',name:'X',latin:'',translation:'',status:'',verified_at:null,notes:'',terms:[],ingredients:[],related:[],sources:[],actionGroups:['heat','toxins']} as RecordData;
+ const r={id:'x',kind:'formula',name:'X',latin:'',translation:'',status:'',verified_at:null,notes:'',terms:[],ingredients:[],related:[],sources:[],actionGroups:['heat','toxins'],facets:{agroup:['heat','toxins']}} as RecordData;
  assert.ok(matches(r,'',{agroup:['toxins']},'AND'));assert.equal(matches(r,'',{agroup:['yin']},'AND'),false);
 });

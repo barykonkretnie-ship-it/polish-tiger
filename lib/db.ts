@@ -2,8 +2,7 @@ import type {RecordUpdate,Product} from './types';
 import {POLISH_NAMES} from './names-pl';
 import {compareTerms} from './term-order';
 import {protocolInfo} from './protocols';
-import {categoryGroups} from './category-groups';
-import {actionGroups} from './action-groups';
+import {facetValues} from './facets';
 export type {Term,RecordData,Product} from './types';
 export const dimensions:Record<string,string>={mine:'Moje znaczniki',category:'Kategoria',thermal:'Termika',taste:'Smak',channel:'Kanał',organ:'Narząd',action:'Działanie TCM',direction:'Kierunek działania',pattern:'Wzorzec TCM',symptom:'Objaw',indication:'Wskazanie',contraindication:'Przeciwwskazanie'};
 async function backend(){
@@ -13,7 +12,8 @@ async function backend(){
 }
 /** Herbs without an edited Polish name get the built-in one, so it is shown and searchable. */
 /** opts.light skips source texts for the list; opts.ids limits the result (see RecordsOptions). */
-export async function records(opts:{light?:boolean;ids?:string[]}={}){return (await (await backend()).records(opts)).map(r=>({...r,translation:r.translation||(r.kind==='herb'?POLISH_NAMES[r.id]:r.kind==='formula'?protocolInfo(r.name)?.label:undefined)||r.translation,terms:[...r.terms].sort(compareTerms),groups:r.kind==='herb'?[...new Set(r.terms.filter(t=>t.dimension==='category').flatMap(t=>categoryGroups(t.label)))]:[],actionGroups:[...new Set(r.terms.filter(t=>t.dimension==='action').flatMap(t=>actionGroups(t.label)))]}));}
+export async function records(opts:{light?:boolean;ids?:string[]}={}){return (await (await backend()).records(opts)).map(r=>({...r,translation:r.translation||(r.kind==='herb'?POLISH_NAMES[r.id]:r.kind==='formula'?protocolInfo(r.name)?.label:undefined)||r.translation,terms:[...r.terms].sort(compareTerms),...withFacets(r)}));}
+function withFacets(r:{kind:string;terms:{dimension:string;label:string}[]}){const facets=facetValues(r.kind==='herb'?'herb':'formula',r.terms);return {facets,groups:r.kind==='herb'?facets.group||[]:[],actionGroups:facets.agroup||[]};}
 export async function dictionary(){return [...await (await backend()).dictionary()].sort(compareTerms);}
 export async function updateRecord(id:string,data:RecordUpdate){return (await backend()).updateRecord(id,data);}
 export async function updateTerm(id:number,label:string,synonyms:string){return (await backend()).updateTerm(id,label,synonyms);}
