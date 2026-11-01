@@ -24,3 +24,10 @@ test('Edycja jest trwała, synonimy działają, błędny termin cofa całą tran
  const term=r.terms.find(t=>t.dimension==='action')!;updateTerm(term.id,term.label,'wspiera energie');assert.ok(matches(records().find(x=>x.id===r.id)!,'energie',{},'AND'));
  assert.throws(()=>updateRecord(r.id,{name:'Nie zapisać',translation:'',notes:'',termIds:[-1]}));assert.equal(records().find(x=>x.id===r.id)!.name,r.name);
 });
+test('AND wymaga wszystkich zaznaczonych terminów, także w jednym wymiarze',()=>{
+ const r=records().find(x=>x.id==='ren-shen')!,acts=r.terms.filter(t=>t.dimension==='action');assert.ok(acts.length>=1);
+ const other=dictionary().find(t=>t.dimension==='action'&&!r.terms.some(x=>x.id===t.id))!;
+ const both={action:[String(acts[0].id),String(other.id)]};
+ assert.equal(matches(r,'',both,'AND'),false);assert.equal(matches(r,'',both,'OR'),true);
+ assert.ok(matches(r,'',{action:acts.map(t=>String(t.id))},'AND'));
+});
